@@ -11,25 +11,12 @@ export function HeroSection() {
   };
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Video */}
-      <video
+      {/* Background Image */}
+      <img
         className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        onError={handleVideoError}
-        onLoadedData={handleVideoLoad}
-        onCanPlay={() => console.log("Video can play")}
-        onLoadStart={() => console.log("Video load started")}
-      >
-        <source src="/hero-video.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      
-      {/* Fallback for browsers that don't support video */}
-      <div className="absolute inset-0 bg-luxury-charcoal -z-10" />
+        src="/src/assets/hero-luxury.jpg"
+        alt="Luxury background"
+      />
       
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-hero" />
