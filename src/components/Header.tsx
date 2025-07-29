@@ -3,7 +3,7 @@ import { MessageCircle, User, Menu } from "lucide-react";
 
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <img 
@@ -14,13 +14,13 @@ export function Header() {
         </div>
         
         <nav className="hidden md:flex items-center space-x-8">
-          <a href="#services" className="text-foreground hover:text-accent transition-colors">
+          <a href="#services" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">
             Services
           </a>
-          <a href="#about" className="text-foreground hover:text-accent transition-colors">
+          <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">
             About
           </a>
-          <a href="#contact" className="text-foreground hover:text-accent transition-colors">
+          <a href="#contact" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">
             Contact
           </a>
         </nav>
