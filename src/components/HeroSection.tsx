@@ -2,6 +2,13 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 export function HeroSection() {
+  const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    console.error("Video failed to load:", e);
+  };
+
+  const handleVideoLoad = () => {
+    console.log("Video loaded successfully");
+  };
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Background Video */}
@@ -11,8 +18,11 @@ export function HeroSection() {
         muted
         loop
         playsInline
+        onError={handleVideoError}
+        onLoadedData={handleVideoLoad}
       >
         <source src="/hero-video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
       </video>
       
       {/* Fallback for browsers that don't support video */}
