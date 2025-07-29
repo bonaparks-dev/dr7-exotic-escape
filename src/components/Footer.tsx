@@ -21,7 +21,7 @@ export function Footer() {
                 variant="ghost" 
                 size="sm" 
                 className="text-luxury-ivory hover:text-luxury-gold"
-                onClick={() => window.open('https://instagram.com/dr7_exotic_cars', '_blank')}
+                onClick={() => window.open('https://www.instagram.com/dr7_exotic_cars', '_blank')}
               >
                 <Instagram className="w-5 h-5" />
               </Button>
