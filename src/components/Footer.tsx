@@ -13,7 +13,7 @@ export function Footer() {
               alt="DR7 Exotic Cars & Luxury" 
               className="h-12 w-auto"
             />
-            <p className="text-luxury-ivory/70 leading-relaxed">
+            <p className="text-luxury-gold leading-relaxed">
               Curating the world's most exclusive luxury experiences for the discerning few.
             </p>
             <div className="flex space-x-4">
@@ -33,11 +33,11 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-luxury-gold">Services</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Supercars</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Luxury Yachts</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Private Jets</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Exclusive Villas</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Private Chefs</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Supercars</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Luxury Yachts</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Private Jets</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Exclusive Villas</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Private Chefs</a></li>
             </ul>
           </div>
           
@@ -45,11 +45,11 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-luxury-gold">Company</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">About Us</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">How It Works</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Careers</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Press</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Partners</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">About Us</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">How It Works</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Careers</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Press</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Partners</a></li>
             </ul>
           </div>
           
@@ -57,10 +57,10 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-luxury-gold">Support</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Help Center</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Contact Us</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="text-luxury-ivory/70 hover:text-luxury-gold transition-colors">Terms of Service</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Help Center</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Contact Us</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Terms of Service</a></li>
             </ul>
             
             <div className="pt-4">
@@ -77,7 +77,7 @@ export function Footer() {
         </div>
         
         <div className="border-t border-luxury-ivory/10 mt-12 pt-8 text-center">
-          <p className="text-luxury-ivory/50">
+          <p className="text-luxury-gold">
             © 2024 DR7 Exotic. All rights reserved. Luxury redefined.
           </p>
         </div>

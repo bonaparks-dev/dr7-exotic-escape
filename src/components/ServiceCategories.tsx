@@ -54,7 +54,7 @@ export function ServiceCategories() {
             Exclusive
             <span className="bg-gradient-gold bg-clip-text text-transparent"> Collections</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-luxury-gold max-w-2xl mx-auto">
             Curated luxury experiences designed for the discerning few
           </p>
         </div>
@@ -81,7 +81,7 @@ export function ServiceCategories() {
               
               <CardContent className="p-6">
                 <h3 className="text-2xl font-bold mb-2">{category.title}</h3>
-                <p className="text-muted-foreground mb-4">{category.description}</p>
+                <p className="text-luxury-gold mb-4">{category.description}</p>
                 <Button variant="luxury" className="w-full">
                   Explore Collection
                 </Button>
