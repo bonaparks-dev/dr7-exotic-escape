@@ -18,13 +18,14 @@ export function HeroSection() {
         muted
         loop
         playsInline
+        preload="auto"
         onError={handleVideoError}
         onLoadedData={handleVideoLoad}
         onCanPlay={() => console.log("Video can play")}
         onLoadStart={() => console.log("Video load started")}
       >
+        <source src="/hero-video.webm" type="video/webm" />
         <source src="/hero-video.MP4" type="video/mp4" />
-        <source src="/public/hero-video.MP4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       
