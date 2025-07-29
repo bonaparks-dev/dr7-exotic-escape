@@ -7,7 +7,7 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <img 
-            src="/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png" 
+            src="/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png" 
             alt="DR7 Exotic Cars & Luxury" 
             className="h-10 w-auto"
           />
