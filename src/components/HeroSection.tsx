@@ -13,9 +13,10 @@ export function HeroSection() {
         playsInline
       >
         <source src="/hero-video.mp4" type="video/mp4" />
-        {/* Fallback for browsers that don't support video */}
-        <div className="absolute inset-0 bg-luxury-charcoal" />
       </video>
+      
+      {/* Fallback for browsers that don't support video */}
+      <div className="absolute inset-0 bg-luxury-charcoal -z-10" />
       
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-hero" />
