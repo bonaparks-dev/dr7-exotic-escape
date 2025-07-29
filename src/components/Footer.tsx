@@ -87,7 +87,7 @@ export function Footer() {
         
         <div className="border-t border-luxury-ivory/10 mt-12 pt-8 text-center">
           <p className="text-luxury-gold">
-            © 2024 DR7 Exotic. All rights reserved. Luxury redefined.
+            © 2024 DR7 Exotic. All rights reserved.
           </p>
         </div>
       </div>
