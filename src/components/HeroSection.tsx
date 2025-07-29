@@ -21,7 +21,7 @@ export function HeroSection() {
         onError={handleVideoError}
         onLoadedData={handleVideoLoad}
       >
-        <source src="/hero-video.MP4" type="video/mp4" />
+        <source src="/HERO-VIDEO.MP4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       
