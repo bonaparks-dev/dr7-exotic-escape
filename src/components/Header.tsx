@@ -28,7 +28,7 @@ export function Header() {
             variant="ghost"
             size="sm"
             className="hidden sm:flex"
-            onClick={() => window.open('https://wa.me/1234567890', '_blank')}
+            onClick={() => window.open('https://wa.me/393457905205', '_blank')}
           >
             <MessageCircle className="w-4 h-4" />
             WhatsApp
