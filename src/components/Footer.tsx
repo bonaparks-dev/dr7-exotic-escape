@@ -8,9 +8,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="text-2xl font-bold bg-gradient-gold bg-clip-text text-transparent">
-              DR7 EXOTIC
-            </div>
+            <img 
+              src="/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png" 
+              alt="DR7 Exotic Cars & Luxury" 
+              className="h-12 w-auto"
+            />
             <p className="text-luxury-ivory/70 leading-relaxed">
               Curating the world's most exclusive luxury experiences for the discerning few.
             </p>
