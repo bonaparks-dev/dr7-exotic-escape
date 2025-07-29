@@ -1,15 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
-import heroImage from "@/assets/hero-luxury.jpg";
 
 export function HeroSection() {
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      />
+      {/* Background Video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+        {/* Fallback for browsers that don't support video */}
+        <div className="absolute inset-0 bg-luxury-charcoal" />
+      </video>
       
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-hero" />
