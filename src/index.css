@@ -38,8 +38,8 @@ All colors MUST be HSL.
     --ring: 45 85% 65%;
 
     /* Luxury design tokens */
-    --luxury-gold: 45 85% 75%;
-    --luxury-gold-light: 45 75% 85%;
+    --luxury-gold: 40 48% 61%;
+    --luxury-gold-light: 40 48% 71%;
     --luxury-navy: 220 35% 15%;
     --luxury-charcoal: 220 25% 8%;
     --luxury-ivory: 45 35% 95%;
@@ -106,8 +106,8 @@ All colors MUST be HSL.
     --ring: 45 85% 65%;
     
     /* Dark mode luxury colors */
-    --luxury-gold: 45 85% 75%;
-    --luxury-gold-light: 45 75% 85%;
+    --luxury-gold: 40 48% 61%;
+    --luxury-gold-light: 40 48% 71%;
     --luxury-navy: 220 45% 12%;
     --luxury-charcoal: 220 25% 8%;
     --luxury-ivory: 45 35% 95%;
