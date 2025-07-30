@@ -9,18 +9,24 @@ export function HeroSection() {
   const handleVideoLoad = () => {
     console.log("Video loaded successfully");
   };
+
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <img
+      {/* Background Video */}
+      <video
         className="absolute inset-0 w-full h-full object-cover"
-        src="/src/assets/hero-luxury.jpg"
-        alt="Luxury background"
+        src="/hero-video.MP4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        onError={handleVideoError}
+        onLoadedData={handleVideoLoad}
       />
-      
+
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-hero" />
-      
+
       {/* Content */}
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
         <div className="flex items-center justify-center mb-6">
@@ -29,30 +35,30 @@ export function HeroSection() {
             EXCLUSIVE LUXURY EXPERIENCES
           </span>
         </div>
-        
+
         <h1 className="text-5xl md:text-7xl font-bold text-luxury-ivory mb-6 leading-tight">
           Redefine
           <span className="block bg-gradient-gold bg-clip-text text-transparent">
             Luxury
           </span>
         </h1>
-        
+
         <p className="text-xl md:text-2xl text-luxury-ivory/80 mb-8 max-w-2xl mx-auto leading-relaxed">
           Access the world's most exclusive supercars, villas, yachts, private jets, and personal chefs.
         </p>
-        
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Button variant="gold" size="lg" className="px-8 py-6 text-lg">
             Explore Collection
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
-          
+
           <Button variant="hero" size="lg" className="px-8 py-6 text-lg">
             Watch Experience
           </Button>
         </div>
       </div>
-      
+
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <div className="w-6 h-10 border-2 border-luxury-ivory/30 rounded-full flex justify-center">
