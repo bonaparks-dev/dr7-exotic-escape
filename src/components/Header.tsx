@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, User, Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function Header() {
+  const navigate = useNavigate();
+  
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -27,7 +30,7 @@ export function Header() {
         
         <div className="flex items-center space-x-4">
           <Button
-            variant="ghost"
+            variant="gold"
             size="sm"
             className="hidden sm:flex"
             onClick={() => window.open('https://wa.me/393457905205', '_blank')}
@@ -36,7 +39,11 @@ export function Header() {
             WhatsApp
           </Button>
           
-          <Button variant="outline" size="sm">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => navigate("/auth")}
+          >
             <User className="w-4 h-4" />
             <span className="hidden sm:inline">Login</span>
           </Button>
