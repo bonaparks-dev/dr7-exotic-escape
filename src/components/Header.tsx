@@ -17,7 +17,7 @@ export function Header() {
         </div>
         
         <nav className="hidden md:flex items-center space-x-8">
-          <a href="#services" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">
+          <a href="/services" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">
             Services
           </a>
           <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">
