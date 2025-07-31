@@ -34,14 +34,6 @@ const categories = [
     icon: Home,
     image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=800&h=600',
     itemCount: '25 Available'
-  },
-  {
-    id: 'chefs',
-    title: 'Private Chefs',
-    description: 'Michelin-starred culinary experiences',
-    icon: ChefHat,
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=800&h=600',
-    itemCount: '18 Available'
   }
 ];
 
