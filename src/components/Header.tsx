@@ -10,37 +10,10 @@ export function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between relative">
+        <div className="container mx-auto px-4 py-2 flex flex-col items-center relative">
 
-          {/* Logo centré et cliquable */}
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <a href="/">
-              <img 
-                src="/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png" 
-                alt="DR7 Exotic Cars & Luxury" 
-                className="h-16 w-auto"
-              />
-            </a>
-          </div>
-
-          {/* Menu de gauche (vide ou futur contenu) */}
-          <div className="flex items-center space-x-2" />
-
-          {/* Menu desktop */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="/services" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">
-              Services
-            </a>
-            <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">
-              About
-            </a>
-            <a href="#contact" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">
-              Contact
-            </a>
-          </nav>
-          
-          {/* Boutons à droite */}
-          <div className="flex items-center space-x-4">
+          {/* Boutons (WhatsApp / Login / Burger) en haut à droite */}
+          <div className="absolute top-2 right-4 flex items-center space-x-4">
             <Button
               variant="gold"
               size="sm"
@@ -50,7 +23,7 @@ export function Header() {
               <MessageCircle className="w-4 h-4" />
               WhatsApp
             </Button>
-            
+
             <Button 
               size="sm"
               className="bg-black text-white border-none shadow-none outline-none hover:bg-black/90 active:bg-black focus:ring-0 focus:outline-none"
@@ -59,7 +32,7 @@ export function Header() {
               <User className="w-4 h-4" />
               <span className="hidden sm:inline">Login</span>
             </Button>
-            
+
             <Button 
               size="sm"
               className="bg-black text-white border-none shadow-none outline-none hover:bg-black active:bg-black focus:ring-0 focus:outline-none md:hidden"
@@ -68,10 +41,32 @@ export function Header() {
               <Menu className="w-5 h-5" />
             </Button>
           </div>
+
+          {/* Logo centré */}
+          <a href="/" className="z-10 pt-2">
+            <img 
+              src="/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png" 
+              alt="DR7 Exotic Cars & Luxury" 
+              className="h-16 w-auto"
+            />
+          </a>
+
+          {/* Menu centré sous le logo (visible uniquement sur desktop) */}
+          <nav className="hidden md:flex items-center justify-center space-x-10 mt-2">
+            <a href="/services" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
+              Services
+            </a>
+            <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
+              About
+            </a>
+            <a href="#contact" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
+              Contact
+            </a>
+          </nav>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Menu mobile overlay */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 text-white flex flex-col justify-center items-center space-y-6">
           <button
@@ -89,3 +84,5 @@ export function Header() {
     </>
   );
 }
+
+
