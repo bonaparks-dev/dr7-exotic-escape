@@ -40,13 +40,13 @@ export function Header() {
           </Button>
           
           <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => navigate("/auth")}
-          >
-            <User className="w-4 h-4" />
-            <span className="hidden sm:inline">Login</span>
-          </Button>
+  size="sm"
+  className="bg-black text-white border-none shadow-none outline-none hover:bg-black/90 active:bg-black focus:ring-0 focus:outline-none"
+  onClick={() => navigate("/auth")}
+>
+  <User className="w-4 h-4" />
+  <span className="hidden sm:inline">Login</span>
+</Button>
           
           <Button variant="ghost" size="sm" className="md:hidden">
             <Menu className="w-4 h-4" />
