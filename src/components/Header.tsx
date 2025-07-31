@@ -52,7 +52,7 @@ export function Header() {
           </a>
 
           {/* Menu centré sous le logo (desktop) */}
-          <nav className="hidden md:flex items-center justify-center space-x-10 mt-2">
+          <nav className="hidden md:flex items-center justify-center space-x-10 mt-2 font-seasons">
             <a href="/services" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
               Services
             </a>
