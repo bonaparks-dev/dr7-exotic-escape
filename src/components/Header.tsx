@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { MessageCircle, User, Menu, X } from "lucide-react";
+import { MessageCircle, User, Menu, X, Phone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -12,7 +12,14 @@ export function Header() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 to-black/0 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-2 flex flex-col items-center relative">
 
-          {/* Boutons à droite positionnés un peu plus bas */}
+          {/* Icône téléphone mobile à gauche */}
+          <div className="absolute top-6 left-4 sm:hidden">
+            <a href="tel:+393457905205" className="text-white">
+              <Phone className="w-5 h-5" />
+            </a>
+          </div>
+
+          {/* Boutons à droite (WhatsApp / Login / Burger) */}
           <div className="absolute top-6 right-4 flex items-center space-x-4">
             <Button
               variant="gold"
@@ -84,5 +91,3 @@ export function Header() {
     </>
   );
 }
-
-
