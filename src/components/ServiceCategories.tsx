@@ -47,14 +47,15 @@ const categories = [
 
 export function ServiceCategories() {
   return (
-    <section id="services" className="py-20 bg-black text-white">
+    <section id="services" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 font-seasons tracking-wide">
-            <span className="text-luxury-gold">DR7 Exotic</span> Collections
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Exclusive
+            <span className="bg-gradient-gold bg-clip-text text-transparent"> Collections</span>
           </h2>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            Curated luxury experiences for a life without limits
+          <p className="text-xl text-luxury-gold max-w-2xl mx-auto">
+            Curated luxury experiences designed for the discerning few
           </p>
         </div>
         
@@ -67,11 +68,11 @@ export function ServiceCategories() {
                   alt={category.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-luxury-charcoal/80 to-transparent" />
                 <div className="absolute top-4 right-4">
                   <category.icon className="w-8 h-8 text-luxury-gold" />
                 </div>
-                <div className="absolute bottom-4 left-4 text-white">
+                <div className="absolute bottom-4 left-4 text-luxury-ivory">
                   <span className="text-sm font-medium bg-luxury-gold/20 px-3 py-1 rounded-full backdrop-blur-sm">
                     {category.itemCount}
                   </span>
@@ -79,9 +80,9 @@ export function ServiceCategories() {
               </div>
               
               <CardContent className="p-6">
-                <h3 className="text-2xl font-semibold mb-2 text-white font-seasons">{category.title}</h3>
-                <p className="text-luxury-gold mb-4 font-light">{category.description}</p>
-                <Button className="w-full bg-luxury-gold text-black hover:bg-luxury-gold/90 transition font-semibold tracking-wide">
+                <h3 className="text-2xl font-bold mb-2">{category.title}</h3>
+                <p className="text-luxury-gold mb-4">{category.description}</p>
+                <Button variant="luxury" className="w-full">
                   Explore Collection
                 </Button>
               </CardContent>
@@ -92,3 +93,5 @@ export function ServiceCategories() {
     </section>
   );
 }
+
+
