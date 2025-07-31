@@ -12,9 +12,9 @@ export function Header() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 to-black/0 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-2 flex flex-col items-center relative">
 
-          {/* Icône téléphone mobile à gauche */}
+          {/* Icône WhatsApp en haut à gauche sur mobile */}
           <div className="absolute top-6 left-4 sm:hidden">
-            <a href="tel:+393457905205" className="text-white">
+            <a href="https://wa.me/393457905205" target="_blank" rel="noopener noreferrer" className="text-white">
               <Phone className="w-5 h-5" />
             </a>
           </div>
