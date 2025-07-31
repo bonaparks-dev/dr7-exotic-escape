@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { ServiceCategories } from "@/components/ServiceCategories";
 import { FeaturedListings } from "@/components/FeaturedListings";
 import { Footer } from "@/components/Footer";
+import CookieBanner from "@/components/CookieBanner";
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
         <FeaturedListings />
       </main>
       <Footer />
+      <CookieBanner />
     </div>
   );
 };
