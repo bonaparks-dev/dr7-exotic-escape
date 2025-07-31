@@ -59,18 +59,36 @@ export function Header() {
           </a>
 
           {/* Menu centré sous le logo (desktop) */}
-          <nav className="hidden md:flex items-center justify-center space-x-10 mt-2 font-seasons">
-            <a href="/services" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
-              Services
-            </a>
-            <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
-              About
-            </a>
-            <a href="#contact" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
-              Contact
-            </a>
-          </nav>
-        </div>
+          <nav className="hidden md:flex items-center justify-center space-x-10 mt-2 font-seasons relative z-50">
+  {/* SERVICES dropdown */}
+  <div className="relative group">
+    <a
+      href="#"
+      className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase"
+    >
+      Services
+    </a>
+    <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-52 bg-black/95 border border-luxury-gold/20 backdrop-blur-lg rounded-xl shadow-xl hidden group-hover:block">
+      <ul className="flex flex-col py-2">
+        <li><a href="/services/supercars" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Supercars</a></li>
+        <li><a href="/services/yachts" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Luxury Yachts</a></li>
+        <li><a href="/services/jets" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Private Jets</a></li>
+        <li><a href="/services/villas" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Exclusive Villas</a></li>
+        <li><a href="/services" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Rapid Services</a></li>
+      </ul>
+    </div>
+  </div>
+
+  {/* ABOUT */}
+  <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
+    About
+  </a>
+
+  {/* CONTACT */}
+  <a href="#contact" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
+    Contact
+  </a>
+</nav>
       </header>
 
       {/* Menu mobile overlay */}
