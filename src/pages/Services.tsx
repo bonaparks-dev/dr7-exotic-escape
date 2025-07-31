@@ -65,8 +65,8 @@ export default function Services() {
       footer: "\u26a0\ufe0f Questi prezzi sono solo manodopera: i pezzi verranno forniti dal cliente o acquistati da noi separatamente."
     },
     en: {
-      title: "DR7 RAPID SERVICE – LABOR PRICE LIST",
-      subtitle: "Competitive pricing for fast and professional services",
+      title: "DR7 RAPID SERVICE – PRICE LIST",
+      subtitle: "Fast and professional services",
       languageToggle: "\ud83c\uddee\ud83c\uddf9 Italiano",
       services: {
         brakes: {
@@ -139,11 +139,16 @@ export default function Services() {
                 </p>
               </div>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={() => setLanguage(language === 'en' ? 'it' : 'en')}
-                className="ml-4"
+                className="ml-4 bg-black text-white border-none hover:bg-neutral-900"
               >
+                <img
+                  src={language === 'en' ? "/icons/flag-it.svg" : "/icons/flag-us.svg"}
+                  alt="Flag"
+                  className="w-5 h-5 inline-block mr-2"
+                />
                 {currentContent.languageToggle}
               </Button>
             </div>
