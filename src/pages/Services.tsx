@@ -65,7 +65,7 @@ export default function Services() {
       footer: "\u26a0\ufe0f Questi prezzi sono solo manodopera: i pezzi verranno forniti dal cliente o acquistati da noi separatamente."
     },
     en: {
-    
+    title: "DR7 RAPID SERVICE – PRICE LIST",
       subtitle: "DR7 RAPID SERVICE – PRICE LIST",
       languageToggle: "\ud83c\uddee\ud83c\uddf9 Italiano",
       services: {
