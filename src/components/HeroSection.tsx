@@ -32,7 +32,7 @@ export function HeroSection() {
         <div className="flex items-center justify-center mb-6">
         
           <span className="text-luxury-gold text-lg font-medium tracking-wide">
-            EXCLUSIVE LUXURY EXPERIENCES
+            
           </span>
         </div>
 
