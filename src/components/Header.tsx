@@ -9,11 +9,11 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 to-black/0 backdrop-blur-md">
         <div className="container mx-auto px-4 py-2 flex flex-col items-center relative">
 
-          {/* Boutons (WhatsApp / Login / Burger) en haut à droite */}
-          <div className="absolute top-2 right-4 flex items-center space-x-4">
+          {/* Boutons à droite positionnés un peu plus bas */}
+          <div className="absolute top-6 right-4 flex items-center space-x-4">
             <Button
               variant="gold"
               size="sm"
@@ -51,7 +51,7 @@ export function Header() {
             />
           </a>
 
-          {/* Menu centré sous le logo (visible uniquement sur desktop) */}
+          {/* Menu centré sous le logo (desktop) */}
           <nav className="hidden md:flex items-center justify-center space-x-10 mt-2">
             <a href="/services" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
               Services
