@@ -30,7 +30,7 @@ export function HeroSection() {
       {/* Content */}
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
         <div className="flex items-center justify-center mb-6">
-          <Sparkles className="w-8 h-8 text-luxury-gold mr-3" />
+        
           <span className="text-luxury-gold text-lg font-medium tracking-wide">
             EXCLUSIVE LUXURY EXPERIENCES
           </span>
