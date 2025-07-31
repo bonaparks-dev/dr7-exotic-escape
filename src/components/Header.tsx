@@ -48,9 +48,12 @@ export function Header() {
   <span className="hidden sm:inline">Login</span>
 </Button>
           
-          <Button variant="ghost" size="sm" className="md:hidden">
-            <Menu className="w-4 h-4" />
-          </Button>
+          <Button 
+  size="sm"
+  className="bg-black text-white border-none shadow-none outline-none hover:bg-black active:bg-black focus:ring-0 focus:outline-none md:hidden"
+>
+  <Menu className="w-5 h-5" />
+</Button>
         </div>
       </div>
     </header>
