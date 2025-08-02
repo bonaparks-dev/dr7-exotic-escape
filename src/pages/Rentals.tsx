@@ -145,7 +145,7 @@ const cars: Car[] = [
       engine: "3.9L V8"
     },
     description: "Open-top Italian dream.",
-    image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&h=600&fit=crop"
+    image: "/ferrari-portofino.png"
   },
   {
     id: 10,
