@@ -71,7 +71,7 @@ export function Header() {
               </a>
               <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-52 bg-black/95 border border-luxury-gold/20 backdrop-blur-lg rounded-xl shadow-xl hidden group-hover:block">
                 <ul className="flex flex-col py-2">
-                  <li><a href="/services/supercars" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Supercars</a></li>
+                  <li><a href="/rentals" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Supercars</a></li>
                   <li><a href="/services/yachts" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Luxury Yachts</a></li>
                   <li><a href="/services/jets" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Private Jets</a></li>
                   <li><a href="/services/villas" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Exclusive Villas</a></li>
@@ -80,9 +80,6 @@ export function Header() {
               </div>
             </div>
 
-            <a href="/rentals" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
-              Rentals
-            </a>
 
             <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
               About
@@ -116,7 +113,7 @@ export function Header() {
             </button>
             {isServicesOpen && (
               <div className="mt-2 space-y-2">
-                <a href="/services/supercars" className="block text-sm text-white hover:text-luxury-gold">Supercars</a>
+                <a href="/rentals" className="block text-sm text-white hover:text-luxury-gold">Supercars</a>
                 <a href="/services/yachts" className="block text-sm text-white hover:text-luxury-gold">Luxury Yachts</a>
                 <a href="/services/jets" className="block text-sm text-white hover:text-luxury-gold">Private Jets</a>
                 <a href="/services/villas" className="block text-sm text-white hover:text-luxury-gold">Exclusive Villas</a>
@@ -125,7 +122,7 @@ export function Header() {
             )}
           </div>
 
-          <a href="/rentals" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Rentals</a>
+          
           <a href="#about" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">About</a>
           <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Contact</a>
           <a href="/auth" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Login</a>
