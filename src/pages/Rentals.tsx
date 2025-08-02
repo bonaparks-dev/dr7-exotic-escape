@@ -229,7 +229,7 @@ const Rentals = () => {
 
   const openWhatsApp = (carName: string) => {
     const message = `I'm interested in renting the ${carName} from DR7 Exotic.`;
-    const whatsappUrl = `https://wa.me/393495550102?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/393457905205?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
