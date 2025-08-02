@@ -50,7 +50,7 @@ const cars: Car[] = [
       engine: "2.4L inline 5-cylinder"
     },
     description: "Impossibile passare senza voltarsi.",
-    image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&h=600&fit=crop",
+    image: "/rs3.png",
     color: "Green"
   },
   {
@@ -65,7 +65,7 @@ const cars: Car[] = [
       engine: "3.0L V6"
     },
     description: "La firma eterna di Porsche.",
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&h=600&fit=crop"
+    image: "/porsche911.png"
   },
   {
     id: 4,
@@ -79,7 +79,7 @@ const cars: Car[] = [
       engine: "6.2L V8"
     },
     description: "Presenza da leggenda.",
-    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop"
+    image: "/hummer.png"
   },
   {
     id: 5,
@@ -93,7 +93,7 @@ const cars: Car[] = [
       engine: "3.0L inline 6-cylinder"
     },
     description: "Nato per distinguersi.",
-    image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&h=600&fit=crop"
+    image: "/mercedes-gle.png"
   },
   {
     id: 6,
