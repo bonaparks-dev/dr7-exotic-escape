@@ -80,6 +80,10 @@ export function Header() {
               </div>
             </div>
 
+            <a href="/rentals" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
+              Rentals
+            </a>
+
             <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
               About
             </a>
@@ -121,6 +125,7 @@ export function Header() {
             )}
           </div>
 
+          <a href="/rentals" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Rentals</a>
           <a href="#about" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">About</a>
           <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Contact</a>
           <a href="/auth" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Login</a>
