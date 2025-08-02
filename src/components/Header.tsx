@@ -6,12 +6,15 @@ import { useState } from "react";
 export function Header() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false); // pour le menu déroulant mobile
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-xs">
-        <div className="container mx-auto px-4 py-2 flex flex-col items-center relative">
+      <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+        {/* Overlay flou et dégradé XS */}
+        <div className="w-full h-24 bg-gradient-to-b from-black/30 to-transparent backdrop-blur-[2px] absolute top-0 left-0 z-40"></div>
+
+        <div className="container mx-auto px-4 py-2 flex flex-col items-center relative z-50 pointer-events-auto">
 
           {/* Icône WhatsApp mobile */}
           <div className="absolute top-6 left-4 sm:hidden">
@@ -61,7 +64,6 @@ export function Header() {
 
           {/* Menu desktop */}
           <nav className="hidden md:flex items-center justify-center space-x-10 mt-2 font-seasons relative z-50">
-            {/* SERVICES dropdown */}
             <div className="relative group">
               <a
                 href="#"
@@ -79,7 +81,6 @@ export function Header() {
                 </ul>
               </div>
             </div>
-
 
             <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
               About
@@ -102,7 +103,6 @@ export function Header() {
             <X className="w-6 h-6" />
           </button>
 
-          {/* SERVICES mobile dropdown */}
           <div className="text-center">
             <button
               className="text-xl font-semibold flex items-center space-x-1"
@@ -122,7 +122,6 @@ export function Header() {
             )}
           </div>
 
-          
           <a href="#about" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">About</a>
           <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Contact</a>
           <a href="/auth" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Login</a>
