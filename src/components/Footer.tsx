@@ -56,9 +56,6 @@ export function Footer() {
             <ul className="space-y-2">
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">About Us</a></li>
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">How It Works</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Careers</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Press</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Partners</a></li>
             </ul>
           </div>
           
@@ -66,7 +63,6 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-luxury-gold">Support</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Help Center</a></li>
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Contact Us</a></li>
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Privacy Policy</a></li>
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Terms of Service</a></li>
