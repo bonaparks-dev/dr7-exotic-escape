@@ -11,10 +11,10 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Video */}
+    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+      {/* Background Video – full cover, no border, no black band */}
       <video
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute top-0 left-0 w-full h-full object-cover"
         src="/hero-video.MP4"
         autoPlay
         muted
@@ -24,16 +24,16 @@ export function HeroSection() {
         onLoadedData={handleVideoLoad}
       />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-hero" />
+      {/* Light top gradient with blur XS */}
+      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black/20 to-transparent backdrop-blur-[2px] z-10" />
 
-      {/* Content */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+      {/* Overlay for contrast */}
+      <div className="absolute inset-0 bg-black/30 z-0" />
+
+      {/* Hero Content */}
+      <div className="relative z-20 text-center max-w-4xl mx-auto px-4">
         <div className="flex items-center justify-center mb-6">
-        
-          <span className="text-luxury-gold text-lg font-medium tracking-wide">
-            
-          </span>
+          <span className="text-luxury-gold text-lg font-medium tracking-wide"></span>
         </div>
 
         <h1 className="text-5xl md:text-7xl font-bold text-luxury-ivory mb-6 leading-tight">
@@ -60,7 +60,7 @@ export function HeroSection() {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-20">
         <div className="w-6 h-10 border-2 border-luxury-ivory/30 rounded-full flex justify-center">
           <div className="w-1 h-3 bg-luxury-ivory/60 rounded-full mt-2 animate-pulse" />
         </div>
