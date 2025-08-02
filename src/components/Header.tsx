@@ -10,7 +10,7 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 to-black/0 backdrop-blur-sm">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 to-black/0 backdrop-blur-xs">
         <div className="container mx-auto px-4 py-2 flex flex-col items-center relative">
 
           {/* Icône WhatsApp mobile */}
