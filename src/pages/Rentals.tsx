@@ -106,7 +106,7 @@ const cars: Car[] = [
       engine: "2.0L 4-cylinder Turbo"
     },
     description: "Compact but wild.",
-    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&h=600&fit=crop",
+    image: "/mercedes-a45",
     color: "Yellow"
   },
   {
@@ -120,28 +120,28 @@ const cars: Car[] = [
       engine: "3.0L inline 6-cylinder"
     },
     description: "Iconic performance in style.",
-    image: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800&h=600&fit=crop",
+    image: "/bmw-m4",
     color: "Black"
   },
   {
     id: 8,
-    name: "Jeep Wrangler Rubicon",
-    price: "189€/day",
+    name: "Lamborghini URUS",
+    price: "589€/day",
     specs: {
       special: "Perfect for off-road adventures",
       engine: "2.0L Turbo – 4x4"
     },
     description: "Ready for any terrain.",
-    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop",
+    image: "/urus.png",
     color: "Black"
   },
   {
     id: 9,
-    name: "Ferrari California T",
-    price: "349€/day",
+    name: "Ferrari Portofino M",
+    price: "589€/day",
     specs: {
       acceleration: "0–100 in 3.6s",
-      power: "560Cv",
+      power: "620Cv",
       engine: "3.9L V8"
     },
     description: "Open-top Italian dream.",
