@@ -17,7 +17,7 @@ const categories = [
     description: 'Private charters & exclusive access',
     icon: Ship,
     image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&q=80&w=800&h=600',
-    itemCount: '8 Available'
+    itemCount: 'Coming soon'
   },
   {
     id: 'jets',
@@ -25,7 +25,7 @@ const categories = [
     description: 'Global destinations, ultimate comfort',
     icon: Plane,
     image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&q=80&w=800&h=600',
-    itemCount: '15 Available'
+    itemCount: 'Coming soon'
   },
   {
     id: 'villas',
@@ -33,7 +33,7 @@ const categories = [
     description: 'Exclusive properties worldwide',
     icon: Home,
     image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=800&h=600',
-    itemCount: '25 Available'
+    itemCount: 'Coming soon'
   }
 ];
 
