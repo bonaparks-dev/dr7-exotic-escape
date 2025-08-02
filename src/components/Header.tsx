@@ -6,11 +6,11 @@ import { useState } from "react";
 export function Header() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false); // pour le menu déroulant mobile
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-luxury-gold/20 shadow-md">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 to-black/0 backdrop-blur-xs">
         <div className="container mx-auto px-4 py-2 flex flex-col items-center relative">
 
           {/* Icône WhatsApp mobile */}
@@ -61,6 +61,7 @@ export function Header() {
 
           {/* Menu desktop */}
           <nav className="hidden md:flex items-center justify-center space-x-10 mt-2 font-seasons relative z-50">
+            {/* SERVICES dropdown */}
             <div className="relative group">
               <a
                 href="#"
@@ -68,7 +69,7 @@ export function Header() {
               >
                 Services
               </a>
-              <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-52 bg-black/95 border border-luxury-gold/20 rounded-xl shadow-xl hidden group-hover:block">
+              <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-52 bg-black/95 border border-luxury-gold/20 backdrop-blur-lg rounded-xl shadow-xl hidden group-hover:block">
                 <ul className="flex flex-col py-2">
                   <li><a href="/rentals" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Supercars</a></li>
                   <li><a href="/services/yachts" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Luxury Yachts</a></li>
@@ -78,6 +79,7 @@ export function Header() {
                 </ul>
               </div>
             </div>
+
 
             <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
               About
@@ -100,6 +102,7 @@ export function Header() {
             <X className="w-6 h-6" />
           </button>
 
+          {/* SERVICES mobile dropdown */}
           <div className="text-center">
             <button
               className="text-xl font-semibold flex items-center space-x-1"
@@ -119,6 +122,7 @@ export function Header() {
             )}
           </div>
 
+          
           <a href="#about" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">About</a>
           <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Contact</a>
           <a href="/auth" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Login</a>
