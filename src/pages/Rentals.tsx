@@ -249,7 +249,7 @@ const Rentals = () => {
 
       {/* Floating WhatsApp Button */}
       <Button
-        onClick={() => window.open('https://wa.me/393495550102', '_blank')}
+        onClick={() => window.open('https://wa.me/393457905202', '_blank')}
         className="fixed bottom-20 right-4 z-40 bg-green-600 hover:bg-green-700 text-white rounded-full p-3 shadow-lg md:hidden"
         size="icon"
       >
