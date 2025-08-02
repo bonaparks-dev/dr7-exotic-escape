@@ -346,7 +346,7 @@ const Rentals = () => {
               Our luxury concierge team is available 24/7 to help you select the perfect vehicle for your needs.
             </p>
             <Button
-              onClick={() => window.open('https://wa.me/393495550102', '_blank')}
+              onClick={() => window.open('https://wa.me/393457905202', '_blank')}
               variant="gold"
               size="lg"
             >
