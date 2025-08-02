@@ -50,10 +50,13 @@ export function ServiceCategories() {
             Curated luxury experiences designed for the discerning few
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category) => (
-            <Card key={category.id} className="group overflow-hidden border-0 shadow-card hover:shadow-luxury transition-all duration-500 bg-card/50 backdrop-blur-sm">
+            <Card
+              key={category.id}
+              className="group overflow-hidden border-0 shadow-card hover:shadow-luxury transition-all duration-500 bg-card/50 backdrop-blur-sm"
+            >
               <div className="relative h-64 overflow-hidden">
                 <img
                   src={category.image}
@@ -70,13 +73,21 @@ export function ServiceCategories() {
                   </span>
                 </div>
               </div>
-              
+
               <CardContent className="p-6">
                 <h3 className="text-2xl font-bold mb-2">{category.title}</h3>
                 <p className="text-luxury-gold mb-4">{category.description}</p>
-                <Button variant="luxury" className="w-full">
-                  Explore Collection
-                </Button>
+                {category.id === 'supercars' ? (
+                  <a href="/rentals">
+                    <Button variant="luxury" className="w-full">
+                      Explore Collection
+                    </Button>
+                  </a>
+                ) : (
+                  <Button variant="luxury" className="w-full">
+                    Explore Collection
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ))}
@@ -85,5 +96,4 @@ export function ServiceCategories() {
     </section>
   );
 }
-
 
