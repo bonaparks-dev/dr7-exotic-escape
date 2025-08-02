@@ -10,10 +10,9 @@ export function Header() {
 
   return (
     <>
-      {/* Header transparent et sans fond noir */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-transparent pointer-events-none">
-        {/* Overlay flou très léger + dégradé XS */}
-        <div className="w-full h-20 bg-gradient-to-b from-black/20 to-transparent backdrop-blur-sm absolute top-0 left-0 z-40" />
+      <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+        {/* Overlay flou et dégradé XS */}
+        <div className="w-full h-24 bg-gradient-to-b from-black/30 to-transparent backdrop-blur-[2px] absolute top-0 left-0 z-40"></div>
 
         <div className="container mx-auto px-4 py-2 flex flex-col items-center relative z-50 pointer-events-auto">
 
