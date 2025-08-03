@@ -45,17 +45,7 @@ const Index = () => {
                 </a>
               </div>
 
-              <p className="text-sm text-gray-300">
-                Current and new models in our{" "}
-                <a
-                  href="https://t.me/dr7exotic"
-                  className="underline text-white"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  telegram channel
-                </a>
-              </p>
+              
             </div>
 
             {/* Voiture à droite */}
