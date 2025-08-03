@@ -82,7 +82,7 @@ export default function Services() {
             {Object.values(content.services).map((service, index) => (
               <Card key={index} className="border border-luxury-gold/20 bg-white/5 backdrop-blur-md hover:border-luxury-gold transition-colors">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg font-[The_Seasons] text-black">
+                  <CardTitle className="text-lg font-semibold text-black">
                     {service.title}
                   </CardTitle>
                   {"subtitle" in service && (
