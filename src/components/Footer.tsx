@@ -13,9 +13,7 @@ export function Footer() {
               alt="DR7 Exotic Cars & Luxury" 
               className="h-12 w-auto"
             />
-            <p className="text-luxury-gold leading-relaxed">
-              Curating the world's most exclusive luxury experiences for the discerning few.
-            </p>
+            
             <div className="flex space-x-4">
               <Button 
                 variant="ghost" 
@@ -82,7 +80,7 @@ export function Footer() {
         
         <div className="border-t border-luxury-ivory/10 mt-12 pt-8 text-center">
           <p className="text-luxury-gold">
-            © 2024 DR7 Exotic. All rights reserved.
+            © 2023 DR7 Exotic. All rights reserved.
           </p>
         </div>
       </div>
