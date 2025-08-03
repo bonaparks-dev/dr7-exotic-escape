@@ -14,12 +14,12 @@ const Index = () => {
         <HeroSection />
         <ServiceCategories />
 
-        {/* SECTION CONTACT – CLEAN VERSION */}
+        {/* SECTION CONTACT – clean sans box-shadow */}
         <section
           id="contact"
           className="bg-background text-luxury-charcoal py-24 px-6 md:px-12"
         >
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-8 border border-gray-200 rounded-xl shadow-md p-8 bg-white">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-8">
             {/* Infos à gauche */}
             <div className="md:w-1/2 text-left">
               <h2
