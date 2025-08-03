@@ -65,7 +65,7 @@ const cars: Car[] = [
       engine: "3.0L V6"
     },
     description: "La firma eterna di Porsche.",
-    image: "/porsche911.png"
+    image: "/porsche-911.png"
   },
   {
     id: 4,
