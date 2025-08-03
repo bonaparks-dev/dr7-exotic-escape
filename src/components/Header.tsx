@@ -76,8 +76,8 @@ export function Header() {
                   <li><a href="/rentals" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Supercars</a></li>
                   <li><a href="/services" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Rapid Services</a></li>
                   <li><a href="/services/yachts" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Luxury Yachts - Coming Soon</a></li>
-                  <li><a href="/services/jets" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Private Jets</a></li>
-                  <li><a href="/services/villas" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Exclusive Villas</a></li>
+                  <li><a href="/services/jets" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Private Jets- Coming Soon</a></li>
+                  <li><a href="/services/villas" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Exclusive Villas- Coming Soon</a></li>
                   
                 </ul>
               </div>
