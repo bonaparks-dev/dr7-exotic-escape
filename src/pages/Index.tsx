@@ -32,7 +32,7 @@ const Index = () => {
               <p className="text-luxury-gold text-sm uppercase mb-2">WhatsApp</p>
               <p className="text-2xl font-semibold mb-6">+39 345 790 5205</p>
 
-              <p className="mb-1">Cagliari, Via Marconi</p>
+              <p className="mb-1">Viale Marconi, 229, 09131 Cagliari</p>
               <p className="text-muted-foreground mb-6">Office hours: 9am to 7pm</p>
 
               <div className="flex space-x-4 mb-6">
