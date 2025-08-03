@@ -92,7 +92,7 @@ export default function Services() {
                 <CardContent className="space-y-3">
                   {service.items.map((item, itemIndex) => (
                     <div key={itemIndex} className="flex justify-between items-center py-2">
-                      <span className="text-sm text-white/70">{item.name}</span>
+                      <span className="text-sm text-black/70">{item.name}</span>
                       <span className="font-semibold text-luxury-gold">{item.price}</span>
                     </div>
                   ))}
