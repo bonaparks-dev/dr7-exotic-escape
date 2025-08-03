@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export function HeroSection() {
   const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
@@ -11,7 +11,7 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative w-full h-screen overflow-hidden">
       {/* Background Video */}
       <video
         className="absolute inset-0 w-full h-full object-cover"
@@ -24,18 +24,11 @@ export function HeroSection() {
         onLoadedData={handleVideoLoad}
       />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-hero" />
+      {/* Optional Overlay */}
+      <div className="absolute inset-0 bg-gradient-hero z-0" />
 
-      {/* Content */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-        <div className="flex items-center justify-center mb-6">
-        
-          <span className="text-luxury-gold text-lg font-medium tracking-wide">
-            
-          </span>
-        </div>
-
+      {/* Foreground content */}
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
         <h1 className="text-5xl md:text-7xl font-bold text-luxury-ivory mb-6 leading-tight">
           Redefine
           <span className="block bg-gradient-gold bg-clip-text text-transparent">
@@ -60,7 +53,7 @@ export function HeroSection() {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
         <div className="w-6 h-10 border-2 border-luxury-ivory/30 rounded-full flex justify-center">
           <div className="w-1 h-3 bg-luxury-ivory/60 rounded-full mt-2 animate-pulse" />
         </div>
