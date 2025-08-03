@@ -78,7 +78,7 @@ const cars: Car[] = [
       torque: "574Nm",
       engine: "6.2L V8"
     },
-    description: "Presenza da leggenda.",
+    description: "Legendary road presence.",
     image: "/hummer.png"
   },
   {
