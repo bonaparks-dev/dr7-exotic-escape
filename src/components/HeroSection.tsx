@@ -3,7 +3,7 @@ import { MessageCircle, Menu, X, Phone, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-export function Header() {
+export function HeroSection() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);

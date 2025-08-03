@@ -17,6 +17,7 @@ interface Car {
     torque?: string;
     engine: string;
     special?: string;
+    extras?: string;
   };
   description: string;
   image: string;
