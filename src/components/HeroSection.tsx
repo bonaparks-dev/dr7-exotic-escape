@@ -46,11 +46,7 @@ export function HeroSection() {
               Explore Collection
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
-          </a>
-<Button variant="hero" size="lg" className="px-8 py-6 text-lg">
-    Watch Experience
-  </Button>
-          
+          </a>   
         </div>
       </div>
 
