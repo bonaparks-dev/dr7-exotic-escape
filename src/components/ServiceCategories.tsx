@@ -9,7 +9,9 @@ const categories = [
     description: 'Ferrari, Lamborghini, McLaren & more',
     icon: Car,
     image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=800&h=600',
-    itemCount: '12 Available'
+    itemCount: '15 Available',
+    buttonLabel: 'Explore Collection',
+    link: '/rentals'
   },
   {
     id: 'yachts',
@@ -17,7 +19,8 @@ const categories = [
     description: 'Private charters & exclusive access',
     icon: Ship,
     image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&q=80&w=800&h=600',
-    itemCount: 'Coming soon'
+    itemCount: 'Coming soon',
+    buttonLabel: 'Coming Soon'
   },
   {
     id: 'jets',
@@ -25,7 +28,8 @@ const categories = [
     description: 'Global destinations, ultimate comfort',
     icon: Plane,
     image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&q=80&w=800&h=600',
-    itemCount: 'Coming soon'
+    itemCount: 'Coming soon',
+    buttonLabel: 'Coming Soon'
   },
   {
     id: 'villas',
@@ -33,7 +37,8 @@ const categories = [
     description: 'Exclusive properties worldwide',
     icon: Home,
     image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=800&h=600',
-    itemCount: 'Coming soon'
+    itemCount: 'Coming soon',
+    buttonLabel: 'Coming Soon'
   }
 ];
 
@@ -77,15 +82,15 @@ export function ServiceCategories() {
               <CardContent className="p-6">
                 <h3 className="text-2xl font-bold mb-2">{category.title}</h3>
                 <p className="text-luxury-gold mb-4">{category.description}</p>
-                {category.id === 'supercars' ? (
-                  <a href="/rentals">
+                {category.link ? (
+                  <a href={category.link}>
                     <Button variant="luxury" className="w-full">
-                      Explore Collection
+                      {category.buttonLabel}
                     </Button>
                   </a>
                 ) : (
                   <Button variant="luxury" className="w-full">
-                    Explore Collection
+                    {category.buttonLabel}
                   </Button>
                 )}
               </CardContent>
@@ -96,4 +101,3 @@ export function ServiceCategories() {
     </section>
   );
 }
-
