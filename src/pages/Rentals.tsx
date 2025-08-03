@@ -36,7 +36,7 @@ const cars: Car[] = [
       engine: "3.0L inline 6-cylinder"
     },
     description: "Un'icona che domina la strada.",
-    image: "/bmwm3.png"
+    image: "/bmw-m3.png"
   },
   {
     id: 2,
