@@ -46,7 +46,6 @@ export function Footer() {
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Luxury Yachts</a></li>
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Private Jets</a></li>
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Exclusive Villas</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Private Chefs</a></li>
             </ul>
           </div>
           
