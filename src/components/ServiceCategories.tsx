@@ -8,7 +8,7 @@ const categories = [
     title: 'Supercars',
     description: 'Ferrari, Lamborghini, McLaren & more',
     icon: Car,
-    image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=800&h=600',
+    image: '/supercars.png',
     itemCount: '15 Available',
     buttonLabel: 'Explore Collection',
     link: '/rentals'
