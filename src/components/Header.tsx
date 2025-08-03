@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { MessageCircle, User, Menu, X, Phone, ChevronDown } from "lucide-react";
+import { MessageCircle, Menu, X, Phone, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -11,11 +11,7 @@ export function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
-        {/* Overlay flou et dégradé XS */}
-       
-
         <div className="container mx-auto px-4 py-2 flex flex-col items-center relative z-50 pointer-events-auto">
-
           {/* Icône WhatsApp mobile */}
           <div className="absolute top-6 left-4 sm:hidden">
             <a href="https://wa.me/393457905205" target="_blank" rel="noopener noreferrer" className="text-white">
@@ -35,15 +31,7 @@ export function Header() {
               WhatsApp
             </Button>
 
-            <Button 
-              size="sm"
-              className="bg-black text-white border-none shadow-none outline-none hover:bg-black/90 active:bg-black focus:ring-0 focus:outline-none"
-              onClick={() => navigate("/auth")}
-            >
-              <User className="w-4 h-4" />
-              <span className="hidden sm:inline">Login</span>
-            </Button>
-
+            {/* Bouton menu mobile */}
             <Button 
               size="sm"
               className="bg-black text-white border-none shadow-none outline-none hover:bg-black active:bg-black focus:ring-0 focus:outline-none md:hidden"
@@ -76,9 +64,8 @@ export function Header() {
                   <li><a href="/rentals" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Supercars</a></li>
                   <li><a href="/services" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Rapid Services</a></li>
                   <li><a href="/services/yachts" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Luxury Yachts - Coming Soon</a></li>
-                  <li><a href="/services/jets" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Private Jets- Coming Soon</a></li>
-                  <li><a href="/services/villas" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Exclusive Villas- Coming Soon</a></li>
-                  
+                  <li><a href="/services/jets" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Private Jets - Coming Soon</a></li>
+                  <li><a href="/services/villas" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Exclusive Villas - Coming Soon</a></li>
                 </ul>
               </div>
             </div>
@@ -119,7 +106,6 @@ export function Header() {
                 <a href="/services/yachts" className="block text-sm text-white hover:text-luxury-gold">Luxury Yachts - Coming Soon</a>
                 <a href="/services/jets" className="block text-sm text-white hover:text-luxury-gold">Private Jets - Coming Soon</a>
                 <a href="/services/villas" className="block text-sm text-white hover:text-luxury-gold">Exclusive Villas - Coming Soon</a>
-              
               </div>
             )}
           </div>
