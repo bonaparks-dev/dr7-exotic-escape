@@ -19,7 +19,7 @@ const Index = () => {
           id="contact"
           className="relative bg-black text-white py-24 px-6 md:px-12 overflow-hidden"
           style={{
-            backgroundImage: "url('/backgrounds/dr7-contact-bg.jpg')",
+            backgroundImage: "url('/backgrounds/dr7-contact-bg.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
