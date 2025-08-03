@@ -128,12 +128,14 @@ const cars: Car[] = [
     name: "Lamborghini URUS",
     price: "589€/day",
     specs: {
-      special: "Perfect for off-road adventures",
-      engine: "2.0L Turbo – 4x4"
+      acceleration: "0-100 in 3.6s",
+      power: "650Cv",
+      torque: "850Nm",
+      engine: "4.0L V8 Twin-Turbo"
     },
-    description: "Ready for any terrain.",
+    description: "Fearless on any road.",
     image: "/urus.png",
-    color: "Black"
+    color: "Grey"
   },
   {
     id: 9,
