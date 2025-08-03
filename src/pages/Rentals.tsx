@@ -176,16 +176,16 @@ const cars: Car[] = [
   },
   {
     id: 12,
-    name: "McLaren 570S",
-    price: "479€/day",
+    name: "Macan GTS",
+    price: "239€/day",
     specs: {
-      acceleration: "0–100 in 3.2s",
-      power: "570Cv",
-      engine: "3.8L V8 Twin Turbo"
+      acceleration: "0–100 in 4.5s",
+      power: "440Cv",
+      engine: "2.9L Inline 6-Cylinder"
     },
     description: "Race-bred elegance.",
-    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=600&fit=crop",
-    color: "Orange"
+    image: "macan.png",
+    color: "Green"
   },
   {
     id: 13,
