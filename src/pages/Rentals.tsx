@@ -28,7 +28,6 @@ const cars: Car[] = [
   {
     id: 1,
     name: "BMW M3 Competition",
-    price: "239€/day",
     specs: {
       acceleration: "0–100 in 3.9s",
       maxSpeed: "Max speed: 250km/h",
@@ -42,7 +41,6 @@ const cars: Car[] = [
   {
     id: 2,
     name: "Audi RS3",
-    price: "229€/day",
     specs: {
       acceleration: "0–100 in 3.8s",
       maxSpeed: "Max speed: 250km/h",
@@ -57,7 +55,6 @@ const cars: Car[] = [
   {
     id: 3,
     name: "Porsche 911 Carrera 4S",
-    price: "269€/day",
     specs: {
       acceleration: "0–100 in 3.6s",
       maxSpeed: "Max speed: 306km/h",
@@ -71,7 +68,6 @@ const cars: Car[] = [
   {
     id: 4,
     name: "Hummer H2",
-    price: "149€/day",
     specs: {
       acceleration: "0–100 in 7.8s",
       maxSpeed: "Max speed: 160km/h",
@@ -85,7 +81,6 @@ const cars: Car[] = [
   {
     id: 5,
     name: "Mercedes GLE 53 AMG",
-    price: "239€/day",
     specs: {
       acceleration: "0–100 in 4.7s",
       maxSpeed: "Max speed: 250km/h",
@@ -99,7 +94,6 @@ const cars: Car[] = [
   {
     id: 6,
     name: "Mercedes A45 AMG",
-    price: "219€/day",
     specs: {
       acceleration: "0–100 in 3.9s",
       power: "421Cv",
@@ -113,7 +107,6 @@ const cars: Car[] = [
   {
     id: 7,
     name: "BMW M4 Competition",
-    price: "249€/day",
     specs: {
       acceleration: "0–100 in 3.8s",
       power: "510Cv",
@@ -127,7 +120,6 @@ const cars: Car[] = [
   {
     id: 8,
     name: "Lamborghini URUS",
-    price: "589€/day",
     specs: {
       acceleration: "0-100 in 3.6s",
       power: "650Cv",
@@ -141,7 +133,6 @@ const cars: Car[] = [
   {
     id: 9,
     name: "Ferrari Portofino M",
-    price: "589€/day",
     specs: {
       acceleration: "0–100 in 3.6s",
       power: "620Cv",
@@ -153,7 +144,6 @@ const cars: Car[] = [
   {
     id: 10,
     name: "Lamborghini Huracán Evo",
-    price: "499€/day",
     specs: {
       acceleration: "0–100 in 2.9s",
       power: "640Cv",
@@ -166,7 +156,6 @@ const cars: Car[] = [
   {
     id: 11,
     name: "Range Rover Sport SVR",
-    price: "229€/day",
     specs: {
       power: "575Cv",
       engine: "5.0L V8 Supercharged"
@@ -178,7 +167,6 @@ const cars: Car[] = [
   {
     id: 12,
     name: "Macan GTS",
-    price: "239€/day",
     specs: {
       acceleration: "0–100 in 4.5s",
       power: "440Cv",
@@ -191,7 +179,6 @@ const cars: Car[] = [
   {
     id: 13,
     name: "Mercedes G63 AMG",
-    price: "399€/day",
     specs: {
       power: "585Cv",
       engine: "4.0L V8 BiTurbo"
@@ -203,7 +190,6 @@ const cars: Car[] = [
   {
     id: 14,
     name: "BMW X6M Competition",
-    price: "269€/day",
     specs: {
       power: "625Cv",
       engine: "4.4L V8"
