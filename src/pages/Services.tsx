@@ -68,7 +68,7 @@ export default function Services() {
       <main className="pt-32 pb-16">
         {/* Hero Section */}
         <div className="container mx-auto px-4 text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-seasons text-luxury-gold mb-4">
+          <h1 className="text-4xl md:text-6xl font-[The_Seasons] text-luxury-gold mb-4">
             Rapid Services
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
