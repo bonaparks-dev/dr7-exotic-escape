@@ -48,9 +48,7 @@ export function HeroSection() {
             </Button>
           </a>
 
-          <Button variant="hero" size="lg" className="px-8 py-6 text-lg">
-            Watch Experience
-          </Button>
+          
         </div>
       </div>
 
