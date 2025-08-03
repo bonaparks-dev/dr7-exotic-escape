@@ -221,7 +221,7 @@ const cars: Car[] = [
       engine: "2.2L inline 4-cylinder"
     },
     description: "Ready to carry it all.",
-    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop",
+    image: "Ducato.png",
     color: "White"
   }
 ];
