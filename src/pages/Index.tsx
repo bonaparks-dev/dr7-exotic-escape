@@ -27,21 +27,21 @@ const Index = () => {
             {/* Infos à gauche */}
             <div className="md:w-1/2 text-left">
               <h2 className="text-4xl font-bold uppercase mb-6 text-white">Contacts</h2>
-              <p className="text-gold text-sm uppercase mb-2">Call by phone</p>
-              <p className="text-2xl font-semibold mb-6 text-white">+39 333 123 4567</p>
+              <p className="text-gold text-sm uppercase mb-2">WhatsApp</p>
+              <p className="text-2xl font-semibold mb-6 text-white">+39 345 790 5205</p>
 
-              <p className="mb-1 text-white">Porto Cervo, Via del Mare 7</p>
-              <p className="text-gray-400 mb-6">We work from 9:00 to 22:00</p>
+              <p className="mb-1 text-white">Cagliari, Via Marconi</p>
+              <p className="text-gray-400 mb-6">Office hours: 9am to 7pm</p>
 
-              <div className="flex space-x-4 mb-6">
-                <a href="https://instagram.com/dr7exotic" target="_blank" rel="noopener noreferrer">
-                  <img src="/icons/instagram.svg" alt="Instagram" className="h-6 w-6" />
+              <div className="flex items-center gap-4 mb-6">
+                <a href="https://www.instagram.com/dr7exotic" target="_blank" rel="noopener noreferrer">
+                  <img src="/instagram.svg" alt="Instagram" className="w-6 h-6 hover:opacity-70" />
                 </a>
-                <a href="https://t.me/dr7exotic" target="_blank" rel="noopener noreferrer">
-                  <img src="/icons/telegram.svg" alt="Telegram" className="h-6 w-6" />
+                <a href="https://www.tiktok.com/@dr7exotic" target="_blank" rel="noopener noreferrer">
+                  <img src="/tiktok.svg" alt="TikTok" className="w-6 h-6 hover:opacity-70" />
                 </a>
-                <a href="https://wa.me/393331234567" target="_blank" rel="noopener noreferrer">
-                  <img src="/icons/whatsapp.svg" alt="WhatsApp" className="h-6 w-6" />
+                <a href="https://wa.me/393457905205" target="_blank" rel="noopener noreferrer">
+                  <img src="/icons/whatsapp.svg" alt="WhatsApp" className="w-6 h-6 hover:opacity-70" />
                 </a>
               </div>
 
