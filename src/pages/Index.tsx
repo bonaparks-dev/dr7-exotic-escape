@@ -19,7 +19,7 @@ const Index = () => {
           id="contact"
           className="relative bg-black text-white py-24 px-6 md:px-12 overflow-hidden"
           style={{
-            backgroundImage: "url('/backgrounds/dr7-contact-bg.png')",
+            backgroundImage: "url('/backgrounds/dr7-contact-bg.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -55,18 +55,6 @@ const Index = () => {
                   </svg>
                 </Button>
               </div>
-
-              <p className="text-sm text-gray-300">
-                Current and new models in our{" "}
-                <a
-                  href="https://t.me/dr7exotic"
-                  className="underline text-white"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  telegram channel
-                </a>
-              </p>
             </div>
 
             {/* Voiture à droite */}
