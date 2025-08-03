@@ -115,17 +115,17 @@ export function Header() {
             {isServicesOpen && (
               <div className="mt-2 space-y-2">
                 <a href="/rentals" className="block text-sm text-white hover:text-luxury-gold">Supercars</a>
-                <a href="/services/yachts" className="block text-sm text-white hover:text-luxury-gold">Luxury Yachts</a>
-                <a href="/services/jets" className="block text-sm text-white hover:text-luxury-gold">Private Jets</a>
-                <a href="/services/villas" className="block text-sm text-white hover:text-luxury-gold">Exclusive Villas</a>
                 <a href="/services" className="block text-sm text-white hover:text-luxury-gold">Rapid Services</a>
+                <a href="/services/yachts" className="block text-sm text-white hover:text-luxury-gold">Luxury Yachts - Coming Soon</a>
+                <a href="/services/jets" className="block text-sm text-white hover:text-luxury-gold">Private Jets - Coming Soon</a>
+                <a href="/services/villas" className="block text-sm text-white hover:text-luxury-gold">Exclusive Villas - Coming Soon</a>
+              
               </div>
             )}
           </div>
 
           <a href="#about" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">About</a>
           <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Contact</a>
-          <a href="/auth" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Login</a>
         </div>
       )}
     </>
