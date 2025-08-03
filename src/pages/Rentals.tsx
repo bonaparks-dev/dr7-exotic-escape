@@ -50,7 +50,7 @@ const cars: Car[] = [
       engine: "2.4L inline 5-cylinder"
     },
     description: "Impossible to go unnoticed.",
-    image: "/rs3.png",
+    image: "/audi-rs3.png",
     color: "Green"
   },
   {
