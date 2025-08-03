@@ -104,7 +104,7 @@ export default function Services() {
           {/* Footer Note */}
           <Card className="bg-muted/30 border-amber-200/30">
             <CardContent className="p-6">
-              <p className="text-center text-sm text-white/60 leading-relaxed">
+              <p className="text-center text-sm text-black/60 leading-relaxed">
                 {content.footer}
               </p>
             </CardContent>
