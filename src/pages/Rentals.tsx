@@ -49,7 +49,7 @@ const cars: Car[] = [
       torque: "500Nm",
       engine: "2.4L inline 5-cylinder"
     },
-    description: "Impossibile passare senza voltarsi.",
+    description: "Impossible to go unnoticed.",
     image: "/rs3.png",
     color: "Green"
   },
@@ -213,16 +213,16 @@ const cars: Car[] = [
   },
   {
     id: 15,
-    name: "Lamborghini Urus",
-    price: "459€/day",
+    name: "Fiat Ducato Maxi",
+    price: "99€/day",
     specs: {
-      acceleration: "0–100 in 3.6s",
-      power: "650Cv",
-      engine: "4.0L V8"
+      extras: "3 People, Unlimited Km",
+      power: "180Cv",
+      engine: "2.2L inline 4-cylinder"
     },
-    description: "Super SUV. No compromise.",
+    description: "Ready to carry it all.",
     image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop",
-    color: "Green"
+    color: "White"
   }
 ];
 
