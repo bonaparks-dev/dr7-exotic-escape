@@ -28,7 +28,7 @@ const Index = () => {
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between relative z-10">
             {/* Infos à gauche */}
             <div className="md:w-1/2 text-left">
-              <h2 className="text-4xl font-bold uppercase mb-6 text-white">Contacts</h2>
+              <h2 className="text-4xl font-bold uppercase mb-6 text-white">Contact</h2>
               <p className="text-gold text-sm uppercase mb-2">WhatsApp</p>
               <p className="text-2xl font-semibold mb-6 text-white">+39 345 790 5205</p>
 
@@ -60,7 +60,7 @@ const Index = () => {
             {/* Voiture à droite */}
             <div className="md:w-1/2 mt-12 md:mt-0 flex justify-end">
               <img
-                src="/cars/dr7-luxury-car.png"
+                src="/dr7-luxury-car.png"
                 alt="Luxury Car"
                 className="max-w-full w-[500px] object-contain"
               />
