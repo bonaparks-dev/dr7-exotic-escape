@@ -6,7 +6,7 @@ const categories = [
   {
     id: 'supercars',
     title: 'Supercars',
-    description: 'Ferrari, Lamborghini, McLaren & more',
+    description: 'Ferrari, Lamborghini, Mercedes & more',
     icon: Car,
     image: '/supercars.png',
     itemCount: '15 Available',
@@ -52,7 +52,7 @@ export function ServiceCategories() {
             <span className="bg-gradient-gold bg-clip-text text-transparent"> Collections</span>
           </h2>
           <p className="text-xl text-luxury-gold max-w-2xl mx-auto">
-            Curated luxury experiences designed for the discerning few
+            Luxury without limits. Experiences without compromise.
           </p>
         </div>
 
