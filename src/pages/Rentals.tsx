@@ -156,14 +156,15 @@ const cars: Car[] = [
   },
   {
     id: 11,
-    name: "Range Rover Sport SVR",
+    name: "Audi RS3",
     specs: {
-      power: "575Cv",
-      engine: "5.0L V8 Supercharged"
+      acceleration: "0–100 in 3.8s",
+      power: "400Cv",
+      engine: "2.4L inline 5 cylinder"
     },
     description: "Luxury meets raw power.",
-    image: "https://images.unsplash.com/photo-1606016159991-4dd4266c6db7?w=800&h=600&fit=crop",
-    color: "Black"
+    image: "Rs3-red.png",
+    color: "Red"
   },
   {
     id: 12,
