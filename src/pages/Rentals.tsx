@@ -174,7 +174,7 @@ const cars: Car[] = [
   },
   {
     id: 13,
-    name: "Mercedes C63 AMG",
+    name: "Mercedes C63 S AMG",
     specs: {
       power: "585Cv",
       engine: "4.0L V8 BiTurbo"
