@@ -30,9 +30,9 @@ export function HeroSection() {
       {/* Foreground content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
         <h1 className="text-5xl md:text-7xl font-bold text-luxury-ivory mb-6 leading-tight">
-          Redefine
+         The DR7 Sovereign
           <span className="block bg-gradient-gold bg-clip-text text-transparent">
-            Luxury
+            Luxury System
           </span>
         </h1>
 
