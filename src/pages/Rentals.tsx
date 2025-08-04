@@ -50,7 +50,6 @@ const cars: Car[] = [
     },
     description: "Impossible to go unnoticed.",
     image: "/audi-rs3.png",
-    color: "Green"
   },
   {
     id: 3,
@@ -102,7 +101,6 @@ const cars: Car[] = [
     },
     description: "Compact but wild.",
     image: "/mercedes-amg45.png",
-    color: "Grey"
   },
   {
     id: 7,
@@ -115,7 +113,6 @@ const cars: Car[] = [
     },
     description: "Iconic performance in style.",
     image: "/bmw-m4.png",
-    color: "Blue"
   },
   {
     id: 8,
@@ -128,7 +125,6 @@ const cars: Car[] = [
     },
     description: "Fearless on any road.",
     image: "/urus.png",
-    color: "Grey"
   },
   {
     id: 9,
@@ -152,7 +148,6 @@ const cars: Car[] = [
     },
     description: "Pure performance and drama.",
     image: "bmw-m2.png",
-    color: "Grey"
   },
   {
     id: 11,
@@ -164,7 +159,6 @@ const cars: Car[] = [
     },
     description: "Luxury meets raw power.",
     image: "Rs3-red.png",
-    color: "Red"
   },
   {
     id: 12,
@@ -187,7 +181,6 @@ const cars: Car[] = [
     },
     description: "The king of urban luxury SUVs.",
     image: "c63.png",
-    color: "Grey"
   },
   {
     id: 14,
@@ -198,7 +191,6 @@ const cars: Car[] = [
     },
     description: "M Power meets utility.",
     image: "alfa.png",
-    color: "White"
   },
   {
     id: 15,
@@ -211,7 +203,6 @@ const cars: Car[] = [
     },
     description: "Ready to carry it all.",
     image: "Ducato.png",
-    color: "White"
   }
 ];
 
