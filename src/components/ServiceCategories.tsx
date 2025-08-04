@@ -10,7 +10,7 @@ const categories = [
     icon: Car,
     image: '/supercars.png',
     itemCount: '15 Available',
-    buttonLabel: 'Rent a car,
+    buttonLabel: 'Rent a car',
     link: '/rentals'
   },
   {
