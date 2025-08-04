@@ -243,8 +243,9 @@ const Rentals = () => {
             Exotic Car Collection
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Experience the ultimate luxury with our premium collection of exotic supercars. 
-            Every vehicle includes 200km per day and comprehensive insurance.
+            Where elegance meets performance — in Sardinia.
+Drive the island’s most breathtaking roads with 200 km/day included in every exotic rental.
+Crafted for connoisseurs.
           </p>
         </div>
 
