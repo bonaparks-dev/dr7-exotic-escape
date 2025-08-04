@@ -9,7 +9,6 @@ import { useState } from "react";
 interface Car {
   id: number;
   name: string;
-  price: string;
   specs: {
     acceleration?: string;
     maxSpeed?: string;
