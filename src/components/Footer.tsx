@@ -61,7 +61,7 @@ export function Footer() {
             <h3 className="text-lg font-semibold text-luxury-gold">Support</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Contact Us</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Privacy Policy</a></li>
+              <li><a href="#CookiePolicy" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Cookie Policy</a></li>
               <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Terms of Service</a></li>
             </ul>
             
