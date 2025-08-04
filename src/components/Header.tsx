@@ -70,10 +70,7 @@ export function Header() {
               </div>
             </div>
 
-            <a href="#about" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
-              About
-            </a>
-
+           
             <a href="#contact" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
               Contact
             </a>
