@@ -101,7 +101,7 @@ const cars: Car[] = [
       engine: "2.0L 4-cylinder Turbo"
     },
     description: "Compact but wild.",
-    image: "/mercedes-amg45",
+    image: "/mercedes-amg45.png",
     color: "Grey"
   },
   {
