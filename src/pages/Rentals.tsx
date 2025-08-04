@@ -114,8 +114,8 @@ const cars: Car[] = [
       engine: "3.0L inline 6-cylinder"
     },
     description: "Iconic performance in style.",
-    image: "/bmw-m4",
-    color: "Black"
+    image: "/bmw-m4.png",
+    color: "Blue"
   },
   {
     id: 8,
