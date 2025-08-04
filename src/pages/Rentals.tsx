@@ -143,15 +143,16 @@ const cars: Car[] = [
   },
   {
     id: 10,
-    name: "Lamborghini Huracán Evo",
+    name: "BMW M2 Competition",
     specs: {
-      acceleration: "0–100 in 2.9s",
-      power: "640Cv",
-      engine: "5.2L V10"
+      acceleration: "0–100 in 4.1s",
+      power: "'460Cv",
+      torque: "550Nm",
+      engine: "3.0L inline 6 cylinder"
     },
     description: "Pure performance and drama.",
-    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop",
-    color: "White"
+    image: "bmw-m2.png",
+    color: "Grey"
   },
   {
     id: 11,
