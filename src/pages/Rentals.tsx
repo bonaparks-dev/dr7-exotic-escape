@@ -261,18 +261,13 @@ const Rentals = () => {
                   />
                 </div>
                 <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="text-xl font-seasons text-luxury-gold mb-1">
-                        {car.name}
-                        {car.color && <span className="text-sm text-muted-foreground ml-2">({car.color})</span>}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-2">{car.description}</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-luxury-gold">{car.price}</div>
-                      <div className="text-xs text-muted-foreground">200km included</div>
-                    </div>
+                  <div className="mb-4">
+                    <h3 className="text-xl font-seasons text-luxury-gold mb-1">
+                      {car.name}
+                      {car.color && <span className="text-sm text-muted-foreground ml-2">({car.color})</span>}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-2">{car.description}</p>
+                    <div className="text-xs text-muted-foreground">200km included</div>
                   </div>
 
                   {/* Specs */}
