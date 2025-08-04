@@ -190,12 +190,11 @@ const cars: Car[] = [
       engine: "4.4L V8"
     },
     description: "M Power meets utility.",
-    image: "alfa.png",
+    image: "alpha.png",
   },
   {
     id: 15,
     name: "Fiat Ducato Maxi",
-    price: "99€/day",
     specs: {
       extras: "3 People, Unlimited Km",
       power: "180Cv",
@@ -203,6 +202,17 @@ const cars: Car[] = [
     },
     description: "Ready to carry it all.",
     image: "Ducato.png",
+  }
+  {
+    id: 16,
+    name: "Fiat Panda",
+    specs: {
+      extras: "3 People, Unlimited Km",
+      power: "180Cv",
+      engine: "2.2L inline 4-cylinder"
+    },
+    description: "Ready to carry it all.",
+    image: "Panda.png",
   }
 ];
 
