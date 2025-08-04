@@ -27,7 +27,7 @@ const categories = [
     title: 'Private Jets',
     description: 'Global destinations, ultimate comfort',
     icon: Plane,
-    image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&q=80&w=800&h=600',
+    image: '/privatejet.jpg',
     itemCount: 'Coming soon',
     buttonLabel: 'Coming Soon'
   },
@@ -36,7 +36,7 @@ const categories = [
     title: 'Luxury Villas',
     description: 'Exclusive properties worldwide',
     icon: Home,
-    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=800&h=600',
+    image: '/exclusivevilla.jpg',
     itemCount: 'Coming soon',
     buttonLabel: 'Coming Soon'
   }
