@@ -28,6 +28,7 @@ const cars: Car[] = [
   {
     id: 1,
     name: "BMW M3 Competition",
+    price: "€350/day",
     specs: {
       acceleration: "0–100 in 3.9s",
       maxSpeed: "Max speed: 250km/h",
@@ -41,6 +42,7 @@ const cars: Car[] = [
   {
     id: 2,
     name: "Audi RS3",
+    price: "€280/day",
     specs: {
       acceleration: "0–100 in 3.8s",
       maxSpeed: "Max speed: 250km/h",
@@ -54,6 +56,7 @@ const cars: Car[] = [
   {
     id: 3,
     name: "Porsche 911 Carrera 4S",
+    price: "€420/day",
     specs: {
       acceleration: "0–100 in 3.6s",
       maxSpeed: "Max speed: 306km/h",
@@ -67,6 +70,7 @@ const cars: Car[] = [
   {
     id: 4,
     name: "Hummer H2",
+    price: "€180/day",
     specs: {
       acceleration: "0–100 in 7.8s",
       maxSpeed: "Max speed: 160km/h",
@@ -80,6 +84,7 @@ const cars: Car[] = [
   {
     id: 5,
     name: "Mercedes GLE 53 AMG",
+    price: "€320/day",
     specs: {
       acceleration: "0–100 in 4.7s",
       maxSpeed: "Max speed: 250km/h",
@@ -93,6 +98,7 @@ const cars: Car[] = [
   {
     id: 6,
     name: "Mercedes A45 AMG",
+    price: "€260/day",
     specs: {
       acceleration: "0–100 in 3.9s",
       power: "421Cv",
@@ -105,6 +111,7 @@ const cars: Car[] = [
   {
     id: 7,
     name: "BMW M4 Competition",
+    price: "€340/day",
     specs: {
       acceleration: "0–100 in 3.8s",
       power: "510Cv",
@@ -117,6 +124,7 @@ const cars: Car[] = [
   {
     id: 8,
     name: "Lamborghini URUS",
+    price: "€580/day",
     specs: {
       acceleration: "0-100 in 3.6s",
       power: "650Cv",
@@ -129,6 +137,7 @@ const cars: Car[] = [
   {
     id: 9,
     name: "Ferrari Portofino M",
+    price: "€650/day",
     specs: {
       acceleration: "0–100 in 3.6s",
       power: "620Cv",
@@ -140,68 +149,74 @@ const cars: Car[] = [
   {
     id: 10,
     name: "BMW M2 Competition",
+    price: "€290/day",
     specs: {
       acceleration: "0–100 in 4.1s",
-      power: "'460Cv",
+      power: "460Cv",
       torque: "550Nm",
       engine: "3.0L inline 6 cylinder"
     },
     description: "Pure performance and drama.",
-    image: "bmw-m2.png",
+    image: "/bmw-m2.png",
   },
   {
     id: 11,
     name: "Audi RS3",
+    price: "€280/day",
     specs: {
       acceleration: "0–100 in 3.8s",
       power: "400Cv",
       engine: "2.4L inline 5 cylinder"
     },
     description: "Luxury meets raw power.",
-    image: "Rs3-red.png",
+    image: "/Rs3-red.png",
   },
   {
     id: 12,
     name: "Macan GTS",
+    price: "€240/day",
     specs: {
       acceleration: "0–100 in 4.5s",
       power: "440Cv",
       engine: "2.9L Inline 6-Cylinder"
     },
     description: "Race-bred elegance.",
-    image: "macan.png",
+    image: "/macan.png",
     color: "Green"
   },
   {
     id: 13,
     name: "Mercedes C63 S AMG",
+    price: "€380/day",
     specs: {
       power: "585Cv",
       engine: "4.0L V8 BiTurbo"
     },
     description: "The king of urban luxury SUVs.",
-    image: "c63.png",
+    image: "/c63.png",
   },
   {
     id: 14,
     name: "Alfa Romeo Stelvio Quadrifoglio",
+    price: "€320/day",
     specs: {
       power: "625Cv",
       engine: "4.4L V8"
     },
     description: "M Power meets utility.",
-    image: "alpha.png",
+    image: "/alpha.png",
   },
   {
     id: 15,
     name: "Fiat Ducato Maxi",
+    price: "€80/day",
     specs: {
       extras: "3 People, Unlimited Km",
       power: "180Cv",
       engine: "2.2L inline 4-cylinder"
     },
     description: "Ready to carry it all.",
-    image: "Ducato.png",
+    image: "/Ducato.png",
   }
 ];
 
