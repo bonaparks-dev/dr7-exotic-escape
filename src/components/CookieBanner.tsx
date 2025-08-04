@@ -24,8 +24,12 @@ const CookieBanner = () => {
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-black text-white p-4">
       <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-sm sm:text-base text-center sm:text-left">
-          By using our site, you agree to our use of cookies 🍪
-        </div>
+  By using our site, you agree to our{' '}
+  <a href="/cookie-policy" className="text-gold hover:underline">
+    use of cookies
+  </a>{' '}
+  🍪
+</div>
         <button
           onClick={handleAccept}
           className="bg-[#2b2b2b] hover:bg-[#3a3a3a] text-white px-6 py-2 rounded transition-colors duration-200 text-sm font-medium min-w-[60px]"
