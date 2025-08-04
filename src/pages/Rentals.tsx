@@ -203,17 +203,6 @@ const cars: Car[] = [
     description: "Ready to carry it all.",
     image: "Ducato.png",
   }
-  {
-    id: 16,
-    name: "Fiat Panda",
-    specs: {
-      extras: "3 People, Unlimited Km",
-      power: "180Cv",
-      engine: "2.2L inline 4-cylinder"
-    },
-    description: "Ready to carry it all.",
-    image: "Panda.png",
-  }
 ];
 
 const Rentals = () => {
