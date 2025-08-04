@@ -19,7 +19,6 @@ const categories = [
     description: 'Private charters & exclusive access',
     icon: Ship,
     image: '/yacht.jpg',
-    itemCount: 'Coming soon',
     buttonLabel: 'Get info'
   },
   {
@@ -28,7 +27,6 @@ const categories = [
     description: 'Global destinations, ultimate comfort',
     icon: Plane,
     image: '/privatejet.jpg',
-    itemCount: 'Coming soon',
     buttonLabel: 'Get info'
   },
   {
@@ -37,7 +35,6 @@ const categories = [
     description: 'Exclusive properties worldwide',
     icon: Home,
     image: '/exclusivevilla.jpg',
-    itemCount: 'Coming soon',
     buttonLabel: 'Get info'
   }
 ];
