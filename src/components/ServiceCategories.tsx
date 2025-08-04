@@ -18,7 +18,7 @@ const categories = [
     title: 'Luxury Yachts',
     description: 'Private charters & exclusive access',
     icon: Ship,
-    image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&q=80&w=800&h=600',
+    image: '/yacht.jpg',
     itemCount: 'Coming soon',
     buttonLabel: 'Coming Soon'
   },
