@@ -10,7 +10,7 @@ const categories = [
     icon: Car,
     image: '/supercars.png',
     itemCount: '15 Available',
-    buttonLabel: 'Explore Collection',
+    buttonLabel: 'Rent a car,
     link: '/rentals'
   },
   {
@@ -20,7 +20,7 @@ const categories = [
     icon: Ship,
     image: '/yacht.jpg',
     itemCount: 'Coming soon',
-    buttonLabel: 'Coming Soon'
+    buttonLabel: 'Get info'
   },
   {
     id: 'jets',
@@ -29,7 +29,7 @@ const categories = [
     icon: Plane,
     image: '/privatejet.jpg',
     itemCount: 'Coming soon',
-    buttonLabel: 'Coming Soon'
+    buttonLabel: 'Get info'
   },
   {
     id: 'villas',
@@ -38,7 +38,7 @@ const categories = [
     icon: Home,
     image: '/exclusivevilla.jpg',
     itemCount: 'Coming soon',
-    buttonLabel: 'Coming Soon'
+    buttonLabel: 'Get info'
   }
 ];
 
