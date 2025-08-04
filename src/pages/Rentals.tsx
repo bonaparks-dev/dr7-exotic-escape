@@ -89,7 +89,7 @@ const cars: Car[] = [
       engine: "3.0L inline 6-cylinder"
     },
     description: "Nato per distinguersi.",
-    image: "/mercedes-gle.png"
+    image: "/mercedesGLE.png"
   },
   {
     id: 6,
@@ -180,25 +180,25 @@ const cars: Car[] = [
   },
   {
     id: 13,
-    name: "Mercedes G63 AMG",
+    name: "Mercedes C63 AMG",
     specs: {
       power: "585Cv",
       engine: "4.0L V8 BiTurbo"
     },
     description: "The king of urban luxury SUVs.",
-    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&h=600&fit=crop",
-    color: "Black"
+    image: "c63.png",
+    color: "Grey"
   },
   {
     id: 14,
-    name: "BMW X6M Competition",
+    name: "Alfa Romeo Stelvio Quadrifoglio",
     specs: {
       power: "625Cv",
       engine: "4.4L V8"
     },
     description: "M Power meets utility.",
-    image: "https://images.unsplash.com/photo-1606016159991-4dd4266c6db7?w=800&h=600&fit=crop",
-    color: "Gray"
+    image: "alfa.png",
+    color: "White"
   },
   {
     id: 15,
