@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { ReservationForm } from "@/components/ReservationForm";
 
 interface Car {
   id: number;
@@ -206,11 +207,17 @@ const cars: Car[] = [
 
 const Rentals = () => {
   const navigate = useNavigate();
+  const [selectedCar, setSelectedCar] = useState<string | null>(null);
+  const [isReservationFormOpen, setIsReservationFormOpen] = useState(false);
 
-  const openWhatsApp = (carName: string) => {
-    const message = `I'm interested in renting the ${carName} from DR7 Exotic.`;
-    const whatsappUrl = `https://wa.me/393457905205?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+  const openReservationForm = (carName: string) => {
+    setSelectedCar(carName);
+    setIsReservationFormOpen(true);
+  };
+
+  const closeReservationForm = () => {
+    setIsReservationFormOpen(false);
+    setSelectedCar(null);
   };
 
   return (
@@ -300,7 +307,7 @@ Crafted for connoisseurs.
                   </div>
 
                   <Button
-                    onClick={() => openWhatsApp(car.name)}
+                    onClick={() => openReservationForm(car.name)}
                     variant="luxury"
                     className="w-full"
                   >
@@ -332,6 +339,15 @@ Crafted for connoisseurs.
           </div>
         </div>
       </main>
+
+      {/* Reservation Form Modal */}
+      {selectedCar && (
+        <ReservationForm
+          isOpen={isReservationFormOpen}
+          onClose={closeReservationForm}
+          carName={selectedCar}
+        />
+      )}
 
       <Footer />
     </div>
