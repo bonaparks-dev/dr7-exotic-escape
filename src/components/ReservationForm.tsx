@@ -150,7 +150,7 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
                     {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-luxury-charcoal border-luxury-gold/20" align="start">
+                <PopoverContent className="w-auto p-0 bg-luxury-white border-luxury-gold/20" align="start">
                   <Calendar
                     mode="single"
                     selected={startDate}
