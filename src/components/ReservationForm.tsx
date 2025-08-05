@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,8 +6,11 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { CalendarIcon, X, Check } from "lucide-react";
-import { format } from "date-fns";
+import { format, differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,9 +28,52 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [depositOption, setDepositOption] = useState("with-deposit");
+  const [insurance, setInsurance] = useState("kasko");
+  const [fullCleaning, setFullCleaning] = useState(true);
+  const [secondDriver, setSecondDriver] = useState(false);
+  const [under25, setUnder25] = useState(false);
+  const [licenseUnder3, setLicenseUnder3] = useState(false);
+  const [outOfHours, setOutOfHours] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
   const { toast } = useToast();
+
+  const calculateTotal = () => {
+    if (!startDate || !endDate) return 0;
+    
+    const days = differenceInDays(endDate, startDate);
+    if (days <= 0) return 0;
+
+    let total = 0;
+    
+    // Deposit surcharge
+    if (depositOption === "no-deposit") {
+      total += days * 40;
+    }
+    
+    // Insurance
+    const insurancePrices = {
+      "kasko": 100,
+      "kasko-black": 150,
+      "kasko-signature": 200
+    };
+    total += days * insurancePrices[insurance as keyof typeof insurancePrices];
+    
+    // Additional options
+    total += 30; // Full cleaning (required)
+    if (secondDriver) total += days * 10;
+    if (under25) total += days * 10;
+    if (licenseUnder3) total += days * 20;
+    if (outOfHours) total += 50;
+    
+    return total;
+  };
+
+  useEffect(() => {
+    setTotalPrice(calculateTotal());
+  }, [startDate, endDate, depositOption, insurance, secondDriver, under25, licenseUnder3, outOfHours]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +89,8 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
 
     setIsSubmitting(true);
 
+    const days = differenceInDays(endDate, startDate);
+    
     try {
       const { error } = await supabase.functions.invoke('send-reservation', {
         body: {
@@ -53,6 +101,15 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
           phone,
           startDate: format(startDate, 'PP'),
           endDate: format(endDate, 'PP'),
+          days,
+          depositOption,
+          insurance,
+          fullCleaning,
+          secondDriver,
+          under25,
+          licenseUnder3,
+          outOfHours,
+          totalPrice,
         },
       });
 
@@ -62,7 +119,23 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
       
       // Redirect to WhatsApp after a delay
       setTimeout(() => {
-        const message = `Hello DR7 Exotic, I just submitted my rental request on your website for the ${carName}. My contact details: ${firstName} ${lastName}, ${email}, ${phone}. Rental period: ${format(startDate, 'PP')} to ${format(endDate, 'PP')}.`;
+        const additionalOptions = [
+          fullCleaning && "Full cleaning with nitrogen sanitization (€30)",
+          secondDriver && `Second driver (€${days * 10})`,
+          under25 && `Under 25 years old (€${days * 10})`,
+          licenseUnder3 && `Driving license under 3 years (€${days * 20})`,
+          outOfHours && "Out-of-hours pickup (€50)"
+        ].filter(Boolean).join(", ");
+
+        const message = `Hello DR7 Exotic, I just submitted my rental request on your website for the ${carName}. 
+
+Contact: ${firstName} ${lastName}, ${email}, ${phone}
+Rental period: ${format(startDate, 'PP')} to ${format(endDate, 'PP')} (${days} days)
+Deposit: ${depositOption === "with-deposit" ? "With deposit" : "No deposit (+€40/day)"}
+Insurance: ${insurance.charAt(0).toUpperCase() + insurance.slice(1).replace("-", " ")}
+Additional options: ${additionalOptions || "None"}
+Total estimated cost: €${totalPrice}`;
+
         const whatsappUrl = `https://wa.me/393457905205?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         
@@ -77,6 +150,13 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
           setLastName("");
           setEmail("");
           setPhone("");
+          setDepositOption("with-deposit");
+          setInsurance("kasko");
+          setFullCleaning(true);
+          setSecondDriver(false);
+          setUnder25(false);
+          setLicenseUnder3(false);
+          setOutOfHours(false);
         }, 1000);
       }, 2000);
 
@@ -258,6 +338,123 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
             </div>
           </div>
 
+          {/* Deposit Option */}
+          <div className="space-y-3">
+            <Label className="text-luxury-ivory font-medium text-lg">Deposit Option</Label>
+            <RadioGroup value={depositOption} onValueChange={setDepositOption} className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="with-deposit" id="with-deposit" className="border-luxury-gold/50 text-luxury-gold" />
+                <Label htmlFor="with-deposit" className="text-luxury-ivory cursor-pointer">With deposit</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="no-deposit" id="no-deposit" className="border-luxury-gold/50 text-luxury-gold" />
+                <Label htmlFor="no-deposit" className="text-luxury-ivory cursor-pointer">
+                  No deposit <span className="text-luxury-gold">(+€40/day)</span>
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          {/* Insurance */}
+          <div className="space-y-3">
+            <Label className="text-luxury-ivory font-medium text-lg">Insurance</Label>
+            <Select value={insurance} onValueChange={setInsurance}>
+              <SelectTrigger className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory focus:border-luxury-gold">
+                <SelectValue placeholder="Select insurance" />
+              </SelectTrigger>
+              <SelectContent className="bg-luxury-charcoal border-luxury-gold/20">
+                <SelectItem value="kasko" className="text-luxury-ivory hover:bg-luxury-gold/20">
+                  Kasko – €100/day
+                </SelectItem>
+                <SelectItem value="kasko-black" className="text-luxury-ivory hover:bg-luxury-gold/20">
+                  Kasko Black – €150/day
+                </SelectItem>
+                <SelectItem value="kasko-signature" className="text-luxury-ivory hover:bg-luxury-gold/20">
+                  Kasko Signature – €200/day
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Additional Options */}
+          <div className="space-y-3">
+            <Label className="text-luxury-ivory font-medium text-lg">Additional Options</Label>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="full-cleaning" 
+                  checked={fullCleaning} 
+                  onCheckedChange={(checked) => setFullCleaning(checked === true)}
+                  disabled
+                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                />
+                <Label htmlFor="full-cleaning" className="text-luxury-ivory cursor-pointer">
+                  Full cleaning with nitrogen sanitization – €30 <span className="text-luxury-gold">(Required)</span>
+                </Label>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="second-driver" 
+                  checked={secondDriver} 
+                  onCheckedChange={(checked) => setSecondDriver(checked === true)}
+                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                />
+                <Label htmlFor="second-driver" className="text-luxury-ivory cursor-pointer">
+                  Second driver – €10/day
+                </Label>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="under-25" 
+                  checked={under25} 
+                  onCheckedChange={(checked) => setUnder25(checked === true)}
+                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                />
+                <Label htmlFor="under-25" className="text-luxury-ivory cursor-pointer">
+                  Under 25 years old – €10/day
+                </Label>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="license-under-3" 
+                  checked={licenseUnder3} 
+                  onCheckedChange={(checked) => setLicenseUnder3(checked === true)}
+                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                />
+                <Label htmlFor="license-under-3" className="text-luxury-ivory cursor-pointer">
+                  Driving license under 3 years – €20/day
+                </Label>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="out-of-hours" 
+                  checked={outOfHours} 
+                  onCheckedChange={(checked) => setOutOfHours(checked === true)}
+                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                />
+                <Label htmlFor="out-of-hours" className="text-luxury-ivory cursor-pointer">
+                  Out-of-hours or Sunday pickup – €50
+                </Label>
+              </div>
+            </div>
+          </div>
+
+          {/* Price Summary */}
+          {startDate && endDate && differenceInDays(endDate, startDate) > 0 && (
+            <div className="bg-luxury-charcoal/30 border border-luxury-gold/20 rounded-lg p-4">
+              <div className="flex justify-between items-center">
+                <span className="text-luxury-ivory font-medium">
+                  Total for {differenceInDays(endDate, startDate)} day{differenceInDays(endDate, startDate) !== 1 ? 's' : ''}:
+                </span>
+                <span className="text-luxury-gold font-bold text-xl">€{totalPrice}</span>
+              </div>
+            </div>
+          )}
+
           {/* Submit Button */}
           <div className="pt-4">
             <Button
@@ -265,7 +462,7 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
               disabled={isSubmitting}
               className="w-full bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-charcoal font-semibold py-3 text-lg transition-all duration-300"
             >
-              {isSubmitting ? "Submitting..." : "Reserve Now"}
+              {isSubmitting ? "Submitting..." : `Reserve Now - €${totalPrice}`}
             </Button>
           </div>
         </form>
