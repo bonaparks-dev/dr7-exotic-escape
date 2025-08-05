@@ -250,9 +250,7 @@ const Rentals = () => {
             Exotic Car Collection
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Where elegance meets performance — in Sardinia.
-Drive the island’s most breathtaking roads with 200 km/day included in every exotic rental.
-Crafted for connoisseurs.
+            An exclusive fleet. A legendary island. One unforgettable drive.
           </p>
         </div>
 
@@ -275,9 +273,7 @@ Crafted for connoisseurs.
                       {car.color && <span className="text-sm text-muted-foreground ml-2">({car.color})</span>}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-2">{car.description}</p>
-                    <div className="text-xs text-muted-foreground">200km included</div>
-                  </div>
-
+                    
                   {/* Specs */}
                   <div className="space-y-1 mb-6 text-sm">
                     {car.specs.acceleration && (
