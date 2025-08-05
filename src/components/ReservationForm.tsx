@@ -425,7 +425,7 @@ Total estimated cost: €${totalPrice}`;
                   className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
                 />
                 <Label htmlFor="license-under-3" className="text-luxury-ivory cursor-pointer">
-                  Driving license under 3 years – €20/day
+                  Driving license under 3 years (min. 2years) – €20/day
                 </Label>
               </div>
 
