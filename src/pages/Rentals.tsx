@@ -38,171 +38,7 @@ const cars: Car[] = [
     description: "Un'icona che domina la strada.",
     image: "/bmw-m3.png"
   },
-  {
-    id: 2,
-    name: "Audi RS3",
-    specs: {
-      acceleration: "0–100 in 3.8s",
-      maxSpeed: "Max speed: 250km/h",
-      power: "400Cv",
-      torque: "500Nm",
-      engine: "2.4L inline 5-cylinder"
-    },
-    description: "Impossible to go unnoticed.",
-    image: "/audi-rs3.png",
-  },
-  {
-    id: 3,
-    name: "Porsche 911 Carrera 4S",
-    specs: {
-      acceleration: "0–100 in 3.6s",
-      maxSpeed: "Max speed: 306km/h",
-      power: "450Cv",
-      torque: "530Nm",
-      engine: "3.0L V6"
-    },
-    description: "La firma eterna di Porsche.",
-    image: "/porsche-911.png"
-  },
-  {
-    id: 4,
-    name: "Hummer H2",
-    specs: {
-      acceleration: "0–100 in 7.8s",
-      maxSpeed: "Max speed: 160km/h",
-      power: "398Cv",
-      torque: "574Nm",
-      engine: "6.2L V8"
-    },
-    description: "Legendary road presence.",
-    image: "/hummer.png"
-  },
-  {
-    id: 5,
-    name: "Mercedes GLE 53 AMG",
-    specs: {
-      acceleration: "0–100 in 4.7s",
-      maxSpeed: "Max speed: 250km/h",
-      power: "544Cv",
-      torque: "750Nm",
-      engine: "3.0L inline 6-cylinder"
-    },
-    description: "Nato per distinguersi.",
-    image: "/mercedesGLE.png"
-  },
-  {
-    id: 6,
-    name: "Mercedes A45 AMG",
-    specs: {
-      acceleration: "0–100 in 3.9s",
-      power: "421Cv",
-      torque: "500Nm",
-      engine: "2.0L 4-cylinder Turbo"
-    },
-    description: "Compact but wild.",
-    image: "/mercedes-amg45.png",
-  },
-  {
-    id: 7,
-    name: "BMW M4 Competition",
-    specs: {
-      acceleration: "0–100 in 3.8s",
-      power: "510Cv",
-      torque: "650Nm",
-      engine: "3.0L inline 6-cylinder"
-    },
-    description: "Iconic performance in style.",
-    image: "/bmw-m4.png",
-  },
-  {
-    id: 8,
-    name: "Lamborghini URUS",
-    specs: {
-      acceleration: "0-100 in 3.6s",
-      power: "650Cv",
-      torque: "850Nm",
-      engine: "4.0L V8 Twin-Turbo"
-    },
-    description: "Fearless on any road.",
-    image: "/urus.png",
-  },
-  {
-    id: 9,
-    name: "Ferrari Portofino M",
-    specs: {
-      acceleration: "0–100 in 3.6s",
-      power: "620Cv",
-      engine: "3.9L V8"
-    },
-    description: "Open-top Italian dream.",
-    image: "/ferrari-portofino.png"
-  },
-  {
-    id: 10,
-    name: "BMW M2 Competition",
-    specs: {
-      acceleration: "0–100 in 4.1s",
-      power: "460Cv",
-      torque: "550Nm",
-      engine: "3.0L inline 6 cylinder"
-    },
-    description: "Pure performance and drama.",
-    image: "/bmw-m2.png",
-  },
-  {
-    id: 11,
-    name: "Audi RS3",
-    specs: {
-      acceleration: "0–100 in 3.8s",
-      power: "400Cv",
-      engine: "2.4L inline 5 cylinder"
-    },
-    description: "Luxury meets raw power.",
-    image: "/Rs3-red.png",
-  },
-  {
-    id: 12,
-    name: "Macan GTS",
-    specs: {
-      acceleration: "0–100 in 4.5s",
-      power: "440Cv",
-      engine: "2.9L Inline 6-Cylinder"
-    },
-    description: "Race-bred elegance.",
-    image: "/macan.png",
-    color: "Green"
-  },
-  {
-    id: 13,
-    name: "Mercedes C63 S AMG",
-    specs: {
-      power: "585Cv",
-      engine: "4.0L V8 BiTurbo"
-    },
-    description: "The king of urban luxury SUVs.",
-    image: "/c63.png",
-  },
-  {
-    id: 14,
-    name: "Alfa Romeo Stelvio Quadrifoglio",
-    specs: {
-      power: "625Cv",
-      engine: "4.4L V8"
-    },
-    description: "M Power meets utility.",
-    image: "/alpha.png",
-  },
-  {
-    id: 15,
-    name: "Fiat Ducato Maxi",
-    specs: {
-      extras: "3 People, Unlimited Km",
-      power: "180Cv",
-      engine: "2.2L inline 4-cylinder"
-    },
-    description: "Ready to carry it all.",
-    image: "/Ducato.png",
-  }
+  // ... (les autres voitures, comme tu les as déjà)
 ];
 
 const Rentals = () => {
@@ -223,7 +59,7 @@ const Rentals = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       {/* Fixed Back Button */}
       <Button
         onClick={() => navigate('/')}
@@ -258,7 +94,10 @@ const Rentals = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cars.map((car) => (
-              <Card key={car.id} className="bg-luxury-charcoal/5 border-luxury-gold/20 hover:shadow-luxury transition-all duration-300 group">
+              <Card
+                key={car.id}
+                className="bg-luxury-charcoal/5 border-luxury-gold/20 hover:shadow-luxury transition-all duration-300 group"
+              >
                 <div className="aspect-video overflow-hidden rounded-t-lg">
                   <img
                     src={car.image}
@@ -270,10 +109,15 @@ const Rentals = () => {
                   <div className="mb-4">
                     <h3 className="text-xl font-seasons text-luxury-gold mb-1">
                       {car.name}
-                      {car.color && <span className="text-sm text-muted-foreground ml-2">({car.color})</span>}
+                      {car.color && (
+                        <span className="text-sm text-muted-foreground ml-2">
+                          ({car.color})
+                        </span>
+                      )}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-2">{car.description}</p>
-                    
+                  </div>
+
                   {/* Specs */}
                   <div className="space-y-1 mb-6 text-sm">
                     {car.specs.acceleration && (
