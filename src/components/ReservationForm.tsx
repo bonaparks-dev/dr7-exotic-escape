@@ -230,7 +230,7 @@ Total estimated cost: €${totalPrice}`;
                     {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-luxury-white border-luxury-gold/20" align="start">
+                <PopoverContent className="w-auto p-0 bg-luxury-charcoal border-luxury-gold/20" align="start">
                   <Calendar
                     mode="single"
                     selected={startDate}
@@ -252,7 +252,7 @@ Total estimated cost: €${totalPrice}`;
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal bg-luxury-white/50 border-luxury-gold/20 text-luxury-ivory hover:bg-luxury-charcoal/70",
+                      "w-full justify-start text-left font-normal bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory hover:bg-luxury-charcoal/70",
                       !endDate && "text-luxury-ivory/50"
                     )}
                   >
