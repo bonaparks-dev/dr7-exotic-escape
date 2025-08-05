@@ -222,7 +222,7 @@ Total estimated cost: €${totalPrice}`;
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory hover:bg-luxury-charcoal/70",
+                      "w-full justify-start text-left font-normal bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory hover:bg-luxury-gold/20 hover:border-luxury-gold/40",
                       !startDate && "text-luxury-ivory/50"
                     )}
                   >
@@ -252,7 +252,7 @@ Total estimated cost: €${totalPrice}`;
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory hover:bg-luxury-charcoal/70",
+                      "w-full justify-start text-left font-normal bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory hover:bg-luxury-gold/20 hover:border-luxury-gold/40",
                       !endDate && "text-luxury-ivory/50"
                     )}
                   >
@@ -284,7 +284,7 @@ Total estimated cost: €${totalPrice}`;
                 id="firstName"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold"
+                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70"
                 placeholder="Enter your first name"
                 required
               />
@@ -298,7 +298,7 @@ Total estimated cost: €${totalPrice}`;
                 id="lastName"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold"
+                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70"
                 placeholder="Enter your last name"
                 required
               />
@@ -316,7 +316,7 @@ Total estimated cost: €${totalPrice}`;
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold"
+                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70"
                 placeholder="your@email.com"
                 required
               />
@@ -331,7 +331,7 @@ Total estimated cost: €${totalPrice}`;
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold"
+                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70"
                 placeholder="+39 123 456 7890"
                 required
               />
@@ -359,17 +359,17 @@ Total estimated cost: €${totalPrice}`;
           <div className="space-y-3">
             <Label className="text-luxury-ivory font-medium text-lg">Insurance</Label>
             <Select value={insurance} onValueChange={setInsurance}>
-              <SelectTrigger className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory focus:border-luxury-gold">
+              <SelectTrigger className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70">
                 <SelectValue placeholder="Select insurance" />
               </SelectTrigger>
               <SelectContent className="bg-luxury-charcoal border-luxury-gold/20">
-                <SelectItem value="kasko" className="text-luxury-ivory hover:bg-luxury-gold/20">
+                <SelectItem value="kasko" className="text-luxury-ivory hover:bg-luxury-gold/30 focus:bg-luxury-gold/30">
                   Kasko – €100/day
                 </SelectItem>
-                <SelectItem value="kasko-black" className="text-luxury-ivory hover:bg-luxury-gold/20">
+                <SelectItem value="kasko-black" className="text-luxury-ivory hover:bg-luxury-gold/30 focus:bg-luxury-gold/30">
                   Kasko Black – €150/day
                 </SelectItem>
-                <SelectItem value="kasko-signature" className="text-luxury-ivory hover:bg-luxury-gold/20">
+                <SelectItem value="kasko-signature" className="text-luxury-ivory hover:bg-luxury-gold/30 focus:bg-luxury-gold/30">
                   Kasko Signature – €200/day
                 </SelectItem>
               </SelectContent>
