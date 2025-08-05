@@ -359,7 +359,7 @@ Total estimated cost: €${totalPrice}`;
           <div className="space-y-3">
             <Label className="text-luxury-ivory font-medium text-lg">Insurance</Label>
             <Select value={insurance} onValueChange={setInsurance}>
-              <SelectTrigger className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70">
+              <SelectTrigger className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory focus:border-luxury-gold hover:border-luxury-white/40 hover:bg-luxury-charcoal/70">
                 <SelectValue placeholder="Select insurance" />
               </SelectTrigger>
               <SelectContent className="bg-luxury-charcoal border-luxury-gold/20">
