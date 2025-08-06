@@ -106,7 +106,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Email to DR7 Exotic
     const businessEmailResponse = await resend.emails.send({
       from: "DR7 Exotic <onboarding@resend.dev>",
-      to: ["info@dr7exotic.com"],
+      to: ["bonaparks@gmail.com"],
       subject: `New Reservation Request - ${carName} (€${totalPrice})`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; color: #333; padding: 40px; border-radius: 8px;">
