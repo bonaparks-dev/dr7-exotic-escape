@@ -72,7 +72,12 @@ export function Header() {
             </div>
 
            
-            <a href="#contact" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase">
+            <a 
+              href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services." 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-luxury-gold hover:text-luxury-gold/80 transition-colors text-sm uppercase"
+            >
               Contact
             </a>
           </nav>
@@ -110,7 +115,15 @@ export function Header() {
           </div>
 
           
-          <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-xl font-semibold">Contact</a>
+          <a 
+            href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services." 
+            target="_blank" 
+            rel="noopener noreferrer"
+            onClick={() => setIsMenuOpen(false)} 
+            className="text-xl font-semibold"
+          >
+            Contact
+          </a>
         </div>
       )}
     </>
