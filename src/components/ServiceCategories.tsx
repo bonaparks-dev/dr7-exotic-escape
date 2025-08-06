@@ -8,7 +8,7 @@ const categories = [
     title: 'Supercars',
     description: 'Ferrari, Lamborghini, Mercedes & more',
     icon: Car,
-    image: '/supercars.png',
+    image: '/cars.jpg',
     itemCount: '15 Available',
     buttonLabel: 'Rent a car',
     link: '/rentals'
