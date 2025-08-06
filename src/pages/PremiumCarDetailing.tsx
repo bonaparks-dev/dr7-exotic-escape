@@ -121,18 +121,31 @@ const PremiumCarDetailing = () => {
         <MessageCircle className="w-6 h-6" />
       </Button>
 
-      <main className="pt-32 pb-16">
-        <div className="container mx-auto px-4 text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-seasons text-luxury-gold mb-4">
+      {/* Hero Section */}
+      <div className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-black">
+          <img
+            src="/cars.jpg"
+            alt="DR7 Premium Car Detailing"
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+        </div>
+        
+        <div className="relative z-10 text-center text-white px-4">
+          <h1 className="text-5xl md:text-7xl font-seasons text-luxury-gold mb-6">
             DR7 RAPID SERVICE
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-4">
+          <p className="text-xl md:text-2xl text-luxury-gold/80 mb-8 max-w-3xl mx-auto font-light">
             Fast & Premium Car Wash Services – No Appointment Needed
           </p>
-          <p className="text-lg text-muted-foreground/80 max-w-3xl mx-auto">
+          <p className="text-lg text-luxury-ivory/90 max-w-4xl mx-auto leading-relaxed">
             For a clean, detailed look every day. Choose excellence, speed, and luxury.
           </p>
         </div>
+      </div>
+
+      <main className="py-16">
 
         {/* Wash Packages Section */}
         <div className="container mx-auto px-4 mb-16">
