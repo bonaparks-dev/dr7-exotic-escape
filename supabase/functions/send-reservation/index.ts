@@ -5,8 +5,7 @@ const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 interface ReservationRequest {
@@ -25,25 +24,33 @@ interface ReservationRequest {
   under25: boolean;
   licenseUnder3: boolean;
   outOfHours: boolean;
-  totalPrice: number;
+  basePricePerDay: number;
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { 
-      carName, firstName, lastName, email, phone, startDate, endDate, 
-      days, depositOption, insurance, fullCleaning, secondDriver, 
-      under25, licenseUnder3, outOfHours, totalPrice 
+    const {
+      carName, firstName, lastName, email, phone, startDate, endDate,
+      days, depositOption, insurance, fullCleaning, secondDriver,
+      under25, licenseUnder3, outOfHours, basePricePerDay
     }: ReservationRequest = await req.json();
 
-    console.log("Processing reservation for:", { carName, email, firstName, lastName });
+    const baseTotal = days * basePricePerDay;
+    const additionalCosts = (
+      (depositOption === "no-deposit" ? days * 40 : 0) +
+      (insurance === "premium" ? days * 20 : insurance === "standard" ? days * 10 : 0) +
+      (fullCleaning ? 30 : 0) +
+      (secondDriver ? days * 10 : 0) +
+      (under25 ? days * 10 : 0) +
+      (licenseUnder3 ? days * 20 : 0) +
+      (outOfHours ? 50 : 0)
+    );
+    const totalPrice = baseTotal + additionalCosts;
 
-    // Build additional options list
     const additionalOptions = [
       fullCleaning && "Full cleaning with nitrogen sanitization (€30)",
       secondDriver && `Second driver (€${days * 10})`,
@@ -52,112 +59,38 @@ const handler = async (req: Request): Promise<Response> => {
       outOfHours && "Out-of-hours pickup (€50)"
     ].filter(Boolean);
 
-    // Email to the client
-    const clientEmailResponse = await resend.emails.send({
-      from: "DR7 Exotic <onboarding@resend.dev>",
-      to: [email],
-      subject: "Reservation Confirmation - DR7 Exotic",
-      html: `
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #1a1a1a; color: #ffffff; padding: 40px; border-radius: 8px;">
-          <div style="text-align: center; margin-bottom: 40px;">
-            <h1 style="color: #d4af37; font-size: 32px; margin: 0; font-weight: 300;">DR7 EXOTIC</h1>
-            <p style="color: #888; margin: 8px 0 0 0;">Luxury Car Rental</p>
-          </div>
-          
-          <h2 style="color: #d4af37; font-size: 24px; margin-bottom: 20px;">Reservation Confirmation</h2>
-          
-          <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-            Dear ${firstName} ${lastName},
-          </p>
-          
-          <p style="font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-            Thank you for your reservation request. We have received your inquiry for the <strong style="color: #d4af37;">${carName}</strong>.
-          </p>
-          
-          <div style="background: #2a2a2a; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
-            <h3 style="color: #d4af37; margin: 0 0 15px 0; font-size: 18px;">Reservation Details</h3>
-            <p style="margin: 8px 0; font-size: 14px;"><strong>Vehicle:</strong> ${carName}</p>
-            <p style="margin: 8px 0; font-size: 14px;"><strong>Start Date:</strong> ${startDate}</p>
-            <p style="margin: 8px 0; font-size: 14px;"><strong>End Date:</strong> ${endDate} (${days} days)</p>
-            <p style="margin: 8px 0; font-size: 14px;"><strong>Contact:</strong> ${phone}</p>
-          </div>
-
-          <div style="background: #2a2a2a; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
-            <h3 style="color: #d4af37; margin: 0 0 15px 0; font-size: 18px;">Pricing Details</h3>
-            <p style="margin: 8px 0; font-size: 14px;"><strong>Deposit:</strong> ${depositOption === "with-deposit" ? "With deposit" : "No deposit (+€40/day)"}</p>
-            <p style="margin: 8px 0; font-size: 14px;"><strong>Insurance:</strong> ${insurance.charAt(0).toUpperCase() + insurance.slice(1).replace("-", " ")}</p>
-            ${additionalOptions.length > 0 ? `<p style="margin: 8px 0; font-size: 14px;"><strong>Additional Options:</strong><br>${additionalOptions.join("<br>")}</p>` : ""}
-            <p style="margin: 15px 0 8px 0; font-size: 16px; color: #d4af37;"><strong>Total Estimated Cost: €${totalPrice}</strong></p>
-          </div>
-          
-          <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-            Our team will contact you within 24 hours to confirm availability and finalize your reservation.
-          </p>
-          
-          <p style="font-size: 14px; color: #888; line-height: 1.6;">
-            Best regards,<br>
-            The DR7 Exotic Team<br>
-            Sardinia, Italy
-          </p>
-        </div>
-      `,
-    });
-
-    // Email to DR7 Exotic
     const businessEmailResponse = await resend.emails.send({
       from: "DR7 Exotic <onboarding@resend.dev>",
       to: ["bonaparks@gmail.com"],
       subject: `New Reservation Request - ${carName} (€${totalPrice})`,
       html: `
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; color: #333; padding: 40px; border-radius: 8px;">
-          <h1 style="color: #d4af37; font-size: 24px; margin-bottom: 20px;">New Reservation Request</h1>
-          
-          <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
-            <h3 style="margin: 0 0 15px 0; color: #333;">Customer Information</h3>
-            <p style="margin: 8px 0;"><strong>Name:</strong> ${firstName} ${lastName}</p>
-            <p style="margin: 8px 0;"><strong>Email:</strong> ${email}</p>
-            <p style="margin: 8px 0;"><strong>Phone:</strong> ${phone}</p>
-          </div>
-          
-          <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
-            <h3 style="margin: 0 0 15px 0; color: #333;">Reservation Details</h3>
-            <p style="margin: 8px 0;"><strong>Vehicle:</strong> ${carName}</p>
-            <p style="margin: 8px 0;"><strong>Start Date:</strong> ${startDate}</p>
-            <p style="margin: 8px 0;"><strong>End Date:</strong> ${endDate} (${days} days)</p>
-          </div>
-
-          <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
-            <h3 style="margin: 0 0 15px 0; color: #333;">Pricing Configuration</h3>
-            <p style="margin: 8px 0;"><strong>Deposit:</strong> ${depositOption === "with-deposit" ? "With deposit" : "No deposit (+€40/day)"}</p>
-            <p style="margin: 8px 0;"><strong>Insurance:</strong> ${insurance.charAt(0).toUpperCase() + insurance.slice(1).replace("-", " ")}</p>
-            ${additionalOptions.length > 0 ? `<p style="margin: 8px 0;"><strong>Additional Options:</strong><br>${additionalOptions.join("<br>")}</p>` : `<p style="margin: 8px 0;"><strong>Additional Options:</strong> None selected</p>`}
-            <p style="margin: 15px 0 8px 0; font-size: 18px; color: #d4af37;"><strong>Total Estimated Revenue: €${totalPrice}</strong></p>
-          </div>
-        </div>
-      `,
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI'; max-width: 600px; margin: 0 auto; padding: 40px;">
+          <h1 style="color: #d4af37;">New Reservation Request</h1>
+          <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Vehicle:</strong> ${carName}</p>
+          <p><strong>Start:</strong> ${startDate}</p>
+          <p><strong>End:</strong> ${endDate} (${days} days)</p>
+          <p><strong>Deposit:</strong> ${depositOption === "with-deposit" ? "With deposit" : "No deposit (+€40/day)"}</p>
+          <p><strong>Insurance:</strong> ${insurance}</p>
+          ${additionalOptions.length > 0 ? `<p><strong>Options:</strong><br>${additionalOptions.join("<br>")}</p>` : ""}
+          <p><strong>Total Estimated Revenue:</strong> €${totalPrice}</p>
+        </div>`
     });
 
-    console.log("Emails sent successfully:", { clientEmailResponse, businessEmailResponse });
+    console.log("Email sent:", businessEmailResponse);
 
-    return new Response(JSON.stringify({ 
-      success: true, 
-      message: "Reservation request sent successfully" 
-    }), {
+    return new Response(JSON.stringify({ success: true }), {
       status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
+      headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (error: any) {
-    console.error("Error in send-reservation function:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    console.error("Error:", error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
   }
 };
 
