@@ -64,9 +64,7 @@ export function Header() {
                   <li><a href="/rentals" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Rent a car</a></li>
                   <li><a href="/premium-car-detailing" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Premium Car Detailing</a></li>
                   <li><a href="/services" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Rapid Car Services</a></li>
-                  <li><a href="#contact" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Luxury Yachts - Get info</a></li>
-                  <li><a href="#contact" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Private Jets - Get info</a></li>
-                  <li><a href="#contact" className="block px-4 py-2 text-sm text-white hover:text-luxury-gold">Exclusive Villas - Get info</a></li>
+
                 </ul>
               </div>
             </div>
@@ -107,9 +105,7 @@ export function Header() {
                 <a href="/rentals" className="block text-sm text-white hover:text-luxury-gold">Rent a car</a>
                 <a href="/premium-car-detailing" className="block text-sm text-white hover:text-luxury-gold">Premium Car Detailing</a>
                 <a href="/services" className="block text-sm text-white hover:text-luxury-gold">Rapid Car Services</a>
-                <a href="#contact" className="block text-sm text-white hover:text-luxury-gold">Luxury Yachts - Get info</a>
-                <a href="#contact" className="block text-sm text-white hover:text-luxury-gold">Private Jets - Get info</a>
-                <a href="#contact" className="block text-sm text-white hover:text-luxury-gold">Exclusive Villas - Get info</a>
+
               </div>
             )}
           </div>
