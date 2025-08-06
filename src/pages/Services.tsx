@@ -83,6 +83,19 @@ const services: Service[] = [
 export default function Services() {
   const navigate = useNavigate();
 
+  const generateWhatsAppMessage = (service: Service) => {
+    let message = `Hello DR7 Exotic, I would like to book the following service:\n\n`;
+    message += `Service: ${service.title}\n`;
+    message += `Options:\n`;
+    
+    service.items.forEach(item => {
+      message += `- ${item.name}: ${item.price}\n`;
+    });
+    
+    message += `\nPlease let me know the availability. Thank you!`;
+    return encodeURIComponent(message);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -164,7 +177,10 @@ export default function Services() {
                   </div>
 
                   <Button
-                    onClick={() => window.open('https://wa.me/393457905205', '_blank')}
+                    onClick={() => {
+                      const message = generateWhatsAppMessage(service);
+                      window.open(`https://wa.me/393457905205?text=${message}`, '_blank');
+                    }}
                     variant="luxury"
                     className="w-full"
                   >
