@@ -134,7 +134,7 @@ const PremiumCarDetailing = () => {
         
         <div className="relative z-10 text-center text-white px-4">
           <h1 className="text-5xl md:text-7xl font-seasons text-luxury-gold mb-6">
-            DR7 Premium Car Detailing
+           Premium Car Detailing
           </h1>
           <p className="text-xl md:text-2xl text-luxury-gold/80 mb-8 max-w-3xl mx-auto font-light">
             Fast & Premium Car Wash Services – No Appointment Needed
