@@ -115,7 +115,7 @@ const PremiumCarDetailing = () => {
             Tailored care for prestige vehicles
           </p>
           <p className="text-lg text-luxury-ivory/90 max-w-4xl mx-auto leading-relaxed">
-            Every vehicle treated by Dubai Rent 7.0 receives the same attention reserved for our official supercar fleet.
+            Every vehicle treated by DR7 Exotic receives the same attention reserved for our official supercar fleet.
           </p>
         </div>
       </div>
@@ -205,7 +205,7 @@ const PremiumCarDetailing = () => {
             {additionalServices.map((service, index) => (
               <div key={index} className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-6 hover:shadow-luxury transition-all duration-300">
                 <div className="flex justify-between items-center">
-                  <h4 className="text-lg font-medium text-luxury-ivory">{service.name}</h4>
+                  <h4 className="text-lg font-medium text-luxury-charcoal">{service.name}</h4>
                   <span className="text-xl font-bold text-luxury-gold">{service.price}</span>
                 </div>
               </div>
