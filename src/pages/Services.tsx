@@ -17,7 +17,7 @@ interface Service {
 const services: Service[] = [
   {
     id: 1,
-    title: "🚑 Brake Pad Replacement",
+    title: "Brake Pad Replacement",
     description: "Professional brake maintenance for your safety",
     icon: Settings,
     items: [
@@ -28,7 +28,7 @@ const services: Service[] = [
   },
   {
     id: 2,
-    title: "🛢️ Express Oil Service",
+    title: "Express Oil Service",
     description: "Oil + filters with fluid level check",
     icon: Wrench,
     items: [
@@ -39,7 +39,7 @@ const services: Service[] = [
   },
   {
     id: 3,
-    title: "🌧️ Wiper Blade Replacement",
+    title: "Wiper Blade Replacement",
     description: "Clear vision in all weather conditions",
     icon: Settings,
     items: [
@@ -49,7 +49,7 @@ const services: Service[] = [
   },
   {
     id: 4,
-    title: "🔋 Battery Replacement",
+    title: "Battery Replacement",
     description: "Reliable power for your vehicle",
     icon: Wrench,
     items: [
@@ -59,7 +59,7 @@ const services: Service[] = [
   },
   {
     id: 5,
-    title: "💡 Bulb Replacement",
+    title: "Bulb Replacement",
     description: "Professional lighting solutions",
     icon: Settings,
     items: [
@@ -69,7 +69,7 @@ const services: Service[] = [
   },
   {
     id: 6,
-    title: "🔧 Quick Mechanical Fixes",
+    title: "Quick Mechanical Fixes",
     description: "Fast and reliable mechanical services",
     icon: Wrench,
     items: [
