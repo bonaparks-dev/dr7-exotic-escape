@@ -126,11 +126,17 @@ export const BookingModal = ({ open, onOpenChange }: BookingModalProps) => {
             <h3 className="text-lg font-semibold text-luxury-gold">Select Wash Package</h3>
             <RadioGroup value={selectedPackage} onValueChange={setSelectedPackage}>
               {washPackages.map((pkg) => (
-                <div key={pkg.id} className="flex items-center space-x-3 p-3 rounded-lg border border-luxury-gold/20 hover:bg-luxury-gold/5 transition-colors">
+                <div key={pkg.id} className={`flex items-center space-x-3 p-3 rounded-lg border transition-all duration-200 ${
+                  selectedPackage === pkg.id 
+                    ? 'border-luxury-gold bg-luxury-gold/10 shadow-lg shadow-luxury-gold/20' 
+                    : 'border-luxury-gold/20 hover:bg-luxury-gold/5'
+                }`}>
                   <RadioGroupItem value={pkg.id} id={pkg.id} />
                   <Label htmlFor={pkg.id} className="flex-1 cursor-pointer">
                     <div className="flex justify-between items-center">
-                      <span className="text-luxury-ivory">{pkg.title}</span>
+                      <span className={`${selectedPackage === pkg.id ? 'text-luxury-gold font-semibold' : 'text-luxury-ivory'}`}>
+                        {pkg.title}
+                      </span>
                       <span className="text-luxury-gold font-bold">{pkg.price}</span>
                     </div>
                   </Label>
