@@ -121,66 +121,53 @@ const PremiumCarDetailing = () => {
         <MessageCircle className="w-6 h-6" />
       </Button>
 
-      {/* Hero Section */}
-      <div className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
-          <img
-            src="/cars.jpg"
-            alt="DR7 Premium Car Detailing"
-            className="w-full h-full object-cover opacity-40"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
-        </div>
-        
-        <div className="relative z-10 text-center text-white px-4">
-          <h1 className="text-5xl md:text-7xl font-seasons text-luxury-gold mb-6">
-           Premium Car Detailing
+      <main className="pt-32 pb-16">
+        <div className="container mx-auto px-4 text-center mb-16">
+          <h1 className="text-4xl md:text-6xl font-seasons text-luxury-gold mb-4">
+            DR7 RAPID SERVICE
           </h1>
-          <p className="text-xl md:text-2xl text-luxury-gold/80 mb-8 max-w-3xl mx-auto font-light">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-4">
             Fast & Premium Car Wash Services – No Appointment Needed
           </p>
-          <p className="text-lg text-luxury-ivory/90 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg text-muted-foreground/80 max-w-3xl mx-auto">
             For a clean, detailed look every day. Choose excellence, speed, and luxury.
           </p>
         </div>
-      </div>
 
-      <main className="py-16">
         {/* Wash Packages Section */}
         <div className="container mx-auto px-4 mb-16">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-seasons text-luxury-gold mb-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-seasons text-luxury-gold mb-4">
               Wash Packages
             </h2>
-            <p className="text-xl text-luxury-gold/80 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Premium car wash services with luxury-grade products and techniques
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {washPackages.map((package_) => (
               <Card key={package_.id} className="bg-luxury-charcoal/5 border-luxury-gold/20 hover:shadow-luxury transition-all duration-300 group">
                 <CardContent className="p-6">
                   <div className="mb-4">
-                    <package_.icon className="w-12 h-12 text-luxury-gold mb-4" />
-                    <h3 className="text-2xl font-seasons text-luxury-gold mb-2">
+                    <package_.icon className="w-8 h-8 text-luxury-gold mb-3" />
+                    <h3 className="text-xl font-seasons text-luxury-gold mb-2">
                       {package_.title}
                     </h3>
-                    <div className="text-3xl font-bold text-luxury-gold mb-4">
+                    <div className="text-2xl font-bold text-luxury-gold mb-3">
                       {package_.price}
                     </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {package_.description}
+                    </p>
                   </div>
-                  
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    {package_.description}
-                  </p>
 
                   {package_.features && (
                     <div className="space-y-2 mb-6">
                       {package_.features.map((feature, index) => (
-                        <div key={index} className="flex items-center text-sm text-muted-foreground">
-                          <span className="w-2 h-2 bg-luxury-gold rounded-full mr-3"></span>
-                          {feature}
+                        <div key={index} className="flex items-start text-xs text-muted-foreground">
+                          <span className="w-1.5 h-1.5 bg-luxury-gold rounded-full mr-2 mt-2 flex-shrink-0"></span>
+                          <span>{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -201,11 +188,11 @@ const PremiumCarDetailing = () => {
 
         {/* Courtesy Car Services */}
         <div className="container mx-auto px-4 mb-16">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-seasons text-luxury-gold mb-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-seasons text-luxury-gold mb-4">
               Courtesy Car / Supercar Experience
             </h2>
-            <p className="text-xl text-luxury-gold/80 max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Choose a vehicle to use while we clean yours
             </p>
           </div>
@@ -214,18 +201,18 @@ const PremiumCarDetailing = () => {
             {courtesyServices.map((service) => (
               <Card key={service.id} className="bg-luxury-charcoal/5 border-luxury-gold/20 hover:shadow-luxury transition-all duration-300 group">
                 <CardContent className="p-6">
-                  <div className="mb-6">
+                  <div className="mb-4">
                     <h3 className="text-xl font-seasons text-luxury-gold mb-2">
                       {service.title}
                     </h3>
-                    <p className="text-sm text-luxury-gold/80 mb-4 italic">
+                    <p className="text-sm text-muted-foreground mb-4 italic">
                       {service.subtitle}
                     </p>
                   </div>
                   
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-2 mb-6">
                     {service.pricing.map((price, index) => (
-                      <div key={index} className="flex justify-between items-center p-2 bg-luxury-charcoal/10 rounded">
+                      <div key={index} className="flex justify-between items-center text-sm">
                         <span className="text-muted-foreground">{price.duration}</span>
                         <span className="text-luxury-gold font-bold">{price.price}</span>
                       </div>
@@ -241,7 +228,7 @@ const PremiumCarDetailing = () => {
                     variant="luxury"
                     className="w-full"
                   >
-                    Book Experience
+                    Book Now
                   </Button>
                 </CardContent>
               </Card>
@@ -249,26 +236,14 @@ const PremiumCarDetailing = () => {
           </div>
         </div>
 
-        {/* Final Message */}
-        <div className="container mx-auto px-4 text-center mb-16">
-          <div className="max-w-4xl mx-auto">
-            <p className="text-xl md:text-2xl text-luxury-gold/90 mb-6 font-light italic">
-              "Let your client feel it's more than a car"
-            </p>
-            <h3 className="text-3xl md:text-4xl font-seasons text-luxury-gold font-bold">
-              PRESTIGE, PERFORMANCE, PERSONALITY
-            </h3>
-          </div>
-        </div>
-
-        {/* WhatsApp CTA */}
+        {/* Contact CTA */}
         <div className="container mx-auto px-4 text-center">
-          <div className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-seasons text-luxury-gold mb-4">
-              Ready to Experience DR7 Rapid Service?
-            </h3>
+          <div className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-8">
+            <h2 className="text-2xl font-seasons text-luxury-gold mb-4">
+              Need Help Choosing?
+            </h2>
             <p className="text-muted-foreground mb-6">
-              Contact us to book your luxury car wash service.
+              Our luxury team is available 24/7 to help you select the perfect service for your needs.
             </p>
             <Button
               onClick={() => window.open('https://wa.me/393457905205', '_blank')}
@@ -276,10 +251,11 @@ const PremiumCarDetailing = () => {
               size="lg"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
-              Book Now via WhatsApp
+              Contact Our Team
             </Button>
           </div>
         </div>
+
       </main>
 
       <BookingModal 
