@@ -126,7 +126,7 @@ const PremiumCarDetailing = () => {
         <div className="absolute inset-0 bg-black">
           <img
             src="/cars.jpg"
-            alt="DR7 Rapid Service"
+            alt="DR7 Premium Car Detailing"
             className="w-full h-full object-cover opacity-40"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
