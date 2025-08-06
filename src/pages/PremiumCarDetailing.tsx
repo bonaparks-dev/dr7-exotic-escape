@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, MessageCircle, Star, Sparkles, Shield, Droplets } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { BookingModal } from "@/components/BookingModal";
 
 interface Service {
   id: number;
@@ -96,6 +98,7 @@ const courtesyServices: CourtesyService[] = [
 
 const PremiumCarDetailing = () => {
   const navigate = useNavigate();
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -184,7 +187,7 @@ const PremiumCarDetailing = () => {
                   )}
 
                   <Button
-                    onClick={() => window.open('https://wa.me/393457905205', '_blank')}
+                    onClick={() => setIsBookingModalOpen(true)}
                     variant="luxury"
                     className="w-full"
                   >
@@ -234,7 +237,7 @@ const PremiumCarDetailing = () => {
                   </p>
 
                   <Button
-                    onClick={() => window.open('https://wa.me/393457905205', '_blank')}
+                    onClick={() => setIsBookingModalOpen(true)}
                     variant="luxury"
                     className="w-full"
                   >
@@ -278,6 +281,11 @@ const PremiumCarDetailing = () => {
           </div>
         </div>
       </main>
+
+      <BookingModal 
+        open={isBookingModalOpen} 
+        onOpenChange={setIsBookingModalOpen} 
+      />
 
       <Footer />
     </div>
