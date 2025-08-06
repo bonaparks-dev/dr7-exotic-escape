@@ -137,7 +137,7 @@ Additional options: ${additionalOptions || "None"}
 Total estimated cost: €${totalPrice}`;
 
         const whatsappUrl = `https://wa.me/393457905205?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+        window.location.href = whatsappUrl;
         
         // Close modal after WhatsApp opens
         setTimeout(() => {
@@ -157,7 +157,7 @@ Total estimated cost: €${totalPrice}`;
           setUnder25(false);
           setLicenseUnder3(false);
           setOutOfHours(false);
-        }, 1000);
+        }, 4000);
       }, 2000);
 
     } catch (error) {
