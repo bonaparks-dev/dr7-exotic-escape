@@ -5,7 +5,7 @@ import { Car, Ship, Plane, Home, ChefHat } from "lucide-react";
 const categories = [
   {
     id: 'supercars',
-    title: 'Supercars',
+    title: 'Cars',
     description: 'Ferrari, Lamborghini, Mercedes & more',
     icon: Car,
     image: '/cars.jpg',
