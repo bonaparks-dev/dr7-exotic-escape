@@ -141,7 +141,7 @@ export const BookingModal = ({ open, onOpenChange }: BookingModalProps) => {
 
           {/* Add-on Options */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-luxury-gold">Add-on Options (Optional)</h3>
+            <h3 className="text-lg font-semibold text-luxury-gold">Select One Add-on Only (Optional)</h3>
             {addOnOptions.map((option) => (
               <div key={option.id} className="p-4 rounded-lg border border-luxury-gold/20 bg-luxury-charcoal/30">
                 <h4 className="text-luxury-gold font-medium mb-1">{option.title}</h4>
