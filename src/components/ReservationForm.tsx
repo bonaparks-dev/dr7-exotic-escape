@@ -410,19 +410,19 @@ Total estimated cost: €${totalPrice}`;
                   checked={fullCleaning} 
                   onCheckedChange={(checked) => setFullCleaning(checked === true)}
                   disabled
-                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                  className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:border-white data-[state=checked]:text-black"
                 />
                 <Label htmlFor="full-cleaning" className="text-luxury-ivory cursor-pointer">
                   Full cleaning with nitrogen sanitization – €30 <span className="text-luxury-gold">(Required)</span>
                 </Label>
               </div>
               
-              <div className="flex items-center space-x-2">
+               <div className="flex items-center space-x-2">
                 <Checkbox 
                   id="second-driver" 
                   checked={secondDriver} 
                   onCheckedChange={(checked) => setSecondDriver(checked === true)}
-                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                  className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:border-white data-[state=checked]:text-black"
                 />
                 <Label htmlFor="second-driver" className="text-luxury-ivory cursor-pointer">
                   Second driver – €10/day
@@ -434,7 +434,7 @@ Total estimated cost: €${totalPrice}`;
                   id="under-25" 
                   checked={under25} 
                   onCheckedChange={(checked) => setUnder25(checked === true)}
-                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                  className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:border-white data-[state=checked]:text-black"
                 />
                 <Label htmlFor="under-25" className="text-luxury-ivory cursor-pointer">
                   Under 25 years old – €10/day
@@ -446,7 +446,7 @@ Total estimated cost: €${totalPrice}`;
                   id="license-under-3" 
                   checked={licenseUnder3} 
                   onCheckedChange={(checked) => setLicenseUnder3(checked === true)}
-                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                  className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:border-white data-[state=checked]:text-black"
                 />
                 <Label htmlFor="license-under-3" className="text-luxury-ivory cursor-pointer">
                   Driving license under 3 years (min. 2years) – €20/day
@@ -458,7 +458,7 @@ Total estimated cost: €${totalPrice}`;
                   id="out-of-hours" 
                   checked={outOfHours} 
                   onCheckedChange={(checked) => setOutOfHours(checked === true)}
-                  className="border-luxury-gold/50 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
+                  className="border-white/50 data-[state=checked]:bg-white data-[state=checked]:border-white data-[state=checked]:text-black"
                 />
                 <Label htmlFor="out-of-hours" className="text-luxury-ivory cursor-pointer">
                   Out-of-hours or Sunday pickup – €50
