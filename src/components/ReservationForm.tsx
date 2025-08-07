@@ -308,7 +308,7 @@ Total estimated cost: €${totalPrice}`;
                 id="firstName"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70"
+                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
                 placeholder="Enter your first name"
                 required
               />
@@ -322,7 +322,7 @@ Total estimated cost: €${totalPrice}`;
                 id="lastName"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70"
+                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
                 placeholder="Enter your last name"
                 required
               />
@@ -340,7 +340,7 @@ Total estimated cost: €${totalPrice}`;
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70"
+                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
                 placeholder="your@email.com"
                 required
               />
@@ -355,7 +355,7 @@ Total estimated cost: €${totalPrice}`;
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory placeholder:text-luxury-ivory/50 focus:border-luxury-gold hover:border-luxury-gold/40 hover:bg-luxury-charcoal/70"
+                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
                 placeholder="+39 123 456 7890"
                 required
               />
