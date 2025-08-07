@@ -178,7 +178,7 @@ export const BookingModal = ({ open, onOpenChange }: BookingModalProps) => {
             <Button
               onClick={handleWhatsAppClick}
               disabled={!selectedPackage}
-              variant="gold"
+              variant="luxury"
               size="lg"
               className="w-full"
             >

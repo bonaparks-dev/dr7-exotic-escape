@@ -17,98 +17,99 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Luxury color palette */
-    --background: 45 15% 97%;
-    --foreground: 220 15% 10%;
+    /* Lamborghini-inspired Black & White Design System */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 45 25% 98%;
-    --card-foreground: 220 15% 10%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 45 25% 98%;
-    --popover-foreground: 220 15% 10%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 220 25% 8%;
-    --primary-foreground: 45 35% 95%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 220 8% 85%;
-    --secondary-foreground: 220 15% 15%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 8% 90%;
-    --muted-foreground: 220 10% 45%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 45 85% 75%;
-    --accent-foreground: 220 15% 10%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 70% 55%;
-    --destructive-foreground: 45 35% 95%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 8% 88%;
-    --input: 220 8% 88%;
-    --ring: 45 85% 65%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 30%;
 
-    /* Luxury design tokens */
-    --luxury-gold: 40 48% 61%;
-    --luxury-gold-light: 40 48% 71%;
-    --luxury-navy: 220 35% 15%;
-    --luxury-charcoal: 220 25% 8%;
-    --luxury-ivory: 45 35% 95%;
+    /* Black & White luxury tokens */
+    --luxury-black: 0 0% 0%;
+    --luxury-white: 0 0% 100%;
+    --luxury-grey-dark: 0 0% 10%;
+    --luxury-grey-light: 0 0% 90%;
+    --luxury-grey-muted: 0 0% 70%;
 
     /* Gradients */
-    --gradient-luxury: linear-gradient(135deg, hsl(var(--luxury-charcoal)), hsl(var(--luxury-navy)));
-    --gradient-gold: linear-gradient(135deg, hsl(var(--luxury-gold)), hsl(var(--luxury-gold-light)));
-    --gradient-hero: linear-gradient(180deg, hsl(var(--luxury-charcoal) / 0.9), hsl(var(--luxury-navy) / 0.7));
+    --gradient-luxury: linear-gradient(135deg, hsl(0 0% 0%), hsl(0 0% 10%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 5%), hsl(0 0% 0%));
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 0% / 0.9), hsl(0 0% 0% / 0.7));
 
     /* Shadows */
-    --shadow-luxury: 0 20px 50px -15px hsl(var(--luxury-charcoal) / 0.3);
-    --shadow-gold: 0 10px 30px -10px hsl(var(--luxury-gold) / 0.4);
-    --shadow-card: 0 4px 20px -2px hsl(var(--luxury-charcoal) / 0.1);
+    --shadow-luxury: 0 20px 50px -15px hsl(0 0% 0% / 0.5);
+    --shadow-elegant: 0 10px 30px -10px hsl(0 0% 0% / 0.3);
+    --shadow-card: 0 4px 20px -2px hsl(0 0% 0% / 0.2);
 
     /* Transitions */
     --transition-luxury: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 0 0% 30%;
   }
 
   .dark {
-    --background: 220 25% 8%;
-    --foreground: 45 35% 95%;
+    /* Dark mode inherits the same black theme */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 220 20% 12%;
-    --card-foreground: 45 35% 95%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 220 20% 12%;
-    --popover-foreground: 45 35% 95%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 45 35% 95%;
-    --primary-foreground: 220 25% 8%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 220 15% 20%;
-    --secondary-foreground: 45 35% 95%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 60%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 45 85% 75%;
-    --accent-foreground: 220 25% 8%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 45 35% 95%;
+    --destructive-foreground: 0 0% 100%;
 
-    /* Dark mode luxury colors */
-    --luxury-gold: 40 48% 61%;
-    --luxury-gold-light: 40 48% 71%;
-    --luxury-navy: 220 45% 12%;
-    --luxury-charcoal: 220 25% 8%;
-    --luxury-ivory: 45 35% 95%;
+    /* Dark mode luxury colors - same as light */
+    --luxury-black: 0 0% 0%;
+    --luxury-white: 0 0% 100%;
+    --luxury-grey-dark: 0 0% 10%;
+    --luxury-grey-light: 0 0% 90%;
+    --luxury-grey-muted: 0 0% 70%;
   }
 }
 

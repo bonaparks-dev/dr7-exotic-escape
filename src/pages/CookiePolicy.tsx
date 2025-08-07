@@ -136,7 +136,7 @@ const CookiePolicy = () => {
           <div className="text-center mt-16">
             <Button
               onClick={() => navigate('/')}
-              variant="gold"
+              variant="luxury"
               className="text-sm uppercase"
             >
               Back to Home

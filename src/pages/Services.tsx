@@ -212,7 +212,7 @@ export default function Services() {
             </p>
             <Button
               onClick={() => window.open('https://wa.me/393457905205', '_blank')}
-              variant="gold"
+              variant="luxury"
               size="lg"
             >
               <MessageCircle className="w-5 h-5 mr-2" />

@@ -42,7 +42,7 @@ export function HeroSection() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a href="#services">
-            <Button variant="gold" size="lg" className="px-8 py-6 text-lg">
+            <Button variant="luxury" size="lg" className="px-8 py-6 text-lg">
               Explore Collection
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>

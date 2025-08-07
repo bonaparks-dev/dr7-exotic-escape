@@ -66,21 +66,21 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				luxury: {
-					gold: 'hsl(var(--luxury-gold))',
-					'gold-light': 'hsl(var(--luxury-gold-light))',
-					navy: 'hsl(var(--luxury-navy))',
-					charcoal: 'hsl(var(--luxury-charcoal))',
-					ivory: 'hsl(var(--luxury-ivory))'
+					black: 'hsl(var(--luxury-black))',
+					white: 'hsl(var(--luxury-white))',
+					'grey-dark': 'hsl(var(--luxury-grey-dark))',
+					'grey-light': 'hsl(var(--luxury-grey-light))',
+					'grey-muted': 'hsl(var(--luxury-grey-muted))'
 				}
 			},
 			backgroundImage: {
 				'gradient-luxury': 'var(--gradient-luxury)',
-				'gradient-gold': 'var(--gradient-gold)',
+				'gradient-subtle': 'var(--gradient-subtle)',
 				'gradient-hero': 'var(--gradient-hero)'
 			},
 			boxShadow: {
 				'luxury': 'var(--shadow-luxury)',
-				'gold': 'var(--shadow-gold)',
+				'elegant': 'var(--shadow-elegant)',
 				'card': 'var(--shadow-card)'
 			},
 			transitionProperty: {

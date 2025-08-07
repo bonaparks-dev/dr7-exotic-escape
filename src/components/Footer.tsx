@@ -67,7 +67,7 @@ export function Footer() {
             
             <div className="pt-4">
               <Button
-                variant="gold"
+                variant="luxury"
                 className="w-full"
                 onClick={() => window.open('https://wa.me/393457905205', '_blank')}
               >

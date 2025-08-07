@@ -2,11 +2,14 @@ import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { ServiceCategories } from "@/components/ServiceCategories";
 import { Footer } from "@/components/Footer";
-import CookieBanner from "@/components/CookieBanner";
+import CookieConsentModal from "@/components/CookieConsentModal";
 import { Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -14,32 +17,32 @@ const Index = () => {
         <HeroSection />
         <ServiceCategories />
 
-        {/* SECTION CONTACT – clean sans box-shadow */}
+        {/* SECTION CONTACT – clean minimalist design */}
         <section
           id="contact"
-          className="bg-background text-luxury-charcoal py-24 px-6 md:px-12"
+          className="bg-background text-foreground py-24 px-6 md:px-12"
         >
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-8">
             {/* Infos à gauche */}
             <div className="md:w-1/2 text-left">
               <h2
-                className="text-4xl font-bold uppercase mb-6 text-luxury-gold"
+                className="text-4xl font-bold uppercase mb-6 text-foreground"
                 style={{ fontFamily: '"The Seasons", serif' }}
               >
-                Contact
+                {t('contact.title')}
               </h2>
 
-              <p className="text-luxury-gold text-sm uppercase mb-2">WhatsApp</p>
+              <p className="text-foreground text-sm uppercase mb-2">{t('contact.whatsapp')}</p>
               <p className="text-2xl font-semibold mb-6">+39 345 790 5205</p>
 
               <p className="mb-1">Viale Marconi, 229, 09131 Cagliari</p>
-              <p className="text-muted-foreground mb-6">Office hours: 9am to 7pm</p>
+              <p className="text-muted-foreground mb-6">{t('contact.office')}</p>
 
               <div className="flex space-x-4 mb-6">
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-luxury-charcoal hover:text-luxury-gold"
+                  className="text-foreground hover:text-muted-foreground"
                   onClick={() =>
                     window.open("https://www.instagram.com/dr7_exotic_cars", "_blank")
                   }
@@ -49,7 +52,7 @@ const Index = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-luxury-charcoal hover:text-luxury-gold"
+                  className="text-foreground hover:text-muted-foreground"
                   onClick={() =>
                     window.open("https://tiktok.com/@dr7_exotic_cars", "_blank")
                   }
@@ -63,14 +66,14 @@ const Index = () => {
 
             {/* Bloc droit teaser */}
             <div className="md:w-1/2 text-muted-foreground italic text-sm pt-4">
-              Let us curate your next unforgettable journey.
+              {t('contact.cta')}
             </div>
           </div>
         </section>
       </main>
 
       <Footer />
-      <CookieBanner />
+      <CookieConsentModal />
     </div>
   );
 };
