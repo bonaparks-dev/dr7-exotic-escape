@@ -40,7 +40,7 @@ const translations = {
     // Contact
     'contact.title': 'Contatti',
     'contact.whatsapp': 'WhatsApp',
-    'contact.office': 'Orari ufficio: 9:00 - 19:00',
+    'contact.office': 'Orari ufficio: 9:00 - 20:00',
     'contact.cta': 'Lascia che curiamo il tuo prossimo viaggio indimenticabile.',
     
     // Buttons
@@ -139,7 +139,7 @@ const translations = {
     // Contact
     'contact.title': 'Contact',
     'contact.whatsapp': 'WhatsApp',
-    'contact.office': 'Office hours: 9am to 7pm',
+    'contact.office': 'Office hours: 9am to 8pm',
     'contact.cta': 'Let us curate your next unforgettable journey.',
     
     // Buttons
