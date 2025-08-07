@@ -362,7 +362,7 @@ Total estimated cost: €${totalPrice}`;
               <SelectTrigger className="bg-luxury-charcoal/50 border-luxury-gold/20 text-luxury-ivory focus:border-luxury-gold hover:border-luxury-white/40 hover:bg-luxury-charcoal/70">
                 <SelectValue placeholder="Select insurance" />
               </SelectTrigger>
-              <SelectContent className="bg-luxury-charcoal border-luxury-gold/20">
+              <SelectContent className="bg-black border-white/20 z-50">
                 <SelectItem value="kasko" className="text-luxury-ivory hover:bg-luxury-gold/30 focus:bg-luxury-gold/30">
                   Kasko – €100/day
                 </SelectItem>
