@@ -230,7 +230,7 @@ Total estimated cost: €${totalPrice}`;
                     {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-luxury-charcoal border-luxury-gold/20" align="start">
+                <PopoverContent className="w-auto p-0 bg-black border-white/20" align="start">
                   <Calendar
                     mode="single"
                     selected={startDate}
@@ -260,7 +260,7 @@ Total estimated cost: €${totalPrice}`;
                     {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-luxury-charcoal border-luxury-gold/20" align="start">
+                <PopoverContent className="w-auto p-0 bg-black border-white/20" align="start">
                   <Calendar
                     mode="single"
                     selected={endDate}
