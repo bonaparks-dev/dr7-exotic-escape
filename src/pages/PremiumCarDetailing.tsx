@@ -125,7 +125,7 @@ const PremiumCarDetailing = () => {
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
           <img
-            src="/cars.jpg"
+            src="/wash.jpg"
             alt="DR7 Premium Car Detailing"
             className="w-full h-full object-cover opacity-40"
           />
