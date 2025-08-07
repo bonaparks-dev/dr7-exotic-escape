@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function HeroSection() {
+  const { t } = useLanguage();
+  
   const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     console.error("Video failed to load:", e);
   };
@@ -29,21 +32,18 @@ export function HeroSection() {
 
       {/* Foreground content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-        <h1 className="text-3xl md:text-5xl font-bold text-luxury-ivory mb-6 leading-tight">
-         The DR7 Sovereign
-          <span className="block bg-gradient-gold bg-clip-text text-transparent">
-            Luxury System
-          </span>
+        <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+          {t('hero.title')}
         </h1>
 
-        <p className="text-xl md:text-2xl text-luxury-ivory/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Access the world's most exclusive supercars, villas, yachts, private jets, and personal chefs.
+        <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+          {t('hero.subtitle')}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a href="#services">
             <Button variant="luxury" size="lg" className="px-8 py-6 text-lg">
-              Explore Collection
+              {t('hero.cta')}
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </a>   

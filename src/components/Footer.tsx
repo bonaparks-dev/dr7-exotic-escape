@@ -1,9 +1,12 @@
 import { MessageCircle, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Footer() {
+  const { t } = useLanguage();
+  
   return (
-    <footer className="bg-luxury-charcoal text-luxury-ivory">
+    <footer className="bg-background text-white border-t border-white/10">
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
@@ -38,31 +41,31 @@ export function Footer() {
           
           {/* Services */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-luxury-gold">Services</h3>
+            <h3 className="text-lg font-semibold text-white">{t('footer.services')}</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Supercars</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Luxury Yachts</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Private Jets</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Exclusive Villas</a></li>
+              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.supercars')}</a></li>
+              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.yachts')}</a></li>
+              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.jets')}</a></li>
+              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.villas')}</a></li>
             </ul>
           </div>
           
           {/* Company */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-luxury-gold">Company</h3>
+            <h3 className="text-lg font-semibold text-white">{t('footer.company')}</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">About Us</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">How It Works</a></li>
+              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('footer.about')}</a></li>
+              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('footer.howitworks')}</a></li>
             </ul>
           </div>
           
           {/* Support */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-luxury-gold">Support</h3>
+            <h3 className="text-lg font-semibold text-white">{t('footer.support')}</h3>
             <ul className="space-y-2">
-              <li><a href="#contact" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Contact Us</a></li>
-              <li><a href="/cookie-policy" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Cookie Policy</a></li>
-              <li><a href="#" className="text-luxury-gold hover:text-luxury-gold/80 transition-colors">Terms of Service</a></li>
+              <li><a href="#contact" className="text-white/70 hover:text-white transition-colors">{t('btn.contact')}</a></li>
+              <li><a href="/cookie-policy" className="text-white/70 hover:text-white transition-colors">Cookie Policy</a></li>
+              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('footer.terms')}</a></li>
             </ul>
             
             <div className="pt-4">
@@ -72,15 +75,15 @@ export function Footer() {
                 onClick={() => window.open('https://wa.me/393457905205', '_blank')}
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
-                WhatsApp Support
+                {t('footer.whatsappsupport')}
               </Button>
             </div>
           </div>
         </div>
         
-        <div className="border-t border-luxury-ivory/10 mt-12 pt-8 text-center">
-          <p className="text-luxury-gold">
-            © 2023 DR7 Exotic. All rights reserved.
+        <div className="border-t border-white/10 mt-12 pt-8 text-center">
+          <p className="text-white/70">
+            {t('footer.rights')}
           </p>
         </div>
       </div>

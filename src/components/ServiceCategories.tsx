@@ -1,56 +1,56 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Car, Ship, Plane, Home, ChefHat } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const categories = [
-  {
-    id: 'supercars',
-    title: 'Cars',
-    description: 'Ferrari, Lamborghini, Mercedes & more',
-    icon: Car,
-    image: '/cars.jpg',
-    itemCount: '15 Available',
-    buttonLabel: 'Rent a car',
-    link: '/rentals'
-  },
-  {
-    id: 'yachts',
-    title: 'Luxury Yachts',
-    description: 'Private charters & exclusive access',
-    icon: Ship,
-    image: '/yacht.jpg',
-    buttonLabel: 'Get info'
-  },
-  {
-    id: 'jets',
-    title: 'Private Jets',
-    description: 'Global destinations, ultimate comfort',
-    icon: Plane,
-    image: '/privatejet.jpg',
-    buttonLabel: 'Get info'
-  },
-  {
-    id: 'villas',
-    title: 'Luxury Villas',
-    description: 'Exclusive properties worldwide',
-    icon: Home,
-    image: '/exclusivevilla.jpg',
-    buttonLabel: 'Get info'
-  }
-];
 
 export function ServiceCategories() {
+  const { t } = useLanguage();
+
+  const categories = [
+    {
+      id: 'supercars',
+      title: t('services.supercars'),
+      description: t('services.supercars.desc'),
+      icon: Car,
+      image: '/cars.jpg',
+      itemCount: '15 Available',
+      buttonLabel: t('nav.rentcar'),
+      link: '/rentals'
+    },
+    {
+      id: 'yachts',
+      title: t('services.yachts'),
+      description: t('services.yachts.desc'),
+      icon: Ship,
+      image: '/yacht.jpg',
+      buttonLabel: t('btn.learnmore')
+    },
+    {
+      id: 'jets',
+      title: t('services.jets'),
+      description: t('services.jets.desc'),
+      icon: Plane,
+      image: '/privatejet.jpg',
+      buttonLabel: t('btn.learnmore')
+    },
+    {
+      id: 'villas',
+      title: t('services.villas'),
+      description: t('services.villas.desc'),
+      icon: Home,
+      image: '/exclusivevilla.jpg',
+      buttonLabel: t('btn.learnmore')
+    }
+  ];
+
   return (
     <section id="services" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Exclusive
-            <span className="bg-gradient-gold bg-clip-text text-transparent"> Collections</span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+            {t('services.title')}
           </h2>
-          <p className="text-xl text-luxury-gold max-w-2xl mx-auto">
-            Luxury without limits. Experiences without compromise.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -76,9 +76,9 @@ export function ServiceCategories() {
                 </div>
               </div>
 
-              <CardContent className="p-6">
-                <h3 className="text-2xl font-bold mb-2">{category.title}</h3>
-                <p className="text-luxury-gold mb-4">{category.description}</p>
+               <CardContent className="p-6">
+                <h3 className="text-2xl font-bold mb-2 text-white">{category.title}</h3>
+                <p className="text-white/70 mb-4">{category.description}</p>
                 {category.link ? (
                   <a href={category.link}>
                     <Button variant="luxury" className="w-full">
