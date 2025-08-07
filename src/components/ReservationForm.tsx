@@ -175,7 +175,7 @@ Total estimated cost: €${totalPrice}`;
   if (showSuccess) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-md bg-luxury-charcoal border-luxury-gold/20">
+        <DialogContent className="sm:max-w-md bg-black border-white/20">
           <div className="text-center py-8">
             <div className="mx-auto w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4">
               <Check className="w-8 h-8 text-green-500" />
@@ -195,7 +195,7 @@ Total estimated cost: €${totalPrice}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto bg-luxury-charcoal border-luxury-gold/20">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto bg-black border-white/20">
         <DialogHeader>
           <DialogTitle className="text-2xl font-seasons text-luxury-gold">
             Reserve Your {carName}
