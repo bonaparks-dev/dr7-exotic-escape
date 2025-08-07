@@ -151,7 +151,7 @@ const CookieConsentModal = () => {
                 <Button
                   onClick={handleDecline}
                   variant="outline"
-                  className="flex-1 border-border hover:bg-muted"
+                  className="flex-1 border-white/20 text-white hover:bg-white/10 hover:text-white"
                 >
                   {t('cookie.decline')}
                 </Button>

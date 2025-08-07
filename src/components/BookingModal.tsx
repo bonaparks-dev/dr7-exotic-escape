@@ -113,7 +113,7 @@ export const BookingModal = ({ open, onOpenChange }: BookingModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-luxury-charcoal/95 border-luxury-gold/20 text-luxury-ivory">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-black border-white/20 text-white">
         <DialogHeader>
           <DialogTitle className="text-2xl font-seasons text-luxury-gold mb-4">
             Book Your DR7 Service
