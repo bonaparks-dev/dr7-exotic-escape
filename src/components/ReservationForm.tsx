@@ -38,6 +38,8 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [startDateOpen, setStartDateOpen] = useState(false);
+  const [endDateOpen, setEndDateOpen] = useState(false);
   const { toast } = useToast();
 
   const calculateTotal = () => {
@@ -74,6 +76,28 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
   useEffect(() => {
     setTotalPrice(calculateTotal());
   }, [startDate, endDate, depositOption, insurance, secondDriver, under25, licenseUnder3, outOfHours]);
+
+  // Auto-open end date picker when start date is selected
+  useEffect(() => {
+    if (startDate && !endDate) {
+      setTimeout(() => {
+        setEndDateOpen(true);
+      }, 300);
+    }
+  }, [startDate, endDate]);
+
+  const handleStartDateSelect = (date: Date | undefined) => {
+    setStartDate(date);
+    setStartDateOpen(false);
+    if (date && date >= endDate!) {
+      setEndDate(undefined);
+    }
+  };
+
+  const handleEndDateSelect = (date: Date | undefined) => {
+    setEndDate(date);
+    setEndDateOpen(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -217,7 +241,7 @@ Total estimated cost: €${totalPrice}`;
               <Label htmlFor="startDate" className="text-luxury-ivory font-medium">
                 Start Date
               </Label>
-              <Popover>
+              <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -234,7 +258,7 @@ Total estimated cost: €${totalPrice}`;
                   <Calendar
                     mode="single"
                     selected={startDate}
-                    onSelect={setStartDate}
+                    onSelect={handleStartDateSelect}
                     disabled={(date) => date < new Date()}
                     initialFocus
                     className="pointer-events-auto"
@@ -247,7 +271,7 @@ Total estimated cost: €${totalPrice}`;
               <Label htmlFor="endDate" className="text-luxury-ivory font-medium">
                 End Date
               </Label>
-              <Popover>
+              <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -264,7 +288,7 @@ Total estimated cost: €${totalPrice}`;
                   <Calendar
                     mode="single"
                     selected={endDate}
-                    onSelect={setEndDate}
+                    onSelect={handleEndDateSelect}
                     disabled={(date) => date < (startDate || new Date())}
                     initialFocus
                     className="pointer-events-auto"
