@@ -121,7 +121,7 @@ export default function Services() {
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
           <img
-            src="/cars.jpg"
+            src="/mecanica.jpg"
             alt="DR7 Rapid Services"
             className="w-full h-full object-cover opacity-40"
           />
