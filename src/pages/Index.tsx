@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { ServiceCategories } from "@/components/ServiceCategories";
+import { StelvioShowcase } from "@/components/StelvioShowcase";
 import { Footer } from "@/components/Footer";
 import CookieConsentModal from "@/components/CookieConsentModal";
 import AgeVerificationModal from "@/components/AgeVerificationModal";
@@ -74,6 +75,7 @@ const Index = () => {
         </section>
       </main>
 
+      <StelvioShowcase />
       <Footer />
       <CookieConsentModal />
       <AgeVerificationModal />

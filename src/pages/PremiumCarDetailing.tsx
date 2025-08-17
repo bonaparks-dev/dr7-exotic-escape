@@ -74,19 +74,19 @@ const courtesyServices: CourtesyService[] = [
   },
   {
     id: 2,
-    title: "Supercar Experience",
+    title: "Exotic Car Experience",
     subtitle: "Feel the thrill of luxury performance",
     pricing: [
       { duration: "1 hr", price: "€59" },
       { duration: "2 hrs", price: "€99" },
       { duration: "3 hrs", price: "€139" }
     ],
-    description: "Experience our premium supercar collection."
+    description: "Experience our premium exotic car collection."
   },
   {
     id: 3,
     title: "Ferrari / Lamborghini Experience",
-    subtitle: "Drive one of our top supercars while we bring yours back to life",
+    subtitle: "Drive one of our top exotic cars while we bring yours back to life",
     pricing: [
       { duration: "1 hr", price: "€149" },
       { duration: "2 hrs", price: "€249" },

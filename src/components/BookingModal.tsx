@@ -44,7 +44,7 @@ const addOnOptions: AddOnOption[] = [
   },
   {
     id: "supercar",
-    title: "Supercar Experience",
+    title: "Exotic Car Experience",
     subtitle: "Feel the thrill of luxury performance",
     pricing: [
       { duration: "1h", price: "€59" },
@@ -55,7 +55,7 @@ const addOnOptions: AddOnOption[] = [
   {
     id: "ferrari-lambo",
     title: "Ferrari / Lamborghini Experience",
-    subtitle: "Drive one of our top supercars while we bring yours back to life",
+    subtitle: "Drive one of our top exotic cars while we bring yours back to life",
     pricing: [
       { duration: "1h", price: "€149" },
       { duration: "2h", price: "€249" },

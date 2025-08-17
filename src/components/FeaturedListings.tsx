@@ -7,7 +7,7 @@ const featuredListings = [
   {
     id: 1,
     title: "Ferrari F8 Tributo",
-    category: "Supercar",
+    category: "Exotic Car",
     location: "Miami, FL",
     price: "$2,500",
     period: "per day",
