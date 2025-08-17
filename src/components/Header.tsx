@@ -15,15 +15,12 @@ export function Header() {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
         <div className="container mx-auto px-4 py-2 flex flex-col items-center relative z-50 pointer-events-auto">
-          {/* Icône WhatsApp mobile */}
-          <div className="absolute top-6 left-4 sm:hidden">
-            <a href="https://wa.me/393457905205" target="_blank" rel="noopener noreferrer" className="text-white">
-              <Phone className="w-5 h-5" />
-            </a>
-          </div>
-
           {/* Boutons à droite */}
           <div className="absolute top-6 right-4 flex items-center space-x-4">
+            {/* Icône Phone mobile */}
+            <a href="https://wa.me/393457905205" target="_blank" rel="noopener noreferrer" className="text-foreground sm:hidden">
+              <Phone className="w-5 h-5" />
+            </a>
             <LanguageToggle />
             <Button
               variant="luxury"

@@ -66,11 +66,6 @@ export function ServiceCategories() {
                 <div className="absolute top-4 right-4">
                   <category.icon className="w-8 h-8 text-luxury-gold" />
                 </div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <span className="text-sm font-medium bg-luxury-gold/70 px-3 py-1 rounded-full">
-                    {category.itemCount}
-                  </span>
-                </div>
               </div>
 
                <CardContent className="p-6">
