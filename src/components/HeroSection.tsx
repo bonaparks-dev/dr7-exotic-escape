@@ -13,6 +13,13 @@ export function HeroSection() {
     console.log("Video loaded successfully");
   };
 
+  const handleAudioLoad = (e: React.SyntheticEvent<HTMLAudioElement, Event>) => {
+    const audio = e.currentTarget;
+    audio.play().catch(error => {
+      console.log("Audio autoplay blocked by browser:", error);
+    });
+  };
+
   return (
     <section className="relative w-full h-screen overflow-hidden">
       {/* Background Video */}
@@ -32,6 +39,7 @@ export function HeroSection() {
         autoPlay
         loop
         className="hidden"
+        onLoadedData={handleAudioLoad}
       >
         <source src="/cosmic.mp3" type="audio/mpeg" />
       </audio>
