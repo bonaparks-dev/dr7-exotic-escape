@@ -46,6 +46,7 @@ export function Footer() {
               <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.supercars')}</a></li>
               <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.yachts')}</a></li>
               <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.jets')}</a></li>
+              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.helicopters')}</a></li>
               <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.villas')}</a></li>
             </ul>
           </div>

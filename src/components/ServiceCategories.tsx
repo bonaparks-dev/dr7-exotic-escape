@@ -41,6 +41,14 @@ export function ServiceCategories() {
       icon: Home,
       image: '/exclusivevilla.jpg',
       buttonLabel: t('btn.learnmore')
+    },
+    {
+      id: 'helicopters',
+      title: t('services.helicopters'),
+      description: t('services.helicopters.desc'),
+      icon: Plane,
+      image: '/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png',
+      buttonLabel: t('btn.learnmore')
     }
   ];
 
