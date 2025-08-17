@@ -11,6 +11,7 @@ import Rentals from "./pages/Rentals";
 import YachtRental from "./pages/YachtRental";
 import PremiumCarDetailing from "./pages/PremiumCarDetailing";
 import CookiePolicy from "./pages/CookiePolicy";
+import Lottery from "./pages/Lottery";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/rentals" element={<Rentals />} />
             <Route path="/yacht-rental" element={<YachtRental />} />
             <Route path="/premium-car-detailing" element={<PremiumCarDetailing />} />
+            <Route path="/lottery" element={<Lottery />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
