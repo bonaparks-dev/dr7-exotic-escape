@@ -74,6 +74,7 @@ const translations = {
     'rentals.helpdesc': 'Il nostro team concierge di lusso è disponibile 24/7 per aiutarti a scegliere il veicolo perfetto.',
     'rentals.contactconcierge': 'Contatta il Nostro Concierge',
     'rentals.booknow': 'Prenota Ora',
+    'rentals.notavailable': 'Non Disponibile',
     
     // Services
     'services.rapidservices': 'Servizi Rapidi',
@@ -312,6 +313,7 @@ const translations = {
     'rentals.helpdesc': 'Our luxury concierge team is available 24/7 to help you select the perfect vehicle for your needs.',
     'rentals.contactconcierge': 'Contact Our Concierge',
     'rentals.booknow': 'Book Now',
+    'rentals.notavailable': 'Not Available',
     
     // Services
     'services.rapidservices': 'Rapid Services',

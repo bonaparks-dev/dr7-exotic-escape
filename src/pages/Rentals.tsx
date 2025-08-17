@@ -319,7 +319,7 @@ const Rentals = () => {
                   />
                   {car.available === false && (
                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                      <span className="text-white font-bold text-lg">Not Available</span>
+                      <span className="text-white font-bold text-lg">{t('rentals.notavailable')}</span>
                     </div>
                   )}
                 </div>
@@ -368,7 +368,7 @@ const Rentals = () => {
                     className="w-full"
                     disabled={car.available === false}
                   >
-                    {car.available === false ? 'Not Available' : t('rentals.booknow')}
+                    {car.available === false ? t('rentals.notavailable') : t('rentals.booknow')}
                   </Button>
                 </CardContent>
               </Card>
