@@ -58,7 +58,7 @@ const translations = {
     'footer.howitworks': 'Come Funziona',
     'footer.terms': 'Termini di Servizio',
     'footer.whatsappsupport': 'Supporto WhatsApp',
-    'footer.rights': '© 2023 DR7 Exotic. Tutti i diritti riservati.',
+    'footer.rights': '© 2024 Dubai Rent 7.0 S.p.A. Tutti i diritti riservati.',
     
     // Car Rental
     'rentals.title': 'Collezione Auto Esclusive',
@@ -157,7 +157,7 @@ const translations = {
     'footer.howitworks': 'How It Works',
     'footer.terms': 'Terms of Service',
     'footer.whatsappsupport': 'WhatsApp Support',
-    'footer.rights': '© 2023 DR7 Exotic. All rights reserved.',
+    'footer.rights': '© 2024 Dubai Rent 7.0 S.p.A. All rights reserved.',
     
     // Car Rental
     'rentals.title': 'Exotic Car Collection',
