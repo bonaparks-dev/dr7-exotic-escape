@@ -78,12 +78,12 @@ export default function YachtRental() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black text-white">
       <Header />
 
       <Button
         onClick={() => navigate('/')}
-        className="fixed top-24 left-4 z-40 bg-luxury-charcoal/90 text-luxury-ivory border border-luxury-gold/20 hover:bg-luxury-charcoal backdrop-blur-sm"
+        className="fixed top-24 left-4 z-40 bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-sm"
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
@@ -99,52 +99,47 @@ export default function YachtRental() {
       </Button>
 
       <main className="pt-32 pb-16">
-        {/* Video Header Section */}
+        {/* Image Header Section */}
         <div className="w-full mb-16">
           <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
-            <video 
+            <img 
+              src="/yacht.jpg" 
+              alt="Luxury Yacht"
               className="w-full h-full object-cover"
-              autoPlay 
-              muted 
-              loop
-              playsInline
-            >
-              <source src="/yacht.MP4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+            />
           </div>
         </div>
 
         {/* Yacht Packages */}
         <div className="container mx-auto px-4 mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-seasons text-luxury-gold mb-4">
+            <h2 className="text-3xl md:text-4xl font-seasons text-white mb-4">
               {t('yacht.packages')}
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">
               {t('yacht.packagesdesc')}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {yachtPackages.map((pkg) => (
-              <Card key={pkg.id} className="bg-luxury-charcoal/5 border-luxury-gold/20 hover:shadow-luxury transition-all duration-300 group">
+              <Card key={pkg.id} className="bg-white/5 border-white/20 hover:bg-white/10 transition-all duration-300 group">
                 <CardContent className="p-8 text-center">
                   <div className="mb-6">
-                    <h3 className="text-2xl font-seasons text-luxury-gold mb-2">
+                    <h3 className="text-2xl font-seasons text-white mb-2">
                       {pkg.title}
                     </h3>
-                    <div className="flex items-center justify-center gap-2 text-muted-foreground mb-4">
+                    <div className="flex items-center justify-center gap-2 text-white/70 mb-4">
                       <Clock className="w-4 h-4" />
                       <span>{pkg.timeSlot}</span>
                     </div>
-                    <div className="text-4xl font-bold text-luxury-gold mb-2">
+                    <div className="text-4xl font-bold text-white mb-2">
                       {pkg.price}
                     </div>
-                    <div className="text-sm text-muted-foreground mb-4">
+                    <div className="text-sm text-white/70 mb-4">
                       {pkg.baseGuests} {t('yacht.persons')}
                     </div>
-                    <p className="text-sm text-muted-foreground mb-6">
+                    <p className="text-sm text-white/70 mb-6">
                       {pkg.description}
                     </p>
                   </div>
@@ -165,7 +160,7 @@ export default function YachtRental() {
           </div>
 
           <div className="text-center mt-8">
-            <p className="text-luxury-gold font-bold text-lg">
+            <p className="text-white font-bold text-lg">
               +€20 {t('yacht.additionalguest')} (max 14 {t('yacht.persons')})
             </p>
           </div>
@@ -174,15 +169,15 @@ export default function YachtRental() {
         {/* Included Services */}
         <div className="container mx-auto px-4 mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-seasons text-luxury-gold mb-4">
+            <h2 className="text-3xl md:text-4xl font-seasons text-white mb-4">
               {t('yacht.included')}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
             {includedServices.map((service, index) => (
-              <div key={index} className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-4">
-                <p className="text-center text-sm">{service}</p>
+              <div key={index} className="bg-white/5 border border-white/20 rounded-lg p-4">
+                <p className="text-center text-sm text-white/80">{service}</p>
               </div>
             ))}
           </div>
@@ -191,18 +186,18 @@ export default function YachtRental() {
         {/* Extra Services */}
         <div className="container mx-auto px-4 mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-seasons text-luxury-gold mb-4">
+            <h2 className="text-3xl md:text-4xl font-seasons text-white mb-4">
               {t('yacht.extraservices')}
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-white/70">
               {t('yacht.extraservicesdesc')}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
             {extraServices.map((service, index) => (
-              <div key={index} className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-4">
-                <p className="text-center text-sm">{service}</p>
+              <div key={index} className="bg-white/5 border border-white/20 rounded-lg p-4">
+                <p className="text-center text-sm text-white/80">{service}</p>
               </div>
             ))}
           </div>
@@ -210,11 +205,11 @@ export default function YachtRental() {
 
         {/* Contact CTA */}
         <div className="container mx-auto px-4 text-center">
-          <div className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-8">
-            <h2 className="text-2xl font-seasons text-luxury-gold mb-4">
+          <div className="bg-white/5 border border-white/20 rounded-lg p-8">
+            <h2 className="text-2xl font-seasons text-white mb-4">
               {t('yacht.needhelp')}
             </h2>
-            <p className="text-muted-foreground mb-6">
+            <p className="text-white/80 mb-6">
               {t('yacht.personalservice')}
             </p>
             <Button
