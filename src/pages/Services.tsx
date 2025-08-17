@@ -103,6 +103,29 @@ export default function Services() {
     <div className="min-h-screen bg-background">
       <Header />
 
+      {/* Hero Video Section */}
+      <section className="relative h-[60vh] overflow-hidden">
+        <video
+          src="/mecanic.MP4"
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+              {t('services.title')}
+            </h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto px-4">
+              {t('services.subtitle')}
+            </p>
+          </div>
+        </div>
+      </section>
+
       <Button
         onClick={() => navigate('/')}
         className="fixed top-24 left-4 z-40 bg-luxury-charcoal/90 text-luxury-ivory border border-luxury-gold/20 hover:bg-luxury-charcoal backdrop-blur-sm"
