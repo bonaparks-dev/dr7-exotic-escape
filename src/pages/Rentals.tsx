@@ -287,8 +287,8 @@ const Rentals = () => {
 
       <main className="pt-32 pb-16">
         {/* Video Header Section */}
-        <div className="container mx-auto px-4 mb-16">
-          <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden mb-8">
+        <div className="w-full mb-16">
+          <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
             <video 
               className="w-full h-full object-cover"
               autoPlay 
