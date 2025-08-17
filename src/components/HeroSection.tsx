@@ -27,6 +27,15 @@ export function HeroSection() {
         onLoadedData={handleVideoLoad}
       />
 
+      {/* Background Music */}
+      <audio
+        autoPlay
+        loop
+        className="hidden"
+      >
+        <source src="/cosmic.mp3" type="audio/mpeg" />
+      </audio>
+
     </section>
   );
 } 
