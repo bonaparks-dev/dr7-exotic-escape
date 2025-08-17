@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Car, Ship, Plane, Home, ChefHat } from "lucide-react";
+import { Car, Ship, Plane, Home, ChefHat, RotateCcw } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 
@@ -47,7 +47,7 @@ export function ServiceCategories() {
       id: 'helicopters',
       title: t('services.helicopters'),
       description: t('services.helicopters.desc'),
-      icon: Plane,
+      icon: RotateCcw,
       image: '/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png',
       buttonLabel: t('btn.learnmore')
     }
