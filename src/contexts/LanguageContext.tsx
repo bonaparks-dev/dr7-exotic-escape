@@ -25,9 +25,9 @@ const translations = {
     
     'services.title': 'I Nostri Servizi',
     'services.supercars': 'Exotic Cars',
-    'services.yachts': 'Yacht di Lusso',
+    'services.yachts': 'Yachts',
     'services.jets': 'Jet Privati',
-    'services.villas': 'Ville Esclusive',
+    'services.villas': 'Ville',
     'services.helicopters': 'Elicotteri',
     'services.detailing': 'Car Detailing Premium',
     'services.mechanical': 'Servizi Meccanici',
