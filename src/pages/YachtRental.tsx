@@ -99,14 +99,18 @@ export default function YachtRental() {
       </Button>
 
       <main className="pt-32 pb-16">
-        {/* Image Header Section */}
+        {/* Video Header Section */}
         <div className="w-full mb-16">
           <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
-            <img 
-              src="/yacht.jpg" 
-              alt="Luxury Yacht"
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
               className="w-full h-full object-cover"
-            />
+            >
+              <source src="/yacht.MP4" type="video/mp4" />
+            </video>
           </div>
         </div>
 
