@@ -286,7 +286,7 @@ const Rentals = () => {
             </video>
             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
               <h1 className="text-4xl md:text-6xl font-seasons text-white">
-                Rental Car
+                {t('rentals.title')}
               </h1>
             </div>
           </div>

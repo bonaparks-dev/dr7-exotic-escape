@@ -68,6 +68,7 @@ const translations = {
     'auth.minchars': 'Minimo 6 caratteri',
     
     // Rentals
+    'rentals.title': 'Noleggia un\'auto',
     'rentals.backto': 'Torna alla Home',
     'rentals.needhelp': 'Hai Bisogno di Aiuto?',
     'rentals.helpdesc': 'Il nostro team concierge di lusso è disponibile 24/7 per aiutarti a scegliere il veicolo perfetto.',
@@ -305,6 +306,7 @@ const translations = {
     'auth.minchars': 'Minimum 6 characters',
     
     // Rentals
+    'rentals.title': 'Rent a car',
     'rentals.backto': 'Back to Home',
     'rentals.needhelp': 'Need Help Choosing?',
     'rentals.helpdesc': 'Our luxury concierge team is available 24/7 to help you select the perfect vehicle for your needs.',
