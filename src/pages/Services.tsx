@@ -120,19 +120,6 @@ export default function Services() {
         <MessageCircle className="w-6 h-6" />
       </Button>
 
-      {/* Hero Section */}
-      <div className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <video
-            src="/mecanic.MP4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div>
 
       <main className="py-16">
         {/* Services Section */}
