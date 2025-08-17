@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, MessageCircle, Star, Sparkles, Shield, Droplets } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { BookingModal } from "@/components/BookingModal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Service {
   id: number;
@@ -99,6 +100,7 @@ const courtesyServices: CourtesyService[] = [
 const PremiumCarDetailing = () => {
   const navigate = useNavigate();
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background">
@@ -110,7 +112,7 @@ const PremiumCarDetailing = () => {
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Home
+        {t('rentals.backto')}
       </Button>
 
       <Button
@@ -123,24 +125,26 @@ const PremiumCarDetailing = () => {
 
       {/* Hero Section */}
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0">
           <img
             src="/wash.jpg"
             alt="DR7 Premium Car Detailing"
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
         </div>
         
-        <div className="relative z-10 text-center text-white px-4">
+        <div className="relative z-10 text-center text-white px-4"
+          style={{
+            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+          }}>
           <h1 className="text-5xl md:text-7xl font-seasons text-luxury-gold mb-6">
-            Premium Car Detailing
+            {t('detailing.premiumdetailing')}
           </h1>
-          <p className="text-xl md:text-2xl text-luxury-gold/80 mb-8 max-w-3xl mx-auto font-light">
-            Fast & Premium Car Wash Services – No Appointment Needed
+          <p className="text-xl md:text-2xl text-luxury-gold/90 mb-8 max-w-3xl mx-auto font-light">
+            {t('detailing.subtitle')}
           </p>
-          <p className="text-lg text-luxury-ivory/90 max-w-4xl mx-auto leading-relaxed">
-            For a clean, detailed look every day. Choose excellence, speed, and luxury.
+          <p className="text-lg text-white/95 max-w-4xl mx-auto leading-relaxed">
+            {t('detailing.tagline')}
           </p>
         </div>
       </div>
@@ -151,10 +155,10 @@ const PremiumCarDetailing = () => {
         <div className="container mx-auto px-4 mb-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-seasons text-luxury-gold mb-4">
-              Wash Packages
+              {t('detailing.washpackages')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Premium car wash services with luxury-grade products and techniques
+              {t('detailing.washpackagesdesc')}
             </p>
           </div>
 
@@ -191,7 +195,7 @@ const PremiumCarDetailing = () => {
                     variant="luxury"
                     className="w-full"
                   >
-                    Book Now
+                    {t('rentals.booknow')}
                   </Button>
                 </CardContent>
               </Card>
@@ -203,10 +207,10 @@ const PremiumCarDetailing = () => {
         <div className="container mx-auto px-4 mb-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-seasons text-luxury-gold mb-4">
-              Courtesy Car / Supercar Experience
+              {t('detailing.courtesycar')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Choose a vehicle to use while we clean yours
+              {t('detailing.courtesycardesc')}
             </p>
           </div>
 
@@ -241,7 +245,7 @@ const PremiumCarDetailing = () => {
                     variant="luxury"
                     className="w-full"
                   >
-                    Book Now
+                    {t('rentals.booknow')}
                   </Button>
                 </CardContent>
               </Card>
@@ -253,10 +257,10 @@ const PremiumCarDetailing = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-8">
             <h2 className="text-2xl font-seasons text-luxury-gold mb-4">
-              Need Help Choosing?
+              {t('detailing.needhelpchoose')}
             </h2>
             <p className="text-muted-foreground mb-6">
-              Our luxury team is available 24/7 to help you select the perfect service for your needs.
+              {t('detailing.needhelpchoosedesc')}
             </p>
             <Button
               onClick={() => window.open('https://wa.me/393457905205', '_blank')}
@@ -264,7 +268,7 @@ const PremiumCarDetailing = () => {
               size="lg"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
-              Contact Our Team
+              {t('detailing.contactteam')}
             </Button>
           </div>
         </div>

@@ -73,12 +73,11 @@ export function ServiceCategories() {
                   alt={category.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-luxury-charcoal/80 to-transparent" />
                 <div className="absolute top-4 right-4">
                   <category.icon className="w-8 h-8 text-luxury-gold" />
                 </div>
-                <div className="absolute bottom-4 left-4 text-luxury-ivory">
-                  <span className="text-sm font-medium bg-luxury-gold/20 px-3 py-1 rounded-full backdrop-blur-sm">
+                <div className="absolute bottom-4 left-4 text-white">
+                  <span className="text-sm font-medium bg-luxury-gold/70 px-3 py-1 rounded-full">
                     {category.itemCount}
                   </span>
                 </div>

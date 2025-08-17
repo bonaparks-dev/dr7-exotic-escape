@@ -67,7 +67,6 @@ export function FeaturedListings() {
                   alt={listing.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 
                 {listing.featured && (
                   <Badge className="absolute top-4 left-4 bg-luxury-gold text-luxury-charcoal border-0">
@@ -75,14 +74,17 @@ export function FeaturedListings() {
                   </Badge>
                 )}
                 
-                <div className="absolute top-4 right-4 flex items-center space-x-1 bg-black/30 backdrop-blur-sm rounded-full px-3 py-1">
+                <div className="absolute top-4 right-4 flex items-center space-x-1 bg-white/90 rounded-full px-3 py-1">
                   <Star className="w-4 h-4 text-luxury-gold fill-current" />
-                  <span className="text-white text-sm font-medium">{listing.rating}</span>
-                  <span className="text-white/70 text-sm">({listing.reviews})</span>
+                  <span className="text-black text-sm font-medium">{listing.rating}</span>
+                  <span className="text-black/70 text-sm">({listing.reviews})</span>
                 </div>
                 
                 <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex items-center justify-between text-white">
+                  <div className="flex items-center justify-between text-white"
+                    style={{
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                    }}>
                     <div className="flex items-center space-x-1">
                       <MapPin className="w-4 h-4" />
                       <span className="text-sm">{listing.location}</span>

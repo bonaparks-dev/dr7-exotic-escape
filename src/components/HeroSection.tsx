@@ -27,16 +27,16 @@ export function HeroSection() {
         onLoadedData={handleVideoLoad}
       />
 
-      {/* Optional Overlay */}
-      <div className="absolute inset-0 bg-gradient-hero z-0" />
-
       {/* Foreground content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4"
+        style={{
+          textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
+        }}>
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
           {t('hero.title')}
         </h1>
 
-        <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
           {t('hero.subtitle')}
         </p>
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, MessageCircle, Wrench, Settings, Car } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Service {
   id: number;
@@ -82,6 +83,7 @@ const services: Service[] = [
 
 export default function Services() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const generateWhatsAppMessage = (service: Service) => {
     let message = `Hello DR7 Exotic, I would like to book the following service:\n\n`;
@@ -106,7 +108,7 @@ export default function Services() {
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Home
+        {t('rentals.backto')}
       </Button>
 
       <Button
@@ -119,24 +121,26 @@ export default function Services() {
 
       {/* Hero Section */}
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0">
           <img
             src="/mecanica.jpg"
             alt="DR7 Rapid Services"
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
         </div>
         
-        <div className="relative z-10 text-center text-white px-4">
+        <div className="relative z-10 text-center text-white px-4"
+          style={{
+            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+          }}>
           <h1 className="text-5xl md:text-7xl font-seasons text-luxury-gold mb-6">
-            Rapid Services
+            {t('services.rapidservices')}
           </h1>
-          <p className="text-xl md:text-2xl text-luxury-gold/80 mb-8 max-w-3xl mx-auto font-light">
-            Competitive pricing for fast and professional services
+          <p className="text-xl md:text-2xl text-luxury-gold/90 mb-8 max-w-3xl mx-auto font-light">
+            {t('services.rapiddesc')}
           </p>
-          <p className="text-lg text-luxury-ivory/90 max-w-4xl mx-auto leading-relaxed">
-            Quick, reliable, and professional automotive services you can trust.
+          <p className="text-lg text-white/95 max-w-4xl mx-auto leading-relaxed">
+            {t('services.rapidsubtitle')}
           </p>
         </div>
       </div>
@@ -146,10 +150,10 @@ export default function Services() {
         <div className="container mx-auto px-4 mb-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-seasons text-luxury-gold mb-4">
-              Our Services
+              {t('services.ourservices')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Professional automotive services with transparent pricing
+              {t('services.ourservicesdesc')}
             </p>
           </div>
 
@@ -184,7 +188,7 @@ export default function Services() {
                     variant="luxury"
                     className="w-full"
                   >
-                    Book Now
+                    {t('rentals.booknow')}
                   </Button>
                 </CardContent>
               </Card>
@@ -196,7 +200,7 @@ export default function Services() {
         <div className="container mx-auto px-4 mb-16">
           <div className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-6">
             <p className="text-center text-sm text-muted-foreground leading-relaxed">
-              ⚠️ <strong>Important:</strong> These prices refer to labor only. Parts will either be supplied by the customer or purchased separately.
+              ⚠️ <strong>{t('services.important')}</strong> {t('services.importantnote')}
             </p>
           </div>
         </div>
@@ -205,10 +209,10 @@ export default function Services() {
         <div className="container mx-auto px-4 text-center">
           <div className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-8">
             <h2 className="text-2xl font-seasons text-luxury-gold mb-4">
-              Need a Service?
+              {t('services.needservice')}
             </h2>
             <p className="text-muted-foreground mb-6">
-              Contact us to schedule your automotive service today.
+              {t('services.needservicedesc')}
             </p>
             <Button
               onClick={() => window.open('https://wa.me/393457905205', '_blank')}
@@ -216,7 +220,7 @@ export default function Services() {
               size="lg"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
-              Book Service Now
+              {t('services.bookservicenow')}
             </Button>
           </div>
         </div>
