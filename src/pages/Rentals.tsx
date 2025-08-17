@@ -271,13 +271,25 @@ const Rentals = () => {
       </Button>
 
       <main className="pt-32 pb-16">
-        <div className="container mx-auto px-4 text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-seasons text-white mb-4">
-            {t('rentals.title')}
-          </h1>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            {t('rentals.subtitle')}
-          </p>
+        {/* Video Header Section */}
+        <div className="container mx-auto px-4 mb-16">
+          <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden mb-8">
+            <video 
+              className="w-full h-full object-cover"
+              autoPlay 
+              muted 
+              loop
+              playsInline
+            >
+              <source src="/hero-video.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+              <h1 className="text-4xl md:text-6xl font-seasons text-white">
+                Rental Car
+              </h1>
+            </div>
+          </div>
         </div>
 
         <div className="container mx-auto px-4">
@@ -332,7 +344,8 @@ const Rentals = () => {
 
                   <Button
                     onClick={() => openReservationForm(car.name)}
-                    className="w-full bg-white text-black hover:bg-white/90 transition-colors"
+                    variant="luxury"
+                    className="w-full"
                   >
                     {t('rentals.booknow')}
                   </Button>
@@ -352,7 +365,7 @@ const Rentals = () => {
             </p>
             <Button
               onClick={() => window.open('https://wa.me/393457905202', '_blank')}
-              className="bg-white text-black hover:bg-white/90"
+              variant="luxury"
               size="lg"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
