@@ -67,15 +67,15 @@ const LotteryModal = () => {
 
           {/* Join lottery button */}
           <div className="text-center">
-            <Button
-              onClick={() => {
-                handleClose();
-                window.location.href = '/lottery';
-              }}
-              className="bg-black text-white hover:bg-gray-800 transition-colors duration-200 font-medium px-8 py-3 text-lg"
-            >
-              {t('lottery.joinButton')}
-            </Button>
+          <Button
+            onClick={() => {
+              handleClose();
+              window.location.href = '/';
+            }}
+            className="bg-black text-white hover:bg-gray-800 transition-colors duration-200 font-medium px-8 py-3 text-lg"
+          >
+            {t('lottery.comingSoon')}
+          </Button>
           </div>
         </div>
       </div>

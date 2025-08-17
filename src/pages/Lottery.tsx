@@ -145,8 +145,11 @@ const Lottery = () => {
               {t('lottery.ctaText')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-white text-black hover:bg-gray-200 font-medium px-8 py-3 text-lg">
-                {t('lottery.joinButton')}
+              <Button 
+                className="bg-white text-black hover:bg-gray-200 font-medium px-8 py-3 text-lg"
+                onClick={() => window.location.href = '/'}
+              >
+                {t('lottery.comingSoon')}
               </Button>
               <Button 
                 variant="outline" 
