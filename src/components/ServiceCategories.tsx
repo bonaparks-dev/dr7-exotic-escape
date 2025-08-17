@@ -24,7 +24,8 @@ export function ServiceCategories() {
       description: t('services.yachts.desc'),
       icon: Ship,
       image: '/yacht.jpg',
-      buttonLabel: t('btn.learnmore')
+      buttonLabel: t('btn.learnmore'),
+      link: '/yacht-rental'
     },
     {
       id: 'jets',
