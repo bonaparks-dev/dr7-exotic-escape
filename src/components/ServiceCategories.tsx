@@ -66,9 +66,6 @@ export function ServiceCategories() {
                   loop
                   playsInline
                 />
-                <div className="absolute top-4 right-4">
-                  <category.icon className="w-8 h-8 text-luxury-gold" />
-                </div>
               </div>
 
                <CardContent className="p-6">
