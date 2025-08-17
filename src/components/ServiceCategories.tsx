@@ -12,7 +12,7 @@ export function ServiceCategories() {
       id: 'Exotic Cars',
       title: t('services.supercars'),
       icon: Car,
-      image: '/bugatti.jpg',
+      video: '/rental.MP4',
       buttonLabel: t('btn.learnmore'),
       link: '/rentals'
     },
@@ -20,7 +20,7 @@ export function ServiceCategories() {
       id: 'yachts',
       title: t('services.yachts'),
       icon: Ship,
-      image: '/yacht.jpg',
+      video: '/yacht.MP4',
       buttonLabel: t('btn.learnmore'),
       link: '/yacht-rental'
     },
@@ -28,21 +28,21 @@ export function ServiceCategories() {
       id: 'jets',
       title: t('services.jets'),
       icon: Plane,
-      image: '/privatejet.jpg',
+      video: '/hero-video.MP4',
       buttonLabel: t('btn.learnmore')
     },
     {
       id: 'villas',
       title: t('services.villas'),
       icon: Home,
-      image: '/exclusivevilla.jpg',
+      video: '/main.MP4',
       buttonLabel: t('btn.learnmore')
     },
     {
       id: 'helicopters',
       title: t('services.helicopters'),
       icon: RotateCcw,
-      image: '/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png',
+      video: '/mecanic.MP4',
       buttonLabel: t('btn.learnmore')
     }
   ];
@@ -58,10 +58,13 @@ export function ServiceCategories() {
               className="group overflow-hidden border-0 shadow-card hover:shadow-luxury transition-all duration-500 bg-card/50 backdrop-blur-sm"
             >
               <div className="relative h-64 overflow-hidden">
-                <img
-                  src={category.image}
-                  alt={category.title}
+                <video
+                  src={category.video}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
                 />
                 <div className="absolute top-4 right-4">
                   <category.icon className="w-8 h-8 text-luxury-gold" />
