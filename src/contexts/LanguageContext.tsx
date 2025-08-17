@@ -217,6 +217,13 @@ const translations = {
     'cookie.decline': 'Rifiuta',
     'cookie.customize': 'Personalizza',
     'cookie.save': 'Salva Preferenze',
+    
+    // Age Verification
+    'ageVerification.title': 'Hai più di 18 anni?',
+    'ageVerification.messageIt': 'Per entrare nel sito DR7 Exotic, conferma di avere almeno 18 anni.',
+    'ageVerification.messageEn': 'To access DR7 Exotic, please confirm you\'re over 18.',
+    'ageVerification.yes': 'Sì, ho più di 18 anni',
+    'ageVerification.no': 'No, ho meno di 18 anni',
   },
   en: {
     // Navigation
@@ -426,6 +433,13 @@ const translations = {
     'cookie.decline': 'Decline',
     'cookie.customize': 'Customize',
     'cookie.save': 'Save Preferences',
+    
+    // Age Verification
+    'ageVerification.title': 'Are you over 18?',
+    'ageVerification.messageIt': 'Per entrare nel sito DR7 Exotic, conferma di avere almeno 18 anni.',
+    'ageVerification.messageEn': 'To access DR7 Exotic, please confirm you\'re over 18.',
+    'ageVerification.yes': 'Yes, I\'m over 18',
+    'ageVerification.no': 'No, I\'m under 18',
   }
 };
 

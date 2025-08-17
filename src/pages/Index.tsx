@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { ServiceCategories } from "@/components/ServiceCategories";
 import { Footer } from "@/components/Footer";
 import CookieConsentModal from "@/components/CookieConsentModal";
+import AgeVerificationModal from "@/components/AgeVerificationModal";
 import { Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -74,6 +75,7 @@ const Index = () => {
 
       <Footer />
       <CookieConsentModal />
+      <AgeVerificationModal />
     </div>
   );
 };
