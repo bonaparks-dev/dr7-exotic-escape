@@ -42,7 +42,7 @@ export function ServiceCategories() {
       id: 'helicopters',
       title: t('services.helicopters'),
       icon: RotateCcw,
-      video: '/mecanic.MP4',
+      video: '/helicopter.MP4',
       buttonLabel: t('btn.learnmore')
     }
   ];
