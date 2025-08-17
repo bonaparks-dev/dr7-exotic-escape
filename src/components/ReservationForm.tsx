@@ -225,14 +225,6 @@ Total estimated cost: €${totalPrice}`;
           <DialogTitle className="text-2xl font-seasons text-luxury-gold">
             Reserve Your {carName}
           </DialogTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-4 top-4 text-luxury-ivory/60 hover:text-luxury-ivory"
-            onClick={onClose}
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6">
