@@ -28,7 +28,7 @@ export function ServiceCategories() {
       id: 'jets',
       title: t('services.jets'),
       icon: Plane,
-      video: '/hero-video.MP4',
+      video: '/jetprivate.MP4',
       buttonLabel: t('btn.learnmore')
     },
     {
