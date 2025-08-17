@@ -15,68 +15,68 @@ interface Service {
   items: { name: string; price: string }[];
 }
 
-const services: Service[] = [
+const useServices = (t: any): Service[] => [
   {
     id: 1,
-    title: "Brake Pad Replacement",
-    description: "Professional brake maintenance for your safety",
+    title: t('services.brakepad'),
+    description: t('services.brakepadDesc'),
     icon: Settings,
     items: [
-      { name: "Front", price: "€29" },
-      { name: "Rear", price: "€29" },
-      { name: "Front + Rear", price: "€49" }
+      { name: t('services.front'), price: "€29" },
+      { name: t('services.rear'), price: "€29" },
+      { name: t('services.frontplusrear'), price: "€49" }
     ]
   },
   {
     id: 2,
-    title: "Express Oil Service",
-    description: "Oil + filters with fluid level check",
+    title: t('services.oilservice'),
+    description: t('services.oilserviceDesc'),
     icon: Wrench,
     items: [
-      { name: "City cars", price: "€39" },
-      { name: "Sedans/SUVs", price: "€49" },
-      { name: "Luxury/Sports cars", price: "€59" }
+      { name: t('services.citycars'), price: "€39" },
+      { name: t('services.sedansuvs'), price: "€49" },
+      { name: t('services.luxurysports'), price: "€59" }
     ]
   },
   {
     id: 3,
-    title: "Wiper Blade Replacement",
-    description: "Clear vision in all weather conditions",
+    title: t('services.wiperblade'),
+    description: t('services.wiperbladeDesc'),
     icon: Settings,
     items: [
-      { name: "Front pair", price: "€5" },
-      { name: "Rear (if present)", price: "€3" }
+      { name: t('services.frontpair'), price: "€5" },
+      { name: t('services.rearif'), price: "€3" }
     ]
   },
   {
     id: 4,
-    title: "Battery Replacement",
-    description: "Reliable power for your vehicle",
+    title: t('services.battery'),
+    description: t('services.batteryDesc'),
     icon: Wrench,
     items: [
-      { name: "City cars", price: "€15" },
-      { name: "Sedans/SUVs", price: "€19" }
+      { name: t('services.citycars'), price: "€15" },
+      { name: t('services.sedansuvs'), price: "€19" }
     ]
   },
   {
     id: 5,
-    title: "Bulb Replacement",
-    description: "Professional lighting solutions",
+    title: t('services.bulb'),
+    description: t('services.bulbDesc'),
     icon: Settings,
     items: [
-      { name: "Standard bulb", price: "€5 each" },
-      { name: "LED/Xenon", price: "€10 each" }
+      { name: t('services.standardbulb'), price: "€5 each" },
+      { name: t('services.ledxenon'), price: "€10 each" }
     ]
   },
   {
     id: 6,
-    title: "Quick Mechanical Fixes",
-    description: "Fast and reliable mechanical services",
+    title: t('services.quickmech'),
+    description: t('services.quickmechDesc'),
     icon: Wrench,
     items: [
-      { name: "Wiper arms", price: "€10 each" },
-      { name: "Suspension arms (easy access)", price: "€29" },
-      { name: "Air/Cabin filter replacement", price: "€10 each" }
+      { name: t('services.wiperarms'), price: "€10 each" },
+      { name: t('services.suspensionarms'), price: "€29" },
+      { name: t('services.aircabinfilter'), price: "€10 each" }
     ]
   }
 ];
@@ -84,6 +84,7 @@ const services: Service[] = [
 export default function Services() {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const services = useServices(t);
 
   const generateWhatsAppMessage = (service: Service) => {
     let message = `Hello DR7 Exotic, I would like to book the following service:\n\n`;
@@ -136,14 +137,6 @@ export default function Services() {
       <main className="py-16">
         {/* Services Section */}
         <div className="container mx-auto px-4 mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-seasons text-luxury-gold mb-4">
-              {t('services.ourservices')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('services.ourservicesdesc')}
-            </p>
-          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service) => (
