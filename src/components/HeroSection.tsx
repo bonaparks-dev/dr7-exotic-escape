@@ -18,7 +18,7 @@ export function HeroSection() {
       {/* Background Video */}
       <video
         className="absolute inset-0 w-full h-full object-cover"
-        src="/hero-video.MP4"
+        src="/main.MP4"
         autoPlay
         muted
         loop
