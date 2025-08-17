@@ -14,6 +14,7 @@ import { format, differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ReservationFormProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ interface ReservationFormProps {
 }
 
 export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: ReservationFormProps) => {
+  const { language, t } = useLanguage();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [firstName, setFirstName] = useState("");
@@ -359,6 +361,46 @@ Total estimated cost: €${totalPrice}`;
                 required
               />
             </div>
+          </div>
+
+          {/* Mileage Rules */}
+          <div className="space-y-3 bg-white/5 rounded-lg p-4 border border-white/10">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">📏</span>
+              <Label className="text-luxury-ivory font-medium text-lg">
+                {t('mileage.title')}
+              </Label>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-luxury-ivory/90">
+              <div>{t('mileage.day1')}</div>
+              <div>{t('mileage.day2')}</div>
+              <div>{t('mileage.day3')}</div>
+              <div>{t('mileage.day4')}</div>
+              <div>{t('mileage.day5')}</div>
+              <div className="sm:col-span-2 text-luxury-gold font-medium">
+                {t('mileage.day6Plus')}
+              </div>
+            </div>
+            {startDate && endDate && (
+              <div className="mt-3 pt-3 border-t border-white/10">
+                <div className="text-luxury-gold font-medium">
+                  {(() => {
+                    const days = differenceInDays(endDate, startDate);
+                    let includedKm = 0;
+                    if (days === 1) includedKm = 100;
+                    else if (days === 2) includedKm = 180;
+                    else if (days === 3) includedKm = 240;
+                    else if (days === 4) includedKm = 280;
+                    else if (days === 5) includedKm = 300;
+                    else if (days >= 6) includedKm = 300 + (days - 5) * 60;
+                    
+                    return language === 'it' 
+                      ? `La tua prenotazione di ${days} giorni include ${includedKm} km`
+                      : `Your ${days}-day rental includes ${includedKm} km`;
+                  })()}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Rental Summary */}

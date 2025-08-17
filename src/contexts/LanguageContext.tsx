@@ -247,6 +247,16 @@ const translations = {
     'lottery.rule6': 'Tutti i veicoli sono nuovi e con garanzia ufficiale',
     'lottery.ctaTitle': 'Non Perdere Questa Opportunità Unica',
     'lottery.ctaText': 'Acquista il tuo biglietto ora e potresti guidare a casa la supercar dei tuoi sogni.',
+    
+    // Mileage rules
+    'mileage.title': 'Kilometri Inclusi',
+    'mileage.day1': '1 giorno → 100 km',
+    'mileage.day2': '2 giorni → 180 km',
+    'mileage.day3': '3 giorni → 240 km',
+    'mileage.day4': '4 giorni → 280 km',
+    'mileage.day5': '5 giorni → 300 km',
+    'mileage.day6Plus': 'Dal 6° giorno in poi → +60 km al giorno',
+    'mileage.yourRental': 'La tua prenotazione di {days} giorni include {km} km',
   },
   en: {
     // Navigation
@@ -486,6 +496,16 @@ const translations = {
     'lottery.rule6': 'All vehicles are brand new with official warranty',
     'lottery.ctaTitle': 'Don\'t Miss This Unique Opportunity',
     'lottery.ctaText': 'Buy your ticket now and you could drive home the supercar of your dreams.',
+    
+    // Mileage rules
+    'mileage.title': 'Included Kilometers',
+    'mileage.day1': '1 day → 100 km',
+    'mileage.day2': '2 days → 180 km',
+    'mileage.day3': '3 days → 240 km',
+    'mileage.day4': '4 days → 280 km',
+    'mileage.day5': '5 days → 300 km',
+    'mileage.day6Plus': 'From the 6th day onward → +60 km per day',
+    'mileage.yourRental': 'Your {days}-day rental includes {km} km',
   }
 };
 
