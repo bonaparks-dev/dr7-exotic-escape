@@ -124,7 +124,7 @@ export default function Services() {
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <video
-            src="/mecanica.MP4"
+            src="/mecanic.MP4"
             autoPlay
             muted
             loop
