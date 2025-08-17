@@ -24,6 +24,7 @@ interface Car {
   description: string;
   image: string;
   color?: string;
+  available?: boolean;
 }
 
 const cars: Car[] = [
@@ -38,7 +39,8 @@ const cars: Car[] = [
       engine: "2.9L V6 BiTurbo"
     },
     description: "Italian excellence meets SUV practicality.",
-    image: "/alpha.png"
+    image: "/alpha.png",
+    available: false
   },
   {
     id: 2,
@@ -295,13 +297,18 @@ const Rentals = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cars.map((car) => (
-              <Card key={car.id} className="bg-white/5 border-white/20 hover:bg-white/10 transition-all duration-300 group">
-                <div className="aspect-video overflow-hidden rounded-t-lg">
+              <Card key={car.id} className={`bg-white/5 border-white/20 hover:bg-white/10 transition-all duration-300 group ${car.available === false ? 'opacity-60' : ''}`}>
+                <div className="aspect-video overflow-hidden rounded-t-lg relative">
                   <img
                     src={car.image}
                     alt={car.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
+                  {car.available === false && (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                      <span className="text-white font-bold text-lg">Not Available</span>
+                    </div>
+                  )}
                 </div>
                 <CardContent className="p-6">
                   <div className="mb-4">
@@ -346,8 +353,9 @@ const Rentals = () => {
                     onClick={() => openReservationForm(car.name)}
                     variant="luxury"
                     className="w-full"
+                    disabled={car.available === false}
                   >
-                    {t('rentals.booknow')}
+                    {car.available === false ? 'Not Available' : t('rentals.booknow')}
                   </Button>
                 </CardContent>
               </Card>
