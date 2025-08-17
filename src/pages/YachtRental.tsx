@@ -98,47 +98,23 @@ export default function YachtRental() {
         <MessageCircle className="w-6 h-6" />
       </Button>
 
-      {/* Hero Section */}
-      <div className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png"
-            alt="DR7 Luxury Yacht"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        
-        <div className="relative z-10 text-center text-white px-4"
-          style={{
-            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-          }}>
-          <h1 className="text-5xl md:text-7xl font-seasons text-luxury-gold mb-6">
-            {t('yacht.title')}
-          </h1>
-          <p className="text-xl md:text-2xl text-luxury-gold/90 mb-8 max-w-3xl mx-auto font-light">
-            {t('yacht.subtitle')}
-          </p>
-          <div className="flex flex-wrap justify-center gap-6 text-lg text-white/95">
-            <div className="flex items-center gap-2">
-              <Ship className="w-5 h-5" />
-              <span>15 metri</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              <span>Fino a 14 ospiti</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Bed className="w-5 h-5" />
-              <span>3 cabine</span>
-            </div>
+      <main className="pt-32 pb-16">
+        {/* Video Header Section */}
+        <div className="w-full mb-16">
+          <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
+            <video 
+              className="w-full h-full object-cover"
+              autoPlay 
+              muted 
+              loop
+              playsInline
+            >
+              <source src="/yacht.MP4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
-          <p className="text-lg text-white/90 mt-4">
-            Porto Base: Cagliari - Sardegna
-          </p>
         </div>
-      </div>
 
-      <main className="py-16">
         {/* Yacht Packages */}
         <div className="container mx-auto px-4 mb-16">
           <div className="text-center mb-12">
