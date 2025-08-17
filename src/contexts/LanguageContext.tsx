@@ -25,19 +25,13 @@ const translations = {
     
     'services.title': 'I Nostri Servizi',
     'services.supercars': 'Exotic Cars',
-    'services.supercars.desc': 'Flotta esclusiva di exotic cars per esperienze indimenticabili',
     'services.yachts': 'Yacht di Lusso',
     'services.yachts.desc': 'Yacht esclusivi per navigare in stile',
     'services.jets': 'Jet Privati',
-    'services.jets.desc': 'Viaggi privati con il massimo comfort',
     'services.villas': 'Ville Esclusive',
-    'services.villas.desc': 'Le migliori proprietà di lusso per i tuoi soggiorni',
     'services.helicopters': 'Elicotteri',
-    'services.helicopters.desc': 'Voli in elicottero di lusso per viste spettacolari',
     'services.detailing': 'Car Detailing Premium',
-    'services.detailing.desc': 'Servizi professionali di detailing per la tua auto',
     'services.mechanical': 'Servizi Meccanici',
-    'services.mechanical.desc': 'Manutenzione e riparazioni specializzate',
     
     // Contact
     'contact.title': 'Contatti',
