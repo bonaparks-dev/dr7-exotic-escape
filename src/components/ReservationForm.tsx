@@ -19,9 +19,10 @@ interface ReservationFormProps {
   isOpen: boolean;
   onClose: () => void;
   carName: string;
+  dailyPrice: number;
 }
 
-export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormProps) => {
+export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: ReservationFormProps) => {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [firstName, setFirstName] = useState("");
@@ -50,10 +51,8 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
 
     let total = 0;
     
-    // Deposit surcharge
-    if (depositOption === "no-deposit") {
-      total += days * 40;
-    }
+    // Base car rental price
+    total += days * dailyPrice;
     
     // Insurance
     const insurancePrices = {
@@ -75,7 +74,7 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
 
   useEffect(() => {
     setTotalPrice(calculateTotal());
-  }, [startDate, endDate, depositOption, insurance, secondDriver, under25, licenseUnder3, outOfHours]);
+  }, [startDate, endDate, dailyPrice, insurance, secondDriver, under25, licenseUnder3, outOfHours]);
 
   // Auto-open end date picker when start date is selected
   useEffect(() => {
@@ -155,7 +154,7 @@ export const ReservationForm = ({ isOpen, onClose, carName }: ReservationFormPro
 
 Contact: ${firstName} ${lastName}, ${email}, ${phone}
 Rental period: ${format(startDate, 'PP')} to ${format(endDate, 'PP')} (${days} days)
-Deposit: ${depositOption === "with-deposit" ? "With deposit" : "No deposit (+€40/day)"}
+Base rental cost: €${days * dailyPrice} (€${dailyPrice}/day)
 Insurance: ${insurance.charAt(0).toUpperCase() + insurance.slice(1).replace("-", " ")}
 Additional options: ${additionalOptions || "None"}
 Total estimated cost: €${totalPrice}`;
@@ -174,7 +173,7 @@ Total estimated cost: €${totalPrice}`;
           setLastName("");
           setEmail("");
           setPhone("");
-          setDepositOption("with-deposit");
+          // Removed deposit option
           setInsurance("kasko");
           setFullCleaning(true);
           setSecondDriver(false);
@@ -362,21 +361,17 @@ Total estimated cost: €${totalPrice}`;
             </div>
           </div>
 
-          {/* Deposit Option */}
-          <div className="space-y-3">
-            <Label className="text-luxury-ivory font-medium text-lg">Deposit Option</Label>
-            <RadioGroup value={depositOption} onValueChange={setDepositOption} className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="with-deposit" id="with-deposit" className="border-luxury-gold/50 text-luxury-gold" />
-                <Label htmlFor="with-deposit" className="text-luxury-ivory cursor-pointer">With deposit</Label>
+          {/* Rental Summary */}
+          <div className="space-y-3 bg-white/5 rounded-lg p-4">
+            <Label className="text-luxury-ivory font-medium text-lg">Rental Summary</Label>
+            {startDate && endDate && (
+              <div className="space-y-2 text-sm text-luxury-ivory/80">
+                <div className="flex justify-between">
+                  <span>Car rental ({differenceInDays(endDate, startDate)} days)</span>
+                  <span>€{differenceInDays(endDate, startDate) * dailyPrice}</span>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="no-deposit" id="no-deposit" className="border-luxury-gold/50 text-luxury-gold" />
-                <Label htmlFor="no-deposit" className="text-luxury-ivory cursor-pointer">
-                  No deposit <span className="text-luxury-gold">(+€40/day)</span>
-                </Label>
-              </div>
-            </RadioGroup>
+            )}
           </div>
 
           {/* Insurance */}

@@ -11,6 +11,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 interface Car {
   id: number;
   name: string;
+  dailyPrice: number;
   specs: {
     acceleration?: string;
     maxSpeed?: string;
@@ -28,46 +29,21 @@ interface Car {
 const cars: Car[] = [
   {
     id: 1,
-    name: "BMW M3 Competition",
+    name: "Alfa Romeo Stelvio Quadrifoglio",
+    dailyPrice: 40,
     specs: {
-      acceleration: "0–100 in 3.9s",
-      maxSpeed: "Max speed: 250km/h",
+      acceleration: "0–100 in 3.8s",
       power: "510Cv",
-      torque: "650Nm",
-      engine: "3.0L inline 6-cylinder"
+      torque: "600Nm",
+      engine: "2.9L V6 BiTurbo"
     },
-    description: "Un'icona che domina la strada.",
-    image: "/bmw-m3.png"
+    description: "Italian excellence meets SUV practicality.",
+    image: "/alpha.png"
   },
   {
     id: 2,
-    name: "Audi RS3",
-    specs: {
-      acceleration: "0–100 in 3.8s",
-      maxSpeed: "Max speed: 250km/h",
-      power: "400Cv",
-      torque: "500Nm",
-      engine: "2.4L inline 5-cylinder"
-    },
-    description: "Impossible to go unnoticed.",
-    image: "/audi-rs3.png",
-  },
-  {
-    id: 3,
-    name: "Porsche 911 Carrera 4S",
-    specs: {
-      acceleration: "0–100 in 3.6s",
-      maxSpeed: "Max speed: 306km/h",
-      power: "450Cv",
-      torque: "530Nm",
-      engine: "3.0L V6"
-    },
-    description: "La firma eterna di Porsche.",
-    image: "/porsche-911.png"
-  },
-  {
-    id: 4,
     name: "Hummer H2",
+    dailyPrice: 40,
     specs: {
       acceleration: "0–100 in 7.8s",
       maxSpeed: "Max speed: 160km/h",
@@ -79,130 +55,181 @@ const cars: Car[] = [
     image: "/hummer.png"
   },
   {
-    id: 5,
-    name: "Mercedes GLE 53 AMG",
+    id: 3,
+    name: "Audi RS3",
+    dailyPrice: 60,
     specs: {
-      acceleration: "0–100 in 4.7s",
+      acceleration: "0–100 in 3.8s",
       maxSpeed: "Max speed: 250km/h",
-      power: "544Cv",
-      torque: "750Nm",
-      engine: "3.0L inline 6-cylinder"
+      power: "400Cv",
+      torque: "500Nm",
+      engine: "2.5L inline 5-cylinder"
     },
-    description: "Nato per distinguersi.",
-    image: "/mercedesGLE.png"
+    description: "Green fury on four wheels.",
+    image: "/audi-rs3.png",
+    color: "Verde"
   },
   {
-    id: 6,
-    name: "Mercedes A45 AMG",
+    id: 4,
+    name: "Audi RS3",
+    dailyPrice: 60,
+    specs: {
+      acceleration: "0–100 in 3.8s",
+      power: "400Cv",
+      torque: "500Nm",
+      engine: "2.5L inline 5-cylinder"
+    },
+    description: "Red racing legend.",
+    image: "/Rs3-red.png",
+    color: "Rossa"
+  },
+  {
+    id: 5,
+    name: "Mercedes A45 S AMG",
+    dailyPrice: 60,
     specs: {
       acceleration: "0–100 in 3.9s",
       power: "421Cv",
       torque: "500Nm",
       engine: "2.0L 4-cylinder Turbo"
     },
-    description: "Compact but wild.",
-    image: "/mercedes-amg45.png",
+    description: "Compact powerhouse.",
+    image: "/mercedes-amg45.png"
+  },
+  {
+    id: 6,
+    name: "BMW M2",
+    dailyPrice: 60,
+    specs: {
+      acceleration: "0–100 in 4.1s",
+      power: "460Cv",  
+      torque: "550Nm",
+      engine: "3.0L inline 6-cylinder"
+    },
+    description: "Pure driving essence.",
+    image: "/bmw-m2.png"
   },
   {
     id: 7,
+    name: "BMW M3 Competition",
+    dailyPrice: 80,
+    specs: {
+      acceleration: "0–100 in 3.9s",
+      maxSpeed: "Max speed: 250km/h",
+      power: "510Cv",
+      torque: "650Nm",
+      engine: "3.0L inline 6-cylinder"
+    },
+    description: "The ultimate driving machine.",
+    image: "/bmw-m3.png"
+  },
+  {
+    id: 8,
+    name: "Mercedes GLE 53 AMG",
+    dailyPrice: 80,
+    specs: {
+      acceleration: "0–100 in 4.7s",
+      maxSpeed: "Max speed: 250km/h",
+      power: "435Cv",
+      torque: "520Nm",
+      engine: "3.0L inline 6-cylinder"
+    },
+    description: "Luxury meets performance.",
+    image: "/mercedesGLE.png"
+  },
+  {
+    id: 9,
     name: "BMW M4 Competition",
+    dailyPrice: 90,
     specs: {
       acceleration: "0–100 in 3.8s",
       power: "510Cv",
       torque: "650Nm",
       engine: "3.0L inline 6-cylinder"
     },
-    description: "Iconic performance in style.",
-    image: "/bmw-m4.png",
-  },
-  {
-    id: 8,
-    name: "Lamborghini URUS",
-    specs: {
-      acceleration: "0-100 in 3.6s",
-      power: "650Cv",
-      torque: "850Nm",
-      engine: "4.0L V8 Twin-Turbo"
-    },
-    description: "Fearless on any road.",
-    image: "/urus.png",
-  },
-  {
-    id: 9,
-    name: "Ferrari Portofino M",
-    specs: {
-      acceleration: "0–100 in 3.6s",
-      power: "620Cv",
-      engine: "3.9L V8"
-    },
-    description: "Open-top Italian dream.",
-    image: "/ferrari-portofino.png"
+    description: "Track-bred coupe excellence.",
+    image: "/bmw-m4.png"
   },
   {
     id: 10,
-    name: "BMW M2 Competition",
+    name: "Porsche 992 Carrera 4S",
+    dailyPrice: 90,
     specs: {
-      acceleration: "0–100 in 4.1s",
-      power: "460Cv",
-      torque: "550Nm",
-      engine: "3.0L inline 6 cylinder"
+      acceleration: "0–100 in 3.6s",
+      maxSpeed: "Max speed: 306km/h",
+      power: "450Cv",
+      torque: "530Nm",
+      engine: "3.0L Twin-Turbo Flat-6"
     },
-    description: "Pure performance and drama.",
-    image: "/bmw-m2.png",
+    description: "Timeless sports car perfection.",
+    image: "/porsche-911.png"
   },
   {
     id: 11,
-    name: "Audi RS3",
+    name: "Mercedes C63 S AMG",
+    dailyPrice: 90,
     specs: {
-      acceleration: "0–100 in 3.8s",
-      power: "400Cv",
-      engine: "2.4L inline 5 cylinder"
+      acceleration: "0–100 in 3.9s",
+      power: "510Cv",
+      torque: "700Nm",
+      engine: "4.0L V8 BiTurbo"
     },
-    description: "Luxury meets raw power.",
-    image: "/Rs3-red.png",
+    description: "Four-door rocket ship.",
+    image: "/c63.png"
   },
   {
     id: 12,
-    name: "Macan GTS",
+    name: "Porsche Macan GTS",
+    dailyPrice: 90,
     specs: {
       acceleration: "0–100 in 4.5s",
       power: "440Cv",
-      engine: "2.9L Inline 6-Cylinder"
+      torque: "550Nm",
+      engine: "2.9L Twin-Turbo V6"
     },
-    description: "Race-bred elegance.",
-    image: "/macan.png",
-    color: "Green"
+    description: "Sports car in SUV clothing.",
+    image: "/macan.png"
   },
   {
     id: 13,
-    name: "Mercedes C63 S AMG",
+    name: "Mercedes GLE 63 AMG",
+    dailyPrice: 90,
     specs: {
-      power: "585Cv",
+      acceleration: "0–100 in 3.8s",
+      power: "612Cv",
+      torque: "850Nm",
       engine: "4.0L V8 BiTurbo"
     },
-    description: "The king of urban luxury SUVs.",
-    image: "/c63.png",
+    description: "Luxury SUV with supercar soul.",
+    image: "/mercedes-gle.png"
   },
   {
     id: 14,
-    name: "Alfa Romeo Stelvio Quadrifoglio",
+    name: "Ferrari Portofino M",
+    dailyPrice: 500,
     specs: {
-      power: "625Cv",
-      engine: "4.4L V8"
+      acceleration: "0–100 in 3.45s",
+      maxSpeed: "Max speed: 320km/h",
+      power: "620Cv",
+      torque: "760Nm",
+      engine: "3.9L Twin-Turbo V8"
     },
-    description: "M Power meets utility.",
-    image: "/alpha.png",
+    description: "Italian masterpiece, open-top glory.",
+    image: "/ferrari-portofino.png"
   },
   {
     id: 15,
-    name: "Fiat Ducato Maxi",
+    name: "Lamborghini Urus Performante",
+    dailyPrice: 500,
     specs: {
-      extras: "3 People, Unlimited Km",
-      power: "180Cv",
-      engine: "2.2L inline 4-cylinder"
+      acceleration: "0–100 in 3.3s",
+      maxSpeed: "Max speed: 306km/h",
+      power: "666Cv",
+      torque: "850Nm",
+      engine: "4.0L Twin-Turbo V8"
     },
-    description: "Ready to carry it all.",
-    image: "/Ducato.png",
+    description: "Super SUV without compromise.",
+    image: "/urus.png"
   }
 ];
 
@@ -223,12 +250,12 @@ const Rentals = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black text-white">
       <Header />
 
       <Button
         onClick={() => navigate('/')}
-        className="fixed top-24 left-4 z-40 bg-luxury-charcoal/90 text-luxury-ivory border border-luxury-gold/20 hover:bg-luxury-charcoal backdrop-blur-sm"
+        className="fixed top-24 left-4 z-40 bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-sm"
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
@@ -245,10 +272,10 @@ const Rentals = () => {
 
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4 text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-seasons text-luxury-gold mb-4">
+          <h1 className="text-4xl md:text-6xl font-seasons text-white mb-4">
             {t('rentals.title')}
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-white/80 max-w-2xl mx-auto">
             {t('rentals.subtitle')}
           </p>
         </div>
@@ -256,7 +283,7 @@ const Rentals = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cars.map((car) => (
-              <Card key={car.id} className="bg-luxury-charcoal/5 border-luxury-gold/20 hover:shadow-luxury transition-all duration-300 group">
+              <Card key={car.id} className="bg-white/5 border-white/20 hover:bg-white/10 transition-all duration-300 group">
                 <div className="aspect-video overflow-hidden rounded-t-lg">
                   <img
                     src={car.image}
@@ -266,34 +293,37 @@ const Rentals = () => {
                 </div>
                 <CardContent className="p-6">
                   <div className="mb-4">
-                    <h3 className="text-xl font-seasons text-luxury-gold mb-1">
+                    <h3 className="text-xl font-seasons text-white mb-1">
                       {car.name}
-                      {car.color && <span className="text-sm text-muted-foreground ml-2">({car.color})</span>}
+                      {car.color && <span className="text-sm text-white/60 ml-2">({car.color})</span>}
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-2">{car.description}</p>
+                    <p className="text-sm text-white/70 mb-2">{car.description}</p>
+                    <div className="text-2xl font-bold text-white mb-2">
+                      €{car.dailyPrice}<span className="text-sm font-normal text-white/60">/day</span>
+                    </div>
                   </div>
 
                   <div className="space-y-1 mb-6 text-sm">
                     {car.specs.acceleration && (
-                      <div className="flex items-center text-muted-foreground">
+                      <div className="flex items-center text-white/70">
                         <span className="mr-2">🚀</span>
                         {car.specs.acceleration}
                         {car.specs.maxSpeed && ` – ${car.specs.maxSpeed}`}
                       </div>
                     )}
                     {car.specs.power && (
-                      <div className="flex items-center text-muted-foreground">
+                      <div className="flex items-center text-white/70">
                         <span className="mr-2">🐎</span>
                         {car.specs.power}
                         {car.specs.torque && ` – ${car.specs.torque}`}
                       </div>
                     )}
-                    <div className="flex items-center text-muted-foreground">
+                    <div className="flex items-center text-white/70">
                       <span className="mr-2">⚙️</span>
                       {car.specs.engine}
                     </div>
                     {car.specs.special && (
-                      <div className="flex items-center text-muted-foreground">
+                      <div className="flex items-center text-white/70">
                         <span className="mr-2">🏕️</span>
                         {car.specs.special}
                       </div>
@@ -302,8 +332,7 @@ const Rentals = () => {
 
                   <Button
                     onClick={() => openReservationForm(car.name)}
-                    variant="luxury"
-                    className="w-full"
+                    className="w-full bg-white text-black hover:bg-white/90 transition-colors"
                   >
                     {t('rentals.booknow')}
                   </Button>
@@ -314,16 +343,16 @@ const Rentals = () => {
         </div>
 
         <div className="container mx-auto px-4 mt-16 text-center">
-          <div className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-8">
-            <h2 className="text-2xl font-seasons text-luxury-gold mb-4">
+          <div className="bg-white/5 border border-white/20 rounded-lg p-8">
+            <h2 className="text-2xl font-seasons text-white mb-4">
               {t('rentals.needhelp')}
             </h2>
-            <p className="text-muted-foreground mb-6">
+            <p className="text-white/80 mb-6">
               {t('rentals.helpdesc')}
             </p>
             <Button
               onClick={() => window.open('https://wa.me/393457905202', '_blank')}
-              variant="luxury"
+              className="bg-white text-black hover:bg-white/90"
               size="lg"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
@@ -338,6 +367,7 @@ const Rentals = () => {
           isOpen={isReservationFormOpen}
           onClose={closeReservationForm}
           carName={selectedCar}
+          dailyPrice={cars.find(car => car.name === selectedCar)?.dailyPrice || 0}
         />
       )}
 
