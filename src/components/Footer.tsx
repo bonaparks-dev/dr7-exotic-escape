@@ -12,7 +12,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <img 
-              src="/logo2.png" 
+              src="/logo4.png" 
               alt="DR7 Exotic Cars & Luxury" 
               className="h-12 w-auto"
             />
