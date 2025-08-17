@@ -9,7 +9,7 @@ export function ServiceCategories() {
 
   const categories = [
     {
-      id: 'supercars',
+      id: 'Exotic Cars',
       title: t('services.supercars'),
       icon: Car,
       image: '/cars.jpg',
