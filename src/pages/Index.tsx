@@ -4,6 +4,7 @@ import { ServiceCategories } from "@/components/ServiceCategories";
 import { Footer } from "@/components/Footer";
 import CookieConsentModal from "@/components/CookieConsentModal";
 import AgeVerificationModal from "@/components/AgeVerificationModal";
+import LotteryModal from "@/components/LotteryModal";
 import { Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -76,6 +77,7 @@ const Index = () => {
       <Footer />
       <CookieConsentModal />
       <AgeVerificationModal />
+      <LotteryModal />
     </div>
   );
 };

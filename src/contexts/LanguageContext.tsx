@@ -224,6 +224,11 @@ const translations = {
     'ageVerification.messageEn': 'To access DR7 Exotic, please confirm you\'re over 18.',
     'ageVerification.yes': 'Sì, ho più di 18 anni',
     'ageVerification.no': 'No, ho meno di 18 anni',
+    
+    // Lottery Modal
+    'lottery.messageIt': 'Hai 20€. Hai un clic. Hai la possibilità di portarti a casa una Lamborghini nuova da 400.000€.',
+    'lottery.messageEn': 'You have €20. One click. You could win a brand-new Lamborghini worth €400,000.',
+    'lottery.close': 'Chiudi',
   },
   en: {
     // Navigation
@@ -440,6 +445,11 @@ const translations = {
     'ageVerification.messageEn': 'To access DR7 Exotic, please confirm you\'re over 18.',
     'ageVerification.yes': 'Yes, I\'m over 18',
     'ageVerification.no': 'No, I\'m under 18',
+    
+    // Lottery Modal
+    'lottery.messageIt': 'Hai 20€. Hai un clic. Hai la possibilità di portarti a casa una Lamborghini nuova da 400.000€.',
+    'lottery.messageEn': 'You have €20. One click. You could win a brand-new Lamborghini worth €400,000.',
+    'lottery.close': 'Close',
   }
 };
 
