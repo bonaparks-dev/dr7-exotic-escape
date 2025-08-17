@@ -122,26 +122,14 @@ export default function Services() {
       {/* Hero Section */}
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img
-            src="/mecanica.jpg"
-            alt="DR7 Rapid Services"
+          <video
+            src="/mecanica.MP4"
+            autoPlay
+            muted
+            loop
+            playsInline
             className="w-full h-full object-cover"
           />
-        </div>
-        
-        <div className="relative z-10 text-center text-white px-4"
-          style={{
-            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-          }}>
-          <h1 className="text-5xl md:text-7xl font-seasons text-luxury-gold mb-6">
-            {t('services.rapidservices')}
-          </h1>
-          <p className="text-xl md:text-2xl text-luxury-gold/90 mb-8 max-w-3xl mx-auto font-light">
-            {t('services.rapiddesc')}
-          </p>
-          <p className="text-lg text-white/95 max-w-4xl mx-auto leading-relaxed">
-            {t('services.rapidsubtitle')}
-          </p>
         </div>
       </div>
 
