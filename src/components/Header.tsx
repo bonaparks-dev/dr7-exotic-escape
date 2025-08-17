@@ -52,7 +52,7 @@ export function Header() {
           </a>
 
           {/* Menu desktop */}
-          <nav className="hidden md:flex items-center justify-center space-x-10 mt-2 font-seasons relative z-50">
+          <nav className="hidden md:flex items-center justify-center space-x-8 mt-4 font-seasons relative z-50">
             <div className="relative group">
               <a
                 href="#"
