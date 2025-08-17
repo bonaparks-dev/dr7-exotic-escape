@@ -84,7 +84,12 @@ export function Footer() {
         
         <div className="border-t border-white/10 mt-12 pt-8 text-center">
           <p className="text-white/70">
-            {t('footer.rights')}
+            <span 
+              className="inline-block tracking-wider font-medium"
+              style={{ letterSpacing: '0.1em' }}
+            >
+              {t('footer.rights').replace('S.p.A', 'S·p·A')}
+            </span>
           </p>
         </div>
       </div>
