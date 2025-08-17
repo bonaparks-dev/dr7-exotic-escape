@@ -82,7 +82,10 @@ export default function YachtRental() {
       <Header />
 
       <Button
-        onClick={() => navigate('/')}
+        onClick={() => {
+          console.log('Navigating to home...');
+          navigate('/');
+        }}
         className="fixed top-24 left-4 z-40 bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-sm"
         size="sm"
       >
