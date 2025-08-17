@@ -14,7 +14,7 @@ export function ServiceCategories() {
       icon: Car,
       image: '/cars.jpg',
       itemCount: '15 Available',
-      buttonLabel: t('nav.rentcar'),
+      buttonLabel: t('btn.learnmore'),
       link: '/rentals'
     },
     {
