@@ -5,18 +5,68 @@ import { Footer } from "@/components/Footer";
 import CookieConsentModal from "@/components/CookieConsentModal";
 import AgeVerificationModal from "@/components/AgeVerificationModal";
 import LotteryModal from "@/components/LotteryModal";
-import { Instagram } from "lucide-react";
+import { Instagram, Crown, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <main>
         <HeroSection />
+        
+        {/* DR7 Concierge AI Feature */}
+        <section className="bg-black text-white py-20 px-6 md:px-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black opacity-90"></div>
+          <div className="relative max-w-4xl mx-auto text-center">
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center">
+                <Crown className="w-8 h-8 text-black" />
+              </div>
+            </div>
+            
+            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white via-yellow-300 to-white bg-clip-text text-transparent">
+              DR7 Concierge AI
+            </h2>
+            
+            <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Your elite AI assistant for ultra-luxury experiences. Supercars, mega yachts, exclusive villas – powered by artificial intelligence.
+            </p>
+            
+            <div className="flex flex-wrap justify-center gap-4 mb-10">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Zap className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm">Instant Recommendations</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Sparkles className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm">Luxury Lifestyle Planning</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Crown className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm">24/7 Elite Service</span>
+              </div>
+            </div>
+            
+            <Button
+              onClick={() => navigate('/dr7-concierge')}
+              className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-black font-bold text-lg px-12 py-6 rounded-full transition-all duration-300 hover:scale-105 shadow-2xl hover:shadow-yellow-500/25"
+            >
+              <Crown className="w-5 h-5 mr-2" />
+              Experience DR7 Concierge AI
+            </Button>
+            
+            <p className="text-white/60 text-sm mt-4">
+              Every interaction feels like a $10,000 experience
+            </p>
+          </div>
+        </section>
+        
         <ServiceCategories />
 
         {/* SECTION CONTACT – clean minimalist design */}

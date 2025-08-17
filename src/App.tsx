@@ -13,6 +13,7 @@ import PremiumCarDetailing from "./pages/PremiumCarDetailing";
 import CookiePolicy from "./pages/CookiePolicy";
 import Lottery from "./pages/Lottery";
 import NotFound from "./pages/NotFound";
+import DR7Concierge from "./components/DR7Concierge";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/rentals" element={<Rentals />} />
             <Route path="/yacht-rental" element={<YachtRental />} />
             <Route path="/premium-car-detailing" element={<PremiumCarDetailing />} />
+            <Route path="/dr7-concierge" element={<DR7Concierge />} />
             <Route path="/lottery" element={<Lottery />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
