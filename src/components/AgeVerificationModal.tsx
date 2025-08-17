@@ -56,8 +56,8 @@ const AgeVerificationModal = () => {
           
           <Button
             onClick={handleDeny}
-            variant="outline"
-            className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white transition-colors duration-200 font-medium"
+            variant="default"
+            className="flex-1 border border-border hover:bg-muted/20 transition-colors duration-200 font-medium"
           >
             {t('ageVerification.no')}
           </Button>
