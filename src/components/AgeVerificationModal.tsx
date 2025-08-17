@@ -39,12 +39,14 @@ const AgeVerificationModal = () => {
             {t('ageVerification.title')}
           </h2>
           
-          <div className="space-y-3 text-sm text-gray-700">
-            <p className="font-medium">
-              🇮🇹 {t('ageVerification.messageIt')}
+          <div className="space-y-4 text-sm text-gray-700">
+            <p className="leading-relaxed">
+              <span className="font-semibold text-gray-900">Italiano:</span><br />
+              {t('ageVerification.messageIt')}
             </p>
-            <p className="font-medium">
-              🇬🇧 {t('ageVerification.messageEn')}
+            <p className="leading-relaxed">
+              <span className="font-semibold text-gray-900">English:</span><br />
+              {t('ageVerification.messageEn')}
             </p>
           </div>
         </div>
@@ -52,17 +54,17 @@ const AgeVerificationModal = () => {
         <div className="flex flex-col sm:flex-row gap-3">
           <Button
             onClick={handleConfirm}
-            className="flex-1 bg-black text-white hover:bg-gray-800 transition-colors duration-200"
+            className="flex-1 bg-black text-white hover:bg-gray-800 transition-colors duration-200 font-medium"
           >
-            ✅ {t('ageVerification.yes')}
+            {t('ageVerification.yes')}
           </Button>
           
           <Button
             onClick={handleDeny}
             variant="outline"
-            className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+            className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 font-medium"
           >
-            ❌ {t('ageVerification.no')}
+            {t('ageVerification.no')}
           </Button>
         </div>
       </div>
