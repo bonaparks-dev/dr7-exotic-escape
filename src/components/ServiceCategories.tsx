@@ -11,7 +11,6 @@ export function ServiceCategories() {
     {
       id: 'supercars',
       title: t('services.supercars'),
-      description: t('services.supercars.desc'),
       icon: Car,
       image: '/cars.jpg',
       itemCount: '15 Available',
@@ -21,7 +20,6 @@ export function ServiceCategories() {
     {
       id: 'yachts',
       title: t('services.yachts'),
-      description: t('services.yachts.desc'),
       icon: Ship,
       image: '/yacht.jpg',
       buttonLabel: t('btn.learnmore'),
@@ -30,7 +28,6 @@ export function ServiceCategories() {
     {
       id: 'jets',
       title: t('services.jets'),
-      description: t('services.jets.desc'),
       icon: Plane,
       image: '/privatejet.jpg',
       buttonLabel: t('btn.learnmore')
@@ -38,7 +35,6 @@ export function ServiceCategories() {
     {
       id: 'villas',
       title: t('services.villas'),
-      description: t('services.villas.desc'),
       icon: Home,
       image: '/exclusivevilla.jpg',
       buttonLabel: t('btn.learnmore')
@@ -46,7 +42,6 @@ export function ServiceCategories() {
     {
       id: 'helicopters',
       title: t('services.helicopters'),
-      description: t('services.helicopters.desc'),
       icon: RotateCcw,
       image: '/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png',
       buttonLabel: t('btn.learnmore')
@@ -85,8 +80,7 @@ export function ServiceCategories() {
               </div>
 
                <CardContent className="p-6">
-                <h3 className="text-2xl font-bold mb-2 text-white">{category.title}</h3>
-                <p className="text-white/70 mb-4 whitespace-nowrap">{category.description}</p>
+                <h3 className="text-2xl font-bold mb-6 text-white">{category.title}</h3>
                 {category.link ? (
                   <a href={category.link}>
                     <Button variant="luxury" className="w-full">
