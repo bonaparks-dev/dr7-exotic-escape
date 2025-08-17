@@ -4,7 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const AgeVerificationModal = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     // Check if user has already verified age
@@ -33,20 +33,15 @@ const AgeVerificationModal = () => {
 
   return (
     <div className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white text-black rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-in fade-in-0 zoom-in-95 duration-300">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-in fade-in-0 zoom-in-95 duration-300">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold mb-4 text-black">
+          <h2 className="text-2xl font-bold mb-6 text-black">
             {t('ageVerification.title')}
           </h2>
           
-          <div className="space-y-4 text-sm text-gray-700">
-            <p className="leading-relaxed">
-              <span className="font-semibold text-gray-900">Italiano:</span><br />
-              {t('ageVerification.messageIt')}
-            </p>
-            <p className="leading-relaxed">
-              <span className="font-semibold text-gray-900">English:</span><br />
-              {t('ageVerification.messageEn')}
+          <div className="text-base text-gray-600 leading-relaxed">
+            <p>
+              {language === 'it' ? t('ageVerification.messageIt') : t('ageVerification.messageEn')}
             </p>
           </div>
         </div>
@@ -62,7 +57,7 @@ const AgeVerificationModal = () => {
           <Button
             onClick={handleDeny}
             variant="outline"
-            className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 font-medium"
+            className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white transition-colors duration-200 font-medium"
           >
             {t('ageVerification.no')}
           </Button>
