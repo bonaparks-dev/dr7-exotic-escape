@@ -243,7 +243,8 @@ const cars: Car[] = [
       special: "Large cargo space"
     },
     description: "Perfect for transporting everything you need.",
-    image: "/Ducato.png"
+    image: "/Ducato.png",
+    available: false
   }
 ];
 
