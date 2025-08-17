@@ -13,6 +13,7 @@ const translations = {
     // Navigation
     'nav.services': 'Servizi',
     'nav.rentcar': 'Noleggia Auto',
+    'nav.yacht': 'Yacht',
     'nav.detailing': 'Premium Car Detailing',
     'nav.rapidservices': 'Servizi Rapidi Auto',
     'nav.contact': 'Contatti',
@@ -252,6 +253,7 @@ const translations = {
     // Navigation
     'nav.services': 'Services',
     'nav.rentcar': 'Rent a Car',
+    'nav.yacht': 'Yacht',
     'nav.detailing': 'Premium Car Detailing',
     'nav.rapidservices': 'Rapid Car Services',
     'nav.contact': 'Contact',

@@ -60,9 +60,10 @@ export function Header() {
               >
                 {t('nav.services')}
               </a>
-              <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-52 bg-background/95 border border-border backdrop-blur-lg rounded-xl shadow-elegant hidden group-hover:block">
+                <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-52 bg-background/95 border border-border backdrop-blur-lg rounded-xl shadow-elegant hidden group-hover:block">
                 <ul className="flex flex-col py-2">
                   <li><a href="/rentals" className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground">{t('nav.rentcar')}</a></li>
+                  <li><a href="/yacht-rental" className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground">{t('nav.yacht')}</a></li>
                   <li><a href="/premium-car-detailing" className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground">{t('nav.detailing')}</a></li>
                   <li><a href="/services" className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground">{t('nav.rapidservices')}</a></li>
                 </ul>
@@ -105,6 +106,7 @@ export function Header() {
             {isServicesOpen && (
               <div className="mt-2 space-y-2">
                 <a href="/rentals" className="block text-sm text-foreground hover:text-muted-foreground">{t('nav.rentcar')}</a>
+                <a href="/yacht-rental" className="block text-sm text-foreground hover:text-muted-foreground">{t('nav.yacht')}</a>
                 <a href="/premium-car-detailing" className="block text-sm text-foreground hover:text-muted-foreground">{t('nav.detailing')}</a>
                 <a href="/services" className="block text-sm text-foreground hover:text-muted-foreground">{t('nav.rapidservices')}</a>
               </div>
