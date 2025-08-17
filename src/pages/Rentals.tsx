@@ -232,6 +232,18 @@ const cars: Car[] = [
     },
     description: "Super SUV without compromise.",
     image: "/urus.png"
+  },
+  {
+    id: 16,
+    name: "Fiat Ducato",
+    dailyPrice: 25,
+    specs: {
+      engine: "2.3L MultiJet Turbo Diesel",
+      power: "140Cv",
+      special: "Large cargo space"
+    },
+    description: "Perfect for transporting everything you need.",
+    image: "/Ducato.png"
   }
 ];
 
