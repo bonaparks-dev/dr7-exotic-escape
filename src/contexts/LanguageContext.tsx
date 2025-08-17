@@ -266,7 +266,7 @@ const translations = {
     'services.supercars': 'Exotic Cars',
     'services.yachts': 'Luxury Yachts',
     'services.jets': 'Private Jets',
-    'services.villas': 'Exclusive Villas',
+    'services.villas': 'Villas',
     'services.helicopters': 'Helicopters',
     'services.detailing': 'Premium Car Detailing',
     'services.mechanical': 'Mechanical Services',
