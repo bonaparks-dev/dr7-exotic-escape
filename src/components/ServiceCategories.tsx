@@ -12,7 +12,7 @@ export function ServiceCategories() {
       id: 'Exotic Cars',
       title: t('services.supercars'),
       icon: Car,
-      image: '/Bugatti.jpg',
+      image: '/bugatti.jpg',
       itemCount: '15 Available',
       buttonLabel: t('btn.learnmore'),
       link: '/rentals'
