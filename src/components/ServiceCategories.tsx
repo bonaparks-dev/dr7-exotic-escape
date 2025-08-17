@@ -35,7 +35,7 @@ export function ServiceCategories() {
       id: 'villas',
       title: t('services.villas'),
       icon: Home,
-      video: '/main.MP4',
+      video: '/villa.MP4',
       buttonLabel: t('btn.learnmore')
     },
     {
