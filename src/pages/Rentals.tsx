@@ -6,6 +6,7 @@ import { ArrowLeft, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ReservationForm } from "@/components/ReservationForm";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
   id: number;
@@ -209,6 +210,7 @@ const Rentals = () => {
   const navigate = useNavigate();
   const [selectedCar, setSelectedCar] = useState<string | null>(null);
   const [isReservationFormOpen, setIsReservationFormOpen] = useState(false);
+  const { t } = useLanguage();
 
   const openReservationForm = (carName: string) => {
     setSelectedCar(carName);
@@ -230,7 +232,7 @@ const Rentals = () => {
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Home
+        {t('rentals.backto')}
       </Button>
 
       <Button
@@ -244,10 +246,10 @@ const Rentals = () => {
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4 text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-seasons text-luxury-gold mb-4">
-            Exotic Car Collection
+            {t('rentals.title')}
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            An exclusive fleet. A legendary island. One unforgettable drive.
+            {t('rentals.subtitle')}
           </p>
         </div>
 
@@ -303,7 +305,7 @@ const Rentals = () => {
                     variant="luxury"
                     className="w-full"
                   >
-                    Book Now
+                    {t('rentals.booknow')}
                   </Button>
                 </CardContent>
               </Card>
@@ -314,10 +316,10 @@ const Rentals = () => {
         <div className="container mx-auto px-4 mt-16 text-center">
           <div className="bg-luxury-charcoal/5 border border-luxury-gold/20 rounded-lg p-8">
             <h2 className="text-2xl font-seasons text-luxury-gold mb-4">
-              Need Help Choosing?
+              {t('rentals.needhelp')}
             </h2>
             <p className="text-muted-foreground mb-6">
-              Our luxury concierge team is available 24/7 to help you select the perfect vehicle for your needs.
+              {t('rentals.helpdesc')}
             </p>
             <Button
               onClick={() => window.open('https://wa.me/393457905202', '_blank')}
@@ -325,7 +327,7 @@ const Rentals = () => {
               size="lg"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
-              Contact Our Concierge
+              {t('rentals.contactconcierge')}
             </Button>
           </div>
         </div>

@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import type { User, Session } from "@supabase/supabase-js";
 
 const Auth = () => {
@@ -19,6 +20,7 @@ const Auth = () => {
   const [session, setSession] = useState<Session | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -142,33 +144,33 @@ const Auth = () => {
             className="mb-4 text-luxury-gold hover:text-luxury-gold/80"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
+            {t('rentals.backto')}
           </Button>
           <img 
             src="/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png" 
             alt="DR7 Exotic Cars & Luxury" 
             className="h-16 w-auto mx-auto mb-4"
           />
-          <h1 className="text-2xl font-bold text-luxury-ivory">Welcome to DR7 Exotic</h1>
-          <p className="text-luxury-ivory/70">Access your luxury rental account</p>
+          <h1 className="text-2xl font-bold text-luxury-ivory">{t('auth.welcome')}</h1>
+          <p className="text-luxury-ivory/70">{t('auth.subtitle')}</p>
         </div>
 
         <Card className="bg-luxury-charcoal/50 border-luxury-gold/20 backdrop-blur-sm">
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-luxury-charcoal/80">
               <TabsTrigger value="signin" className="text-luxury-ivory data-[state=active]:bg-luxury-gold data-[state=active]:text-luxury-charcoal">
-                Sign In
+                {t('auth.signin')}
               </TabsTrigger>
               <TabsTrigger value="signup" className="text-luxury-ivory data-[state=active]:bg-luxury-gold data-[state=active]:text-luxury-charcoal">
-                Sign Up
+                {t('auth.signup')}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
               <CardHeader>
-                <CardTitle className="text-luxury-ivory">Sign In</CardTitle>
+                <CardTitle className="text-luxury-ivory">{t('auth.signin.title')}</CardTitle>
                 <CardDescription className="text-luxury-ivory/70">
-                  Enter your credentials to access your account
+                  {t('auth.signin.desc')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -184,9 +186,9 @@ const Auth = () => {
 
             <TabsContent value="signup">
               <CardHeader>
-                <CardTitle className="text-luxury-ivory">Create Account</CardTitle>
+                <CardTitle className="text-luxury-ivory">{t('auth.signup.title')}</CardTitle>
                 <CardDescription className="text-luxury-ivory/70">
-                  Join DR7 Exotic for exclusive luxury rentals
+                  {t('auth.signup.desc')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -217,7 +219,7 @@ const Auth = () => {
                     <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                     <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                   </svg>
-                  Continue with Google
+                  {t('auth.continuewithgoogle')}
                 </Button>
                 
                 <Button 
@@ -229,7 +231,7 @@ const Auth = () => {
                   <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                   </svg>
-                  Continue with Facebook
+                  {t('auth.continuewithfacebook')}
                 </Button>
               </div>
             </div>
@@ -249,6 +251,7 @@ const SignInForm = ({ onSubmit, onForgotPassword, loading, showPassword, setShow
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { t } = useLanguage();
 
   return (
     <form onSubmit={(e) => {
@@ -256,7 +259,7 @@ const SignInForm = ({ onSubmit, onForgotPassword, loading, showPassword, setShow
       onSubmit(email, password);
     }} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="signin-email" className="text-luxury-ivory">Email</Label>
+        <Label htmlFor="signin-email" className="text-luxury-ivory">{t('auth.email')}</Label>
         <Input
           id="signin-email"
           type="email"
@@ -268,7 +271,7 @@ const SignInForm = ({ onSubmit, onForgotPassword, loading, showPassword, setShow
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="signin-password" className="text-luxury-ivory">Password</Label>
+        <Label htmlFor="signin-password" className="text-luxury-ivory">{t('auth.password')}</Label>
         <div className="relative">
           <Input
             id="signin-password"
@@ -298,7 +301,7 @@ const SignInForm = ({ onSubmit, onForgotPassword, loading, showPassword, setShow
           onClick={() => onForgotPassword(email)}
           disabled={!email || loading}
         >
-          Forgot password?
+          {t('auth.forgotpassword')}
         </Button>
       </div>
 
@@ -308,7 +311,7 @@ const SignInForm = ({ onSubmit, onForgotPassword, loading, showPassword, setShow
         className="w-full"
         disabled={loading}
       >
-        {loading ? "Signing in..." : "Sign In"}
+        {loading ? t('auth.signingin') : t('auth.signin')}
       </Button>
     </form>
   );
@@ -323,6 +326,7 @@ const SignUpForm = ({ onSubmit, loading, showPassword, setShowPassword }: {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <form onSubmit={(e) => {
@@ -330,7 +334,7 @@ const SignUpForm = ({ onSubmit, loading, showPassword, setShowPassword }: {
       onSubmit(email, password);
     }} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="signup-email" className="text-luxury-ivory">Email</Label>
+        <Label htmlFor="signup-email" className="text-luxury-ivory">{t('auth.email')}</Label>
         <Input
           id="signup-email"
           type="email"
@@ -342,7 +346,7 @@ const SignUpForm = ({ onSubmit, loading, showPassword, setShowPassword }: {
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="signup-password" className="text-luxury-ivory">Password</Label>
+        <Label htmlFor="signup-password" className="text-luxury-ivory">{t('auth.password')}</Label>
         <div className="relative">
           <Input
             id="signup-password"
@@ -363,7 +367,7 @@ const SignUpForm = ({ onSubmit, loading, showPassword, setShowPassword }: {
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </Button>
         </div>
-        <p className="text-xs text-luxury-ivory/60">Minimum 6 characters</p>
+        <p className="text-xs text-luxury-ivory/60">{t('auth.minchars')}</p>
       </div>
 
       <div className="flex items-center space-x-2">
@@ -374,13 +378,13 @@ const SignUpForm = ({ onSubmit, loading, showPassword, setShowPassword }: {
           className="border-luxury-gold/30 data-[state=checked]:bg-luxury-gold data-[state=checked]:border-luxury-gold"
         />
         <Label htmlFor="terms" className="text-sm text-luxury-ivory/70">
-          I accept the{" "}
+          {t('auth.acceptterms')}{" "}
           <a href="#" className="text-luxury-gold hover:underline">
-            Terms of Service
+            {t('auth.termsofservice')}
           </a>{" "}
-          and{" "}
+          {t('auth.and')}{" "}
           <a href="#" className="text-luxury-gold hover:underline">
-            Privacy Policy
+            {t('auth.privacypolicy')}
           </a>
         </Label>
       </div>
@@ -391,7 +395,7 @@ const SignUpForm = ({ onSubmit, loading, showPassword, setShowPassword }: {
         className="w-full"
         disabled={loading || !acceptTerms}
       >
-        {loading ? "Creating account..." : "Create Account"}
+        {loading ? t('auth.creatingaccount') : t('auth.createaccount')}
       </Button>
     </form>
   );
