@@ -333,25 +333,21 @@ const Rentals = () => {
                   <div className="space-y-1 mb-6 text-sm">
                     {car.specs.acceleration && (
                       <div className="flex items-center text-white/70">
-                        <span className="mr-2">🚀</span>
                         {car.specs.acceleration}
                         {car.specs.maxSpeed && ` – ${car.specs.maxSpeed}`}
                       </div>
                     )}
                     {car.specs.power && (
                       <div className="flex items-center text-white/70">
-                        <span className="mr-2">🐎</span>
                         {car.specs.power}
                         {car.specs.torque && ` – ${car.specs.torque}`}
                       </div>
                     )}
                     <div className="flex items-center text-white/70">
-                      <span className="mr-2">⚙️</span>
                       {car.specs.engine}
                     </div>
                     {car.specs.special && (
                       <div className="flex items-center text-white/70">
-                        <span className="mr-2">🏕️</span>
                         {car.specs.special}
                       </div>
                     )}

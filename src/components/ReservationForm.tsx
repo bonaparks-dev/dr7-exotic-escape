@@ -366,7 +366,6 @@ Total estimated cost: €${totalPrice}`;
           {/* Mileage Rules */}
           <div className="space-y-3 bg-white/5 rounded-lg p-4 border border-white/10">
             <div className="flex items-center gap-2">
-              <span className="text-lg">📏</span>
               <Label className="text-luxury-ivory font-medium text-lg">
                 {t('mileage.title')}
               </Label>
