@@ -15,7 +15,7 @@ const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" style={{ fontFamily: '"The Seasons", serif' }}>
       <Header />
       <main>
         <HeroSection />
@@ -24,18 +24,12 @@ const Index = () => {
         <section className="bg-black text-white py-20 px-6 md:px-12 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black opacity-90"></div>
           <div className="relative max-w-4xl mx-auto text-center">
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                <Crown className="w-8 h-8 text-black" />
-              </div>
-            </div>
-
             <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               DR7 Concierge AI
             </h2>
 
             <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Your elite AI assistant for ultra-luxury experiences. Exotic Cars, Yachts, Helicopters, Villas – powered by artificial intelligence.
+              Your elite AI assistant for ultra-luxury experiences. Supercars, mega yachts, exclusive villas – powered by artificial intelligence.
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 mb-10">
@@ -57,13 +51,22 @@ const Index = () => {
               onClick={() => navigate('/dr7-concierge')}
               className="bg-white text-black hover:bg-gray-200 font-semibold text-lg px-12 py-6 rounded-full transition-all duration-300 hover:scale-105 shadow-xl"
             >
-              <Crown className="w-5 h-5 mr-2" />
               Experience DR7 Concierge AI
             </Button>
 
             <p className="text-white/60 text-sm mt-4">
               Every interaction feels like a $10,000 experience
             </p>
+
+            <div className="mt-8">
+              <Button
+                variant="outline"
+                onClick={() => window.location.href = "https://www.dr7exotic.com"}
+                className="text-white border-white hover:bg-white hover:text-black"
+              >
+                Back to Home
+              </Button>
+            </div>
           </div>
         </section>
 
@@ -133,4 +136,3 @@ const Index = () => {
 };
 
 export default Index;
-
