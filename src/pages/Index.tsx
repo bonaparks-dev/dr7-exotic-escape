@@ -35,7 +35,7 @@ const Index = () => {
             </h2>
 
             <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Your elite AI assistant for ultra-luxury experiences. Supercars, mega yachts, exclusive villas – powered by artificial intelligence.
+              Your elite AI assistant for ultra-luxury experiences. Exotic Cars, Yachts, Helicopters, Villas – powered by artificial intelligence.
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 mb-10">
