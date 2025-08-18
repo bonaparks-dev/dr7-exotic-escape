@@ -18,7 +18,7 @@ export function HeroSection() {
   const handleAudioLoad = () => {
     const audio = audioRef.current;
     if (audio) {
-      audio.volume = 0.2; // 🔉 Volume réduit pour l'ambiance
+      audio.volume = 0.05; // 🔉 Volume réduit pour l'ambiance
       audio.play().catch((error) => {
         console.log("Audio autoplay blocked by browser:", error);
       });
