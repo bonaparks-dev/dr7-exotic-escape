@@ -91,26 +91,26 @@ const DR7Concierge = () => {
     }
   };
 
-  const quickCommands = [
-    { 
-      command: '/motivate', 
-      icon: Zap, 
-      label: language === 'it' ? 'Motivazione' : 'Motivation',
-      gradient: 'from-yellow-600 to-orange-600'
-    },
-    { 
-      command: '/invest', 
-      icon: Crown, 
-      label: language === 'it' ? 'Investimenti' : 'Investments',
-      gradient: 'from-green-600 to-emerald-600'
-    },
-    { 
-      command: '/luxplan', 
-      icon: Sparkles, 
-      label: language === 'it' ? 'Piano Luxury' : 'Luxury Plan',
-      gradient: 'from-purple-600 to-pink-600'
-    }
-  ];
+const quickCommands = [
+  { 
+    command: '/motivate', 
+    icon: Zap, 
+    label: language === 'it' ? 'Motivazione' : 'Motivation',
+    gradient: 'from-[#111111] to-[#000000]' // noir profond
+  },
+  { 
+    command: '/invest', 
+    icon: Crown, 
+    label: language === 'it' ? 'Investimenti' : 'Investments',
+    gradient: 'from-[#1a1a1a] to-[#000000]' // variation subtile noir foncé
+  },
+  { 
+    command: '/luxplan', 
+    icon: Sparkles, 
+    label: language === 'it' ? 'Piano Luxury' : 'Luxury Plan',
+    gradient: 'from-[#000000] to-[#ffffff]' // noir vers blanc (très contrasté)
+  }
+];
 
   return (
     <div className="min-h-screen bg-black text-white">
