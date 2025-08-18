@@ -18,7 +18,7 @@ export function HeroSection() {
   const handleAudioLoad = () => {
     const audio = audioRef.current;
     if (audio) {
-      audio.volume = 0.2; // 🔉 Volume réduit à 20%
+      audio.volume = 0.2; // 🔉 Volume réduit
       audio.play().catch((error) => {
         console.log("Audio autoplay blocked by browser:", error);
       });
@@ -63,11 +63,11 @@ export function HeroSection() {
         <source src="/cosmic.mp3" type="audio/mpeg" />
       </audio>
 
-      {/* Mute / Unmute Button */}
-      <div className="absolute bottom-6 right-6 z-50">
+      {/* Mute / Unmute Button – top right */}
+      <div className="absolute top-6 right-6 z-50">
         <Button
           onClick={toggleAudio}
-          className="bg-white/10 text-white border border-white/20 backdrop-blur-md hover:bg-white/20 transition"
+          className="bg-white/10 text-white text-sm px-3 py-1 border border-white/20 backdrop-blur-md hover:bg-white/20 transition"
         >
           {isMuted ? "Unmute Music" : "Mute Music"}
         </Button>
