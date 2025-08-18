@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Send, Sparkles, Crown, Zap } from 'lucide-react';
+import { Send, Sparkles, Crown, Zap, Home } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -18,7 +18,7 @@ const DR7Concierge = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -31,12 +31,11 @@ const DR7Concierge = () => {
   }, [messages]);
 
   useEffect(() => {
-    // Welcome message
     const welcomeMessage: Message = {
       id: '1',
-      content: language === 'it' 
-        ? "🏆 **DR7 Concierge AI** al tuo servizio\n\nSono il tuo assistente personale per esperienze ultra-luxury. Lamborghini? Mega yacht? Villa esclusiva in Costa Smeralda?\n\n**Comandi speciali:**\n• `/motivate` - Discorso motivazionale\n• `/invest` - Opportunità investment premium\n• `/luxplan` - Piano lifestyle billionaire\n\nCome posso elevare la tua giornata a livelli straordinari?"
-        : "🏆 **DR7 Concierge AI** at your service\n\nI'm your personal assistant for ultra-luxury experiences. Lamborghini? Mega yacht? Exclusive Costa Smeralda villa?\n\n**Special commands:**\n• `/motivate` - Motivational speech\n• `/invest` - Premium investment opportunities\n• `/luxplan` - Billionaire lifestyle plan\n\nHow can I elevate your day to extraordinary levels?",
+      content: language === 'it'
+        ? "DR7 Concierge AI al tuo servizio.\n\nSono il tuo assistente personale per esperienze ultra-luxury. Lamborghini? Mega yacht? Villa esclusiva in Costa Smeralda?\n\nComandi speciali:\n• /motivate - Discorso motivazionale\n• /invest - Opportunità investment premium\n• /luxplan - Piano lifestyle billionaire\n\nCome posso aiutarti oggi?"
+        : "DR7 Concierge AI at your service.\n\nI'm your personal assistant for ultra-luxury experiences. Lamborghini? Mega yacht? Exclusive Costa Smeralda villa?\n\nSpecial commands:\n• /motivate - Motivational speech\n• /invest - Premium investment opportunities\n• /luxplan - Billionaire lifestyle plan\n\nHow can I assist you today?",
       isUser: false,
       timestamp: new Date()
     };
@@ -91,50 +90,50 @@ const DR7Concierge = () => {
     }
   };
 
-const quickCommands = [
-  { 
-    command: '/motivate', 
-    icon: Zap, 
-    label: language === 'it' ? 'Motivazione' : 'Motivation',
-    gradient: 'from-[#111111] to-[#000000]' // noir profond
-  },
-  { 
-    command: '/invest', 
-    icon: Crown, 
-    label: language === 'it' ? 'Investimenti' : 'Investments',
-    gradient: 'from-[#1a1a1a] to-[#000000]' // variation subtile noir foncé
-  },
-  { 
-    command: '/luxplan', 
-    icon: Sparkles, 
-    label: language === 'it' ? 'Piano Luxury' : 'Luxury Plan',
-    gradient: 'from-[#000000] to-[#ffffff]' // noir vers blanc (très contrasté)
-  }
-];
+  const quickCommands = [
+    {
+      command: '/motivate',
+      icon: Zap,
+      label: language === 'it' ? 'Motivazione' : 'Motivation',
+      gradient: 'from-black to-gray-800'
+    },
+    {
+      command: '/invest',
+      icon: Crown,
+      label: language === 'it' ? 'Investimenti' : 'Investments',
+      gradient: 'from-gray-900 to-black'
+    },
+    {
+      command: '/luxplan',
+      icon: Sparkles,
+      label: language === 'it' ? 'Piano Luxury' : 'Luxury Plan',
+      gradient: 'from-black to-white'
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Header */}
-      <div className="border-b border-white/10 bg-gradient-to-r from-black to-gray-900">
-        <div className="container mx-auto px-4 py-6">
+      <div className="border-b border-white/10 bg-black">
+        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
               <Crown className="w-7 h-7 text-black" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                DR7 Concierge AI
-              </h1>
-              <p className="text-white/70 text-sm">
-                {language === 'it' ? 'Assistente Luxury Elite' : 'Elite Luxury Assistant'}
-              </p>
+              <h1 className="text-3xl font-bold text-white">DR7 Concierge AI</h1>
+              <p className="text-white/70 text-sm">{language === 'it' ? 'Assistente Luxury Elite' : 'Elite Luxury Assistant'}</p>
             </div>
           </div>
+          <a href="https://www.dr7exotic.com" target="_blank" rel="noopener noreferrer">
+            <Button className="bg-white text-black font-semibold px-4 py-2 flex items-center gap-2">
+              <Home className="w-4 h-4" />
+              {language === 'it' ? 'Home' : 'Home'}
+            </Button>
+          </a>
         </div>
       </div>
 
-      {/* Quick Commands */}
-      <div className="border-b border-white/10 bg-black/50">
+      <div className="border-b border-white/10 bg-black">
         <div className="container mx-auto px-4 py-4">
           <div className="flex gap-3 overflow-x-auto">
             {quickCommands.map(({ command, icon: Icon, label, gradient }) => (
@@ -153,39 +152,25 @@ const quickCommands = [
         </div>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-hidden">
         <div className="container mx-auto px-4 py-6 h-[calc(100vh-280px)] overflow-y-auto">
           <div className="space-y-6">
             {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-              >
-                <Card className={`max-w-[80%] p-4 ${
-                  message.isUser 
-                    ? 'bg-gradient-to-br from-yellow-600 to-orange-600 text-black border-yellow-500/30' 
-                    : 'bg-gray-900/80 text-white border-white/10'
-                }`}>
-                  <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                    {message.content}
-                  </div>
-                  <div className={`text-xs mt-2 opacity-70 ${
-                    message.isUser ? 'text-black/70' : 'text-white/50'
-                  }`}>
-                    {message.timestamp.toLocaleTimeString()}
-                  </div>
+              <div key={message.id} className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}>
+                <Card className={`max-w-[80%] p-4 ${message.isUser ? 'bg-white text-black border-white/10' : 'bg-black border-white/10 text-white'}`}>
+                  <div className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</div>
+                  <div className={`text-xs mt-2 opacity-70 ${message.isUser ? 'text-black/70' : 'text-white/50'}`}>{message.timestamp.toLocaleTimeString()}</div>
                 </Card>
               </div>
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <Card className="bg-gray-900/80 text-white border-white/10 p-4">
+                <Card className="bg-black text-white border-white/10 p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
                     <span className="text-sm text-white/70">DR7 is thinking...</span>
                   </div>
@@ -197,7 +182,6 @@ const quickCommands = [
         </div>
       </div>
 
-      {/* Input */}
       <div className="border-t border-white/10 bg-black/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex gap-3">
@@ -206,13 +190,13 @@ const quickCommands = [
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder={language === 'it' ? 'Scrivi il tuo messaggio luxury...' : 'Type your luxury message...'}
-              className="flex-1 bg-gray-900 border-white/20 text-white placeholder:text-white/50 focus:border-yellow-500 focus:ring-yellow-500/30"
+              className="flex-1 bg-black border-white/20 text-white placeholder:text-white/50 focus:border-white focus:ring-white/30"
               disabled={isLoading}
             />
             <Button
               onClick={sendMessage}
               disabled={!input.trim() || isLoading}
-              className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-black font-semibold px-6 transition-all duration-200 hover:scale-105"
+              className="bg-white text-black font-semibold px-6 transition-all duration-200 hover:scale-105"
             >
               <Send className="w-4 h-4" />
             </Button>
