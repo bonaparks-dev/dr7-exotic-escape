@@ -1,10 +1,12 @@
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export function HeroSection() {
   const { t } = useLanguage();
-  
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isMuted, setIsMuted] = useState(false);
+
   const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     console.error("Video failed to load:", e);
   };
@@ -13,11 +15,27 @@ export function HeroSection() {
     console.log("Video loaded successfully");
   };
 
-  const handleAudioLoad = (e: React.SyntheticEvent<HTMLAudioElement, Event>) => {
-    const audio = e.currentTarget;
-    audio.play().catch(error => {
-      console.log("Audio autoplay blocked by browser:", error);
-    });
+  const handleAudioLoad = () => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = 0.2; // 🔉 Volume réduit à 20%
+      audio.play().catch((error) => {
+        console.log("Audio autoplay blocked by browser:", error);
+      });
+    }
+  };
+
+  const toggleAudio = () => {
+    const audio = audioRef.current;
+    if (audio) {
+      if (audio.paused) {
+        audio.play();
+        setIsMuted(false);
+      } else {
+        audio.pause();
+        setIsMuted(true);
+      }
+    }
   };
 
   return (
@@ -36,6 +54,7 @@ export function HeroSection() {
 
       {/* Background Music */}
       <audio
+        ref={audioRef}
         autoPlay
         loop
         className="hidden"
@@ -44,6 +63,15 @@ export function HeroSection() {
         <source src="/cosmic.mp3" type="audio/mpeg" />
       </audio>
 
+      {/* Mute / Unmute Button */}
+      <div className="absolute bottom-6 right-6 z-50">
+        <Button
+          onClick={toggleAudio}
+          className="bg-white/10 text-white border border-white/20 backdrop-blur-md hover:bg-white/20 transition"
+        >
+          {isMuted ? "Unmute Music" : "Mute Music"}
+        </Button>
+      </div>
     </section>
   );
-} 
+}
