@@ -17,7 +17,12 @@ export function Header() {
         <div className="container mx-auto px-4 py-2 flex flex-col items-center relative z-50 pointer-events-auto">
           {/* Phone icon on left */}
           <div className="absolute top-8 left-6">
-            <a href="https://wa.me/393457905205" target="_blank" rel="noopener noreferrer" className="text-foreground sm:hidden">
+            <a
+              href="https://wa.me/393457905205"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-foreground sm:hidden"
+            >
               <Phone className="w-5 h-5" />
             </a>
           </div>
@@ -29,14 +34,16 @@ export function Header() {
               variant="luxury"
               size="sm"
               className="hidden sm:flex"
-              onClick={() => window.open('https://wa.me/393457905205', '_blank')}
+              onClick={() =>
+                window.open("https://wa.me/393457905205", "_blank")
+              }
             >
               <MessageCircle className="w-4 h-4" />
-              {t('btn.whatsapp')}
+              {t("btn.whatsapp")}
             </Button>
 
-            {/* Bouton menu mobile modifié */}
-            <Button 
+            {/* Mobile burger menu button – blanc transparent, burger noir */}
+            <Button
               size="sm"
               className="bg-white/20 text-black border border-white/30 hover:bg-white/30 transition md:hidden"
               onClick={() => setIsMenuOpen(true)}
@@ -47,9 +54,9 @@ export function Header() {
 
           {/* Logo centré */}
           <a href="/" className="z-10 pt-2">
-            <img 
-              src="/logo4.png" 
-              alt="DR7 Exotic Cars & Luxury" 
+            <img
+              src="/logo4.png"
+              alt="DR7 Exotic Cars & Luxury"
               className="h-16 w-auto"
             />
           </a>
@@ -61,25 +68,55 @@ export function Header() {
                 href="#"
                 className="text-foreground hover:text-muted-foreground transition-colors text-sm uppercase"
               >
-                {t('nav.services')}
+                {t("nav.services")}
               </a>
-              <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-52 bg-background/95 border border-border backdrop-blur-lg rounded-xl shadow-elegant hidden group-hover:block">
+
+              {/* ✅ Correction ici : ajout de hover:block */}
+              <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-52 bg-background/95 border border-border backdrop-blur-lg rounded-xl shadow-elegant hidden group-hover:block hover:block">
                 <ul className="flex flex-col py-2">
-                  <li><a href="/rentals" className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground">{t('nav.rentcar')}</a></li>
-                  <li><a href="/yacht-rental" className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground">{t('nav.yacht')}</a></li>
-                  <li><a href="/premium-car-detailing" className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground">{t('nav.detailing')}</a></li>
-                  <li><a href="/services" className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground">{t('nav.rapidservices')}</a></li>
+                  <li>
+                    <a
+                      href="/rentals"
+                      className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
+                    >
+                      {t("nav.rentcar")}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/yacht-rental"
+                      className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
+                    >
+                      {t("nav.yacht")}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/premium-car-detailing"
+                      className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
+                    >
+                      {t("nav.detailing")}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/services"
+                      className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
+                    >
+                      {t("nav.rapidservices")}
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
 
-            <a 
-              href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services." 
-              target="_blank" 
+            <a
+              href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services."
+              target="_blank"
               rel="noopener noreferrer"
               className="text-foreground hover:text-muted-foreground transition-colors text-sm uppercase"
             >
-              {t('nav.contact')}
+              {t("nav.contact")}
             </a>
           </nav>
         </div>
@@ -102,27 +139,47 @@ export function Header() {
               className="text-xl font-semibold flex items-center space-x-1"
               onClick={() => setIsServicesOpen(!isServicesOpen)}
             >
-              <span>{t('nav.services')}</span>
+              <span>{t("nav.services")}</span>
               <ChevronDown className="w-5 h-5" />
             </button>
             {isServicesOpen && (
               <div className="mt-2 space-y-2">
-                <a href="/rentals" className="block text-sm text-foreground hover:text-muted-foreground">{t('nav.rentcar')}</a>
-                <a href="/yacht-rental" className="block text-sm text-foreground hover:text-muted-foreground">{t('nav.yacht')}</a>
-                <a href="/premium-car-detailing" className="block text-sm text-foreground hover:text-muted-foreground">{t('nav.detailing')}</a>
-                <a href="/services" className="block text-sm text-foreground hover:text-muted-foreground">{t('nav.rapidservices')}</a>
+                <a
+                  href="/rentals"
+                  className="block text-sm text-foreground hover:text-muted-foreground"
+                >
+                  {t("nav.rentcar")}
+                </a>
+                <a
+                  href="/yacht-rental"
+                  className="block text-sm text-foreground hover:text-muted-foreground"
+                >
+                  {t("nav.yacht")}
+                </a>
+                <a
+                  href="/premium-car-detailing"
+                  className="block text-sm text-foreground hover:text-muted-foreground"
+                >
+                  {t("nav.detailing")}
+                </a>
+                <a
+                  href="/services"
+                  className="block text-sm text-foreground hover:text-muted-foreground"
+                >
+                  {t("nav.rapidservices")}
+                </a>
               </div>
             )}
           </div>
 
-          <a 
-            href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services." 
-            target="_blank" 
+          <a
+            href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services."
+            target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setIsMenuOpen(false)} 
+            onClick={() => setIsMenuOpen(false)}
             className="text-xl font-semibold"
           >
-            {t('nav.contact')}
+            {t("nav.contact")}
           </a>
         </div>
       )}
