@@ -15,58 +15,48 @@ const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background" style={{ fontFamily: '"The Seasons", serif' }}>
+    <div className="min-h-screen bg-background">
       <Header />
       <main>
         <HeroSection />
 
         {/* DR7 Concierge AI Feature */}
-        <section className="bg-black text-white py-20 px-6 md:px-12 relative overflow-hidden">
+        <section className="bg-black text-white py-16 px-4 sm:py-20 sm:px-6 md:px-12 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black opacity-90"></div>
           <div className="relative max-w-4xl mx-auto text-center">
-            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent" style={{ fontFamily: 'The Seasons, serif' }}>
               DR7 Concierge AI
             </h2>
 
-            <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
               Your elite AI assistant for ultra-luxury experiences. Supercars, mega yachts, exclusive villas – powered by artificial intelligence.
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 mb-10">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Zap className="w-4 h-4 text-white" />
-                <span className="text-sm">Instant Recommendations</span>
+                <span className="text-xs sm:text-sm">Instant Recommendations</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Sparkles className="w-4 h-4 text-white" />
-                <span className="text-sm">Luxury Lifestyle Planning</span>
+                <span className="text-xs sm:text-sm">Luxury Lifestyle Planning</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Crown className="w-4 h-4 text-white" />
-                <span className="text-sm">24/7 Elite Service</span>
+                <span className="text-xs sm:text-sm">24/7 Elite Service</span>
               </div>
             </div>
 
             <Button
               onClick={() => navigate('/dr7-concierge')}
-              className="bg-white text-black hover:bg-gray-200 font-semibold text-lg px-12 py-6 rounded-full transition-all duration-300 hover:scale-105 shadow-xl"
+              className="bg-white text-black hover:bg-gray-200 font-semibold text-base sm:text-lg px-8 sm:px-12 py-4 sm:py-6 rounded-full transition-all duration-300 hover:scale-105 shadow-xl"
             >
               Experience DR7 Concierge AI
             </Button>
 
-            <p className="text-white/60 text-sm mt-4">
+            <p className="text-white/60 text-xs sm:text-sm mt-4">
               Every interaction feels like a $10,000 experience
             </p>
-
-            <div className="mt-8">
-              <Button
-                variant="outline"
-                onClick={() => window.location.href = "https://www.dr7exotic.com"}
-                className="text-white border-white hover:bg-white hover:text-black"
-              >
-                Back to Home
-              </Button>
-            </div>
           </div>
         </section>
 
@@ -81,14 +71,14 @@ const Index = () => {
             {/* Infos à gauche */}
             <div className="md:w-1/2 text-left">
               <h2
-                className="text-4xl font-bold uppercase mb-6 text-foreground"
-                style={{ fontFamily: '"The Seasons", serif' }}
+                className="text-3xl sm:text-4xl font-bold uppercase mb-6 text-foreground"
+                style={{ fontFamily: 'The Seasons, serif' }}
               >
                 {t('contact.title')}
               </h2>
 
               <p className="text-foreground text-sm uppercase mb-2">{t('contact.whatsapp')}</p>
-              <p className="text-2xl font-semibold mb-6">+39 345 790 5205</p>
+              <p className="text-xl font-semibold mb-6">+39 345 790 5205</p>
 
               <p className="mb-1">Viale Marconi, 229, 09131 Cagliari</p>
               <p className="text-muted-foreground mb-6">{t('contact.office')}</p>
