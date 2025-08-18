@@ -64,7 +64,7 @@ export function HeroSection() {
       </audio>
 
       {/* Mute / Unmute Button */}
-      <div className="absolute top-15 right-6 z-50">
+      <div className="absolute top-20 right-6 z-50">
         <Button
           onClick={toggleAudio}
           className="bg-white/10 text-white text-sm px-3 py-1 border border-white/20 backdrop-blur-md hover:bg-white/20 transition rounded-md"
