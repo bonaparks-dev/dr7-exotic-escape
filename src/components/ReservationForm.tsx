@@ -282,6 +282,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                     }}
                     disabled={(date) => date < new Date()}
                     initialFocus
+                    className="pointer-events-auto"
                   />
                 </PopoverContent>
               </Popover>
@@ -311,6 +312,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                     }}
                     disabled={(date) => !startDate || date <= startDate}
                     initialFocus
+                    className="pointer-events-auto"
                   />
                 </PopoverContent>
               </Popover>

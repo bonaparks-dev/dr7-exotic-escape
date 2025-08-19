@@ -70,7 +70,10 @@ export default {
 					white: 'hsl(var(--luxury-white))',
 					'grey-dark': 'hsl(var(--luxury-grey-dark))',
 					'grey-light': 'hsl(var(--luxury-grey-light))',
-					'grey-muted': 'hsl(var(--luxury-grey-muted))'
+					'grey-muted': 'hsl(var(--luxury-grey-muted))',
+					gold: 'hsl(var(--luxury-gold))',
+					charcoal: 'hsl(var(--luxury-charcoal))',
+					ivory: 'hsl(var(--luxury-ivory))'
 				}
 			},
 			backgroundImage: {
