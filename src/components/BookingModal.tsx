@@ -115,7 +115,7 @@ export const BookingModal = ({ open, onOpenChange }: BookingModalProps) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-black border-white/20 text-white">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-seasons text-luxury-gold mb-4">
+          <DialogTitle className="text-2xl font-seasons text-luxury-white mb-4">
             Book Your DR7 Service
           </DialogTitle>
         </DialogHeader>
@@ -123,21 +123,21 @@ export const BookingModal = ({ open, onOpenChange }: BookingModalProps) => {
         <div className="space-y-6">
           {/* Wash Packages */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-luxury-gold">Select Wash Package</h3>
+            <h3 className="text-lg font-semibold text-luxury-white">Select Wash Package</h3>
             <RadioGroup value={selectedPackage} onValueChange={setSelectedPackage}>
               {washPackages.map((pkg) => (
                 <div key={pkg.id} className={`flex items-center space-x-3 p-3 rounded-lg border transition-all duration-200 ${
                   selectedPackage === pkg.id 
-                    ? 'border-luxury-gold bg-luxury-gold/10 shadow-lg shadow-luxury-gold/20' 
-                    : 'border-luxury-gold/20 hover:bg-luxury-gold/5'
+                    ? 'border-luxury-white bg-luxury-white/10 shadow-lg shadow-luxury-white/20' 
+                    : 'border-luxury-white/20 hover:bg-luxury-white/5'
                 }`}>
                   <RadioGroupItem value={pkg.id} id={pkg.id} />
                   <Label htmlFor={pkg.id} className="flex-1 cursor-pointer">
                     <div className="flex justify-between items-center">
-                      <span className={`${selectedPackage === pkg.id ? 'text-luxury-gold font-semibold' : 'text-luxury-ivory'}`}>
+                      <span className={`${selectedPackage === pkg.id ? 'text-luxury-white font-semibold' : 'text-luxury-white'}`}>
                         {pkg.title}
                       </span>
-                      <span className="text-luxury-gold font-bold">{pkg.price}</span>
+                      <span className="text-luxury-white font-bold">{pkg.price}</span>
                     </div>
                   </Label>
                 </div>
@@ -147,11 +147,11 @@ export const BookingModal = ({ open, onOpenChange }: BookingModalProps) => {
 
           {/* Add-on Options */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-luxury-gold">Select One Add-on Only (Optional)</h3>
+            <h3 className="text-lg font-semibold text-luxury-white">Select One Add-on Only (Optional)</h3>
             {addOnOptions.map((option) => (
-              <div key={option.id} className="p-4 rounded-lg border border-luxury-gold/20 bg-luxury-charcoal/30">
-                <h4 className="text-luxury-gold font-medium mb-1">{option.title}</h4>
-                <p className="text-sm text-luxury-gold/70 mb-3">{option.subtitle}</p>
+              <div key={option.id} className="p-4 rounded-lg border border-luxury-white/20 bg-luxury-black/30">
+                <h4 className="text-luxury-white font-medium mb-1">{option.title}</h4>
+                <p className="text-sm text-luxury-white/70 mb-3">{option.subtitle}</p>
                 <div className="grid grid-cols-3 gap-2">
                   {option.pricing.map((price) => (
                     <div key={price.duration} className="flex items-center space-x-2">
@@ -163,8 +163,8 @@ export const BookingModal = ({ open, onOpenChange }: BookingModalProps) => {
                         }
                       />
                       <Label htmlFor={`${option.id}-${price.duration}`} className="text-sm cursor-pointer">
-                        <div className="text-luxury-ivory">{price.duration}</div>
-                        <div className="text-luxury-gold text-xs">{price.price}</div>
+                        <div className="text-luxury-white">{price.duration}</div>
+                        <div className="text-luxury-white text-xs">{price.price}</div>
                       </Label>
                     </div>
                   ))}
@@ -174,7 +174,7 @@ export const BookingModal = ({ open, onOpenChange }: BookingModalProps) => {
           </div>
 
           {/* WhatsApp CTA */}
-          <div className="pt-4 border-t border-luxury-gold/20">
+          <div className="pt-4 border-t border-luxury-white/20">
             <Button
               onClick={handleWhatsAppClick}
               disabled={!selectedPackage}

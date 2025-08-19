@@ -21,7 +21,7 @@ export function Footer() {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="text-luxury-ivory hover:text-luxury-gold"
+                className="text-luxury-white hover:text-luxury-black"
                 onClick={() => window.open('https://www.instagram.com/dr7_exotic_cars', '_blank')}
               >
                 <Instagram className="w-5 h-5" />
@@ -29,7 +29,7 @@ export function Footer() {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="text-luxury-ivory hover:text-luxury-gold"
+                className="text-luxury-white hover:text-luxury-black"
                 onClick={() => window.open('https://tiktok.com/@dr7_exotic_cars', '_blank')}
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

@@ -67,13 +67,7 @@ export default {
 				},
 				luxury: {
 					black: 'hsl(var(--luxury-black))',
-					white: 'hsl(var(--luxury-white))',
-					'grey-dark': 'hsl(var(--luxury-grey-dark))',
-					'grey-light': 'hsl(var(--luxury-grey-light))',
-					'grey-muted': 'hsl(var(--luxury-grey-muted))',
-					gold: 'hsl(var(--luxury-gold))',
-					charcoal: 'hsl(var(--luxury-charcoal))',
-					ivory: 'hsl(var(--luxury-ivory))'
+					white: 'hsl(var(--luxury-white))'
 				}
 			},
 			backgroundImage: {

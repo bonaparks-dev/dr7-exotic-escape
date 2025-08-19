@@ -221,13 +221,13 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
   if (showSuccess) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-md bg-luxury-charcoal border border-luxury-gold/20">
+        <DialogContent className="sm:max-w-md bg-luxury-black border border-luxury-white/20">
           <div className="flex flex-col items-center justify-center py-8 text-center">
-            <Check className="h-16 w-16 text-luxury-gold mb-4" />
-            <h3 className="text-2xl font-bold text-luxury-ivory mb-2">
+            <Check className="h-16 w-16 text-luxury-white mb-4" />
+            <h3 className="text-2xl font-bold text-luxury-white mb-2">
               {language === 'it' ? 'Prenotazione Confermata!' : 'Reservation Confirmed!'}
             </h3>
-            <p className="text-luxury-ivory/80">
+            <p className="text-luxury-white/80">
               {language === 'it' 
                 ? 'Ti contatteremo entro 24 ore per finalizzare i dettagli.'
                 : 'We will contact you within 24 hours to finalize the details.'}
@@ -240,15 +240,15 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto bg-luxury-charcoal border border-luxury-gold/20">
-        <DialogHeader className="border-b border-luxury-gold/20 pb-4">
-          <DialogTitle className="text-2xl font-bold text-luxury-ivory flex items-center justify-between">
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto bg-luxury-black border border-luxury-white/20">
+        <DialogHeader className="border-b border-luxury-white/20 pb-4">
+          <DialogTitle className="text-2xl font-bold text-luxury-white flex items-center justify-between">
             {language === 'it' ? 'Prenota' : 'Reserve'} {carName}
             <Button
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="text-luxury-ivory hover:bg-luxury-gold/10"
+              className="text-luxury-white hover:bg-luxury-white/10"
             >
               <X className="h-5 w-5" />
             </Button>
@@ -259,14 +259,14 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
           {/* Date Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-luxury-ivory font-medium">
+              <Label className="text-luxury-white font-medium">
                 {language === 'it' ? 'Data di inizio' : 'Start Date'}
               </Label>
               <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full bg-white border-luxury-gold/20 text-black hover:border-luxury-gold hover:bg-luxury-gold/5"
+                    className="w-full bg-white border-luxury-white/20 text-black hover:border-luxury-white hover:bg-luxury-white/5"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {startDate ? format(startDate, "PPP") : "Select date"}
@@ -289,14 +289,14 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
             </div>
 
             <div className="space-y-2">
-              <Label className="text-luxury-ivory font-medium">
+              <Label className="text-luxury-white font-medium">
                 {language === 'it' ? 'Data di fine' : 'End Date'}
               </Label>
               <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full bg-white border-luxury-gold/20 text-black hover:border-luxury-gold hover:bg-luxury-gold/5"
+                    className="w-full bg-white border-luxury-white/20 text-black hover:border-luxury-white hover:bg-luxury-white/5"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {endDate ? format(endDate, "PPP") : "Select date"}
@@ -322,27 +322,27 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
           {/* Personal Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName" className="text-luxury-ivory font-medium">
+              <Label htmlFor="firstName" className="text-luxury-white font-medium">
                 {language === 'it' ? 'Nome' : 'First Name'}
               </Label>
               <Input
                 id="firstName"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
+                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="lastName" className="text-luxury-ivory font-medium">
+              <Label htmlFor="lastName" className="text-luxury-white font-medium">
                 {language === 'it' ? 'Cognome' : 'Last Name'}
               </Label>
               <Input
                 id="lastName"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
+                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
                 required
               />
             </div>
@@ -350,7 +350,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-luxury-ivory font-medium">
+              <Label htmlFor="email" className="text-luxury-white font-medium">
                 Email
               </Label>
               <Input
@@ -358,20 +358,20 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
+                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone" className="text-luxury-ivory font-medium">
+              <Label htmlFor="phone" className="text-luxury-white font-medium">
                 {language === 'it' ? 'Telefono' : 'Phone'}
               </Label>
               <Input
                 id="phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
+                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
                 required
               />
             </div>
@@ -380,7 +380,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
           {/* Date of birth and License date */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="dob" className="text-luxury-ivory font-medium">
+              <Label htmlFor="dob" className="text-luxury-white font-medium">
                 {language === "it" ? "Data di nascita" : "Date of Birth"}
               </Label>
               <Input
@@ -388,13 +388,13 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                 type="date"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
-                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
+                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="licenseDate" className="text-luxury-ivory font-medium">
+              <Label htmlFor="licenseDate" className="text-luxury-white font-medium">
                 {language === "it" ? "Data rilascio patente" : "License Issue Date"}
               </Label>
               <Input
@@ -402,7 +402,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                 type="date"
                 value={licenseDate}
                 onChange={(e) => setLicenseDate(e.target.value)}
-                className="bg-white border-luxury-gold/20 text-black placeholder:text-gray-500 focus:border-luxury-gold hover:border-luxury-gold/40"
+                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
                 required
               />
             </div>
@@ -410,33 +410,33 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
 
           {/* Insurance Selection */}
           <div className="space-y-4">
-            <Label className="text-luxury-ivory font-medium text-lg">
+            <Label className="text-luxury-white font-medium text-lg">
               {language === 'it' ? 'Assicurazione' : 'Insurance'}
             </Label>
             <RadioGroup value={insurance} onValueChange={setInsurance} className="space-y-3">
-              <div className="flex items-center space-x-2 p-3 rounded-lg border border-luxury-gold/20">
+              <div className="flex items-center space-x-2 p-3 rounded-lg border border-luxury-white/20">
                 <RadioGroupItem value="kasko" id="kasko" />
-                <Label htmlFor="kasko" className="text-luxury-ivory cursor-pointer flex-1">
+                <Label htmlFor="kasko" className="text-luxury-white cursor-pointer flex-1">
                   <div className="font-medium">KASKO - €100/day</div>
-                  <div className="text-sm text-luxury-ivory/70">
+                  <div className="text-sm text-luxury-white/70">
                     {language === 'it' ? 'Minimo 2 anni di patente' : 'Minimum 2 years license'}
                   </div>
                 </Label>
               </div>
-              <div className="flex items-center space-x-2 p-3 rounded-lg border border-luxury-gold/20">
+              <div className="flex items-center space-x-2 p-3 rounded-lg border border-luxury-white/20">
                 <RadioGroupItem value="kasko-black" id="kasko-black" />
-                <Label htmlFor="kasko-black" className="text-luxury-ivory cursor-pointer flex-1">
+                <Label htmlFor="kasko-black" className="text-luxury-white cursor-pointer flex-1">
                   <div className="font-medium">KASKO BLACK - €150/day</div>
-                  <div className="text-sm text-luxury-ivory/70">
+                  <div className="text-sm text-luxury-white/70">
                     {language === 'it' ? 'Minimo 25 anni e 5 anni di patente' : 'Minimum 25 years old and 5 years license'}
                   </div>
                 </Label>
               </div>
-              <div className="flex items-center space-x-2 p-3 rounded-lg border border-luxury-gold/20">
+              <div className="flex items-center space-x-2 p-3 rounded-lg border border-luxury-white/20">
                 <RadioGroupItem value="kasko-signature" id="kasko-signature" />
-                <Label htmlFor="kasko-signature" className="text-luxury-ivory cursor-pointer flex-1">
+                <Label htmlFor="kasko-signature" className="text-luxury-white cursor-pointer flex-1">
                   <div className="font-medium">KASKO SIGNATURE - €200/day</div>
-                  <div className="text-sm text-luxury-ivory/70">
+                  <div className="text-sm text-luxury-white/70">
                     {language === 'it' ? 'Minimo 30 anni e 10 anni di patente' : 'Minimum 30 years old and 10 years license'}
                   </div>
                 </Label>
@@ -446,12 +446,12 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
 
           {/* Additional Options */}
           <div className="space-y-4">
-            <Label className="text-luxury-ivory font-medium text-lg">
+            <Label className="text-luxury-white font-medium text-lg">
               {language === 'it' ? 'Opzioni aggiuntive' : 'Additional Options'}
             </Label>
             
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-gold/20">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
                 <div className="flex items-center space-x-3">
                   <Checkbox
                     id="fullCleaning"
@@ -459,78 +459,78 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                     onCheckedChange={(checked) => setFullCleaning(checked === true)}
                     disabled
                   />
-                  <Label htmlFor="fullCleaning" className="text-luxury-ivory cursor-pointer">
+                  <Label htmlFor="fullCleaning" className="text-luxury-white cursor-pointer">
                     {language === 'it' ? 'Pulizia completa (Obbligatorio)' : 'Full Cleaning (Required)'}
                   </Label>
                 </div>
-                <span className="text-luxury-gold font-medium">€30</span>
+                <span className="text-luxury-white font-medium">€30</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-gold/20">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
                 <div className="flex items-center space-x-3">
                   <Checkbox
                     id="secondDriver"
                     checked={secondDriver}
                     onCheckedChange={(checked) => setSecondDriver(checked === true)}
                   />
-                  <Label htmlFor="secondDriver" className="text-luxury-ivory cursor-pointer">
+                  <Label htmlFor="secondDriver" className="text-luxury-white cursor-pointer">
                     {language === 'it' ? 'Secondo conducente' : 'Second Driver'}
                   </Label>
                 </div>
-                <span className="text-luxury-gold font-medium">€10/day</span>
+                <span className="text-luxury-white font-medium">€10/day</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-gold/20">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
                 <div className="flex items-center space-x-3">
                   <Checkbox
                     id="under25"
                     checked={under25}
                     onCheckedChange={(checked) => setUnder25(checked === true)}
                   />
-                  <Label htmlFor="under25" className="text-luxury-ivory cursor-pointer">
+                  <Label htmlFor="under25" className="text-luxury-white cursor-pointer">
                     {language === 'it' ? 'Conducente sotto 25 anni' : 'Driver under 25'}
                   </Label>
                 </div>
-                <span className="text-luxury-gold font-medium">€10/day</span>
+                <span className="text-luxury-white font-medium">€10/day</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-gold/20">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
                 <div className="flex items-center space-x-3">
                   <Checkbox
                     id="licenseUnder3"
                     checked={licenseUnder3}
                     onCheckedChange={(checked) => setLicenseUnder3(checked === true)}
                   />
-                  <Label htmlFor="licenseUnder3" className="text-luxury-ivory cursor-pointer">
+                  <Label htmlFor="licenseUnder3" className="text-luxury-white cursor-pointer">
                     {language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years'}
                   </Label>
                 </div>
-                <span className="text-luxury-gold font-medium">€20/day</span>
+                <span className="text-luxury-white font-medium">€20/day</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-gold/20">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
                 <div className="flex items-center space-x-3">
                   <Checkbox
                     id="outOfHours"
                     checked={outOfHours}
                     onCheckedChange={(checked) => setOutOfHours(checked === true)}
                   />
-                  <Label htmlFor="outOfHours" className="text-luxury-ivory cursor-pointer">
+                  <Label htmlFor="outOfHours" className="text-luxury-white cursor-pointer">
                     {language === 'it' ? 'Consegna/ritiro fuori orario' : 'Out-of-hours delivery/pickup'}
                   </Label>
                 </div>
-                <span className="text-luxury-gold font-medium">€50</span>
+                <span className="text-luxury-white font-medium">€50</span>
               </div>
             </div>
           </div>
 
           {/* Total Price */}
-          <div className="bg-luxury-gold/10 p-4 rounded-lg border border-luxury-gold/20">
+          <div className="bg-luxury-white/10 p-4 rounded-lg border border-luxury-white/20">
             <div className="flex justify-between items-center">
-              <span className="text-luxury-ivory font-semibold text-lg">
+              <span className="text-luxury-white font-semibold text-lg">
                 {language === 'it' ? 'Totale:' : 'Total:'}
               </span>
-              <span className="text-luxury-gold font-bold text-2xl">€{totalPrice}</span>
+              <span className="text-luxury-white font-bold text-2xl">€{totalPrice}</span>
             </div>
           </div>
 
@@ -549,7 +549,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
               className={cn(
                 "w-full py-3 text-lg font-semibold transition-all duration-300",
                 isInsuranceEligible().valid
-                  ? "bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-charcoal"
+                  ? "bg-luxury-white hover:bg-luxury-white/90 text-luxury-black"
                   : "bg-gray-500 text-white cursor-not-allowed"
               )}
             >

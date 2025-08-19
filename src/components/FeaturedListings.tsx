@@ -53,7 +53,7 @@ export function FeaturedListings() {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             <span className="bg-gradient-gold bg-clip-text text-transparent">Featured</span> Experiences
           </h2>
-          <p className="text-xl text-luxury-gold max-w-2xl mx-auto">
+          <p className="text-xl text-luxury-white max-w-2xl mx-auto">
             Hand-picked premium selections available for immediate booking
           </p>
         </div>
@@ -69,13 +69,13 @@ export function FeaturedListings() {
                 />
                 
                 {listing.featured && (
-                  <Badge className="absolute top-4 left-4 bg-luxury-gold text-luxury-charcoal border-0">
+                  <Badge className="absolute top-4 left-4 bg-luxury-white text-luxury-black border-0">
                     Featured
                   </Badge>
                 )}
                 
                 <div className="absolute top-4 right-4 flex items-center space-x-1 bg-white/90 rounded-full px-3 py-1">
-                  <Star className="w-4 h-4 text-luxury-gold fill-current" />
+                  <Star className="w-4 h-4 text-luxury-black fill-current" />
                   <span className="text-black text-sm font-medium">{listing.rating}</span>
                   <span className="text-black/70 text-sm">({listing.reviews})</span>
                 </div>
@@ -108,8 +108,8 @@ export function FeaturedListings() {
                 
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <span className="text-2xl font-bold text-luxury-charcoal">{listing.price}</span>
-                    <span className="text-luxury-gold text-sm ml-1">{listing.period}</span>
+                    <span className="text-2xl font-bold text-luxury-black">{listing.price}</span>
+                    <span className="text-luxury-white text-sm ml-1">{listing.period}</span>
                   </div>
                 </div>
                 
