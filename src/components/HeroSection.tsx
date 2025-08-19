@@ -19,7 +19,7 @@ export function HeroSection() {
     const audio = audioRef.current;
     if (audio) {
       audio.muted = true;
-      audio.volume = 0.2;
+      audio.volume = 0.1;
 
       audio.play()
         .then(() => {
