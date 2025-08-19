@@ -18,14 +18,19 @@ export function HeroSection() {
   const handleAudioLoad = () => {
     const audio = audioRef.current;
     if (audio) {
-      audio.muted = true; // ← pour que le navigateur accepte l'autoplay
-      audio.volume = 0.20;
-      audio.play().then(() => {
-        audio.muted = false; // ← remet le son après autoplay
-        setIsMuted(false);
-      }).catch((error) => {
-        console.log("Audio autoplay blocked by browser:", error);
-      });
+      audio.muted = true;
+      audio.volume = 0.2;
+
+      audio.play()
+        .then(() => {
+          setTimeout(() => {
+            audio.muted = false;
+            setIsMuted(false);
+          }, 50); // 🔄 permet d’assurer le démutage après autoplay
+        })
+        .catch((error) => {
+          console.log("Audio autoplay blocked by browser:", error);
+        });
     }
   };
 
@@ -61,7 +66,7 @@ export function HeroSection() {
         ref={audioRef}
         autoPlay
         loop
-        muted // ← indispensable pour contourner le blocage initial
+        muted
         className="hidden"
         onLoadedData={handleAudioLoad}
       >
