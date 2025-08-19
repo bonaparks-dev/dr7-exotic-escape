@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -6,6 +6,7 @@ export function HeroSection() {
   const { t } = useLanguage();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     console.error("Video failed to load:", e);
@@ -15,24 +16,38 @@ export function HeroSection() {
     console.log("Video loaded successfully");
   };
 
-  const handleAudioLoad = () => {
-    const audio = audioRef.current;
-    if (audio) {
-      audio.muted = true;
-      audio.volume = 0.2;
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      if (hasInteracted) return;
+      setHasInteracted(true);
 
-      audio.play()
-        .then(() => {
-          setTimeout(() => {
-            audio.muted = false;
+      const audio = audioRef.current;
+      if (audio) {
+        audio.muted = false;
+        audio.volume = 0.2;
+        audio
+          .play()
+          .then(() => {
             setIsMuted(false);
-          }, 50); // 🔄 permet d’assurer le démutage après autoplay
-        })
-        .catch((error) => {
-          console.log("Audio autoplay blocked by browser:", error);
-        });
-    }
-  };
+          })
+          .catch((error) => {
+            console.log("Autoplay failed:", error);
+          });
+      }
+
+      // Remove listeners after first interaction
+      window.removeEventListener("click", handleUserInteraction);
+      window.removeEventListener("scroll", handleUserInteraction);
+    };
+
+    window.addEventListener("click", handleUserInteraction);
+    window.addEventListener("scroll", handleUserInteraction);
+
+    return () => {
+      window.removeEventListener("click", handleUserInteraction);
+      window.removeEventListener("scroll", handleUserInteraction);
+    };
+  }, [hasInteracted]);
 
   const toggleAudio = () => {
     const audio = audioRef.current;
@@ -66,9 +81,8 @@ export function HeroSection() {
         ref={audioRef}
         autoPlay
         loop
-        muted
+        muted // required for initial autoplay
         className="hidden"
-        onLoadedData={handleAudioLoad}
       >
         <source src="/cosmic.mp3" type="audio/mpeg" />
       </audio>
@@ -77,7 +91,7 @@ export function HeroSection() {
       <div className="absolute top-20 right-6 z-50">
         <Button
           onClick={toggleAudio}
-          className="bg-white/10 text-white text-xs px-3 py-1 border border-white/20 backdrop-blur-md hover:bg-white/20 transition rounded-md"
+          className="bg-white/10 text-white text-sm px-3 py-1 border border-white/20 backdrop-blur-md hover:bg-white/20 transition rounded-md"
         >
           {isMuted ? "Unmute Music" : "Mute Music"}
         </Button>
