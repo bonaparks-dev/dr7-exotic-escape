@@ -19,7 +19,7 @@ export function HeroSection() {
     const audio = audioRef.current;
     if (audio) {
       audio.muted = true; // ← pour que le navigateur accepte l'autoplay
-      audio.volume = 0.10;
+      audio.volume = 0.20;
       audio.play().then(() => {
         audio.muted = false; // ← remet le son après autoplay
         setIsMuted(false);
