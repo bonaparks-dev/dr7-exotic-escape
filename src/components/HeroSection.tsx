@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -6,7 +6,6 @@ export function HeroSection() {
   const { t } = useLanguage();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
 
   const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     console.error("Video failed to load:", e);
@@ -16,38 +15,19 @@ export function HeroSection() {
     console.log("Video loaded successfully");
   };
 
-  useEffect(() => {
-    const handleUserInteraction = () => {
-      if (hasInteracted) return;
-      setHasInteracted(true);
-
-      const audio = audioRef.current;
-      if (audio) {
-        audio.muted = false;
-        audio.volume = 0.2;
-        audio
-          .play()
-          .then(() => {
-            setIsMuted(false);
-          })
-          .catch((error) => {
-            console.log("Autoplay failed:", error);
-          });
-      }
-
-      // Remove listeners after first interaction
-      window.removeEventListener("click", handleUserInteraction);
-      window.removeEventListener("scroll", handleUserInteraction);
-    };
-
-    window.addEventListener("click", handleUserInteraction);
-    window.addEventListener("scroll", handleUserInteraction);
-
-    return () => {
-      window.removeEventListener("click", handleUserInteraction);
-      window.removeEventListener("scroll", handleUserInteraction);
-    };
-  }, [hasInteracted]);
+  const handleAudioLoad = () => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.muted = true; // ← pour que le navigateur accepte l'autoplay
+      audio.volume = 0.05;
+      audio.play().then(() => {
+        audio.muted = false; // ← remet le son après autoplay
+        setIsMuted(false);
+      }).catch((error) => {
+        console.log("Audio autoplay blocked by browser:", error);
+      });
+    }
+  };
 
   const toggleAudio = () => {
     const audio = audioRef.current;
@@ -81,8 +61,9 @@ export function HeroSection() {
         ref={audioRef}
         autoPlay
         loop
-        muted // required for initial autoplay
+        muted // ← indispensable pour contourner le blocage initial
         className="hidden"
+        onLoadedData={handleAudioLoad}
       >
         <source src="/cosmic.mp3" type="audio/mpeg" />
       </audio>
