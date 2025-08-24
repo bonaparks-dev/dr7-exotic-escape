@@ -27,8 +27,8 @@ interface Villa {
 const villas: Villa[] = [
   {
     id: 1,
-    title: "Villa Elicriso Luxury",
-    location: "Geremeas (CA), Sardegna",
+    title: "Villa Elicriso - Luxury 50m from the Beach",
+    location: "Geremeas, Sardegna",
     distanceToBeach: "50m dalla Spiaggia",
     price: "€2,500",
     nightly: 2500,
@@ -41,89 +41,89 @@ const villas: Villa[] = [
       "/lovable-uploads/18f8724c-e423-4c66-a32d-807b53d368f5.png",
       "/lovable-uploads/1630985d-a23b-4344-a01f-886c5fa2be7b.png"
     ],
-    description: "Benvenuti a Villa Elicriso, una residenza esclusiva situata a Geremeas, a soli 50 metri da una spiaggia incontaminata tra le più belle della Sardegna.",
+    description: "Villa di lusso con piscina riscaldata e vista mare a soli 50 metri dalla spiaggia incontaminata di Geremeas.",
     rating: 4.9,
     reviewCount: 28
   },
   {
     id: 2,
-    title: "Villa Azzurra Mare",
-    location: "Costa Smeralda, Sardegna",
-    distanceToBeach: "30m dalla Spiaggia",
-    price: "€3,200",
-    nightly: 3200,
-    maxGuests: 12,
-    bedrooms: 6,
-    bathrooms: 5,
-    images: [
-      "/lovable-uploads/5e5637a8-a5f2-4706-82f7-04258ae88ed9.png",
-      "/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png",
-      "/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png",
-      "/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png"
-    ],
-    description: "Una villa esclusiva sulla Costa Smeralda con vista mozzafiato sul mare cristallino e accesso diretto alla spiaggia privata.",
-    rating: 4.8,
-    reviewCount: 42
-  },
-  {
-    id: 3,
-    title: "Villa Bellavista",
-    location: "Portofino, Liguria",
-    distanceToBeach: "100m dalla Spiaggia",
-    price: "€2,800",
-    nightly: 2800,
-    maxGuests: 8,
-    bedrooms: 4,
-    bathrooms: 3,
-    images: [
-      "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
-      "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
-      "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png",
-      "/lovable-uploads/18f8724c-e423-4c66-a32d-807b53d368f5.png"
-    ],
-    description: "Villa elegante nel cuore di Portofino con terrazza panoramica e giardino mediterraneo, perfetta per una vacanza di lusso.",
-    rating: 4.7,
-    reviewCount: 31
-  },
-  {
-    id: 4,
-    title: "Villa Sole & Mare",
-    location: "Amalfi, Campania",
-    distanceToBeach: "80m dalla Spiaggia",
-    price: "€2,200",
-    nightly: 2200,
-    maxGuests: 10,
-    bedrooms: 5,
-    bathrooms: 4,
-    images: [
-      "/lovable-uploads/1630985d-a23b-4344-a01f-886c5fa2be7b.png",
-      "/lovable-uploads/5e5637a8-a5f2-4706-82f7-04258ae88ed9.png",
-      "/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png",
-      "/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png"
-    ],
-    description: "Villa tradizionale con vista sulla costiera amalfitana, piscina infinity e terrazze panoramiche su uno dei litorali più belli d'Italia.",
-    rating: 4.9,
-    reviewCount: 56
-  },
-  {
-    id: 5,
-    title: "Villa Tramonto",
-    location: "Taormina, Sicilia",
-    distanceToBeach: "200m dalla Spiaggia",
+    title: "Juniper House - Villa by the Sea",
+    location: "Costa del Sud, Sardegna",
+    distanceToBeach: "Accesso diretto al mare",
     price: "€1,800",
     nightly: 1800,
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
     images: [
+      "/lovable-uploads/5e5637a8-a5f2-4706-82f7-04258ae88ed9.png",
+      "/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png",
+      "/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png",
+      "/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png"
+    ],
+    description: "Villa elegante con vista mare mozzafiato e accesso diretto alla spiaggia privata.",
+    rating: 4.8,
+    reviewCount: 22
+  },
+  {
+    id: 3,
+    title: "Villa Ambra - with cliffside pool and private access to the sea",
+    location: "Costa Smeralda, Sardegna",
+    distanceToBeach: "Accesso privato al mare",
+    price: "€4,200",
+    nightly: 4200,
+    maxGuests: 12,
+    bedrooms: 6,
+    bathrooms: 5,
+    images: [
+      "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
+      "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
+      "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png",
+      "/lovable-uploads/18f8724c-e423-4c66-a32d-807b53d368f5.png"
+    ],
+    description: "Villa esclusiva di 400m² con piscina a strapiombo sul mare e accesso privato alla spiaggia.",
+    rating: 4.9,
+    reviewCount: 35
+  },
+  {
+    id: 4,
+    title: "Villa Lolly - Blue Bay",
+    location: "Blue Bay, Sardegna",
+    distanceToBeach: "Vista mare",
+    price: "€1,600",
+    nightly: 1600,
+    maxGuests: 6,
+    bedrooms: 3,
+    bathrooms: 2,
+    images: [
+      "/lovable-uploads/1630985d-a23b-4344-a01f-886c5fa2be7b.png",
+      "/lovable-uploads/5e5637a8-a5f2-4706-82f7-04258ae88ed9.png",
+      "/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png",
+      "/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png"
+    ],
+    description: "Villa moderna con piscina privata e vista panoramica sulla splendida Blue Bay.",
+    rating: 4.7,
+    reviewCount: 18
+  },
+  {
+    id: 5,
+    title: "Villa Glicine - Villa 100 mt from the beach",
+    location: "Costa del Sud, Sardegna",
+    distanceToBeach: "100m dalla Spiaggia",
+    price: "€2,200",
+    nightly: 2200,
+    maxGuests: 9,
+    bedrooms: 4,
+    bathrooms: 3,
+    images: [
       "/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png",
       "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
       "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
       "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png"
     ],
-    description: "Villa con vista sull'Etna e sul mare, immersa nel verde di Taormina con piscina privata e giardino curato.",
+    description: "Villa tradizionale sarda a soli 100 metri dalla spiaggia con giardino mediterraneo.",
     rating: 4.6,
-    reviewCount: 23
+    reviewCount: 25
   }
 ];
 
