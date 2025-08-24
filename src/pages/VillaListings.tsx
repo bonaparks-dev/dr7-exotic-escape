@@ -160,9 +160,9 @@ export default function VillaListings() {
         <div className="container mx-auto px-4">
           {/* Page Header */}
           <div className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Ville di Lusso</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('villa.listings.title')}</h1>
             <p className="text-xl text-white/80">
-              Scopri le nostre ville esclusive con servizi concierge 24/7
+              {t('villa.listings.subtitle')}
             </p>
           </div>
 
@@ -235,7 +235,7 @@ export default function VillaListings() {
                   <div className="flex items-end justify-between">
                     <div>
                       <div className="text-2xl font-bold">{villa.price}</div>
-                      <div className="text-white/70 text-sm">per notte</div>
+                      <div className="text-white/70 text-sm">{t('villa.listings.perNight')}</div>
                     </div>
                     <Button
                       variant="outline"
@@ -246,7 +246,7 @@ export default function VillaListings() {
                         handleVillaClick(villa.id);
                       }}
                     >
-                      Dettagli
+                      {t('villa.listings.discoverMore')}
                     </Button>
                   </div>
                 </CardContent>
@@ -258,17 +258,17 @@ export default function VillaListings() {
           <div className="mt-16 text-center">
             <div className="bg-white/5 border border-white/20 rounded-lg p-8">
               <h2 className="text-2xl font-bold mb-4">
-                Non trovi la villa perfetta?
+                {t('villa.listings.notFoundTitle')}
               </h2>
               <p className="text-white/80 mb-6">
-                Il nostro team concierge può aiutarti a trovare l'alloggio ideale per le tue esigenze
+                {t('villa.listings.notFoundDesc')}
               </p>
               <Button
                 onClick={() => window.open("https://wa.me/393457905205", "_blank")}
                 variant="luxury"
                 size="lg"
               >
-                Contatta il Concierge
+                {t('villa.listings.contactConcierge')}
               </Button>
             </div>
           </div>

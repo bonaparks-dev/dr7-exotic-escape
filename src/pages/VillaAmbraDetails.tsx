@@ -104,7 +104,7 @@ export default function VillaAmbraDetails() {
     const { nights, total } = calculateTotal();
     if (nights <= 0) return "";
     
-    return `Ciao! Sono interessato a prenotare ${villa.title} per ${guests} ospiti dal ${checkIn?.toLocaleDateString('it-IT')} al ${checkOut?.toLocaleDateString('it-IT')} (${nights} notti). Prezzo totale: €${total.toLocaleString()}`;
+    return `Ciao! Sono interessato a prenotare ${villa.title} per ${guests} ${t('villa.details.guests')} dal ${checkIn?.toLocaleDateString('it-IT')} al ${checkOut?.toLocaleDateString('it-IT')} (${nights} ${t('villa.details.nights')}). Prezzo totale: €${total.toLocaleString()}`;
   };
 
   const handleWhatsApp = () => {
@@ -265,7 +265,7 @@ export default function VillaAmbraDetails() {
                   <div className="flex items-center gap-1">
                     <Star className="w-5 h-5 fill-current text-white" />
                     <span className="font-medium">{villa.rating}</span>
-                    <span className="text-white/70">· {villa.reviewCount} recensioni</span>
+                    <span className="text-white/70">· {villa.reviewCount} {t('language') === 'it' ? 'recensioni' : 'reviews'}</span>
                   </div>
                   <div className="flex items-center gap-1 text-white/70">
                     <MapPin className="w-4 h-4" />
@@ -276,15 +276,15 @@ export default function VillaAmbraDetails() {
                 <div className="flex items-center gap-6 text-white/80">
                   <div className="flex items-center gap-1">
                     <Users className="w-4 h-4" />
-                    <span>{villa.maxGuests} ospiti</span>
+                    <span>{villa.maxGuests} {t('villa.details.guests')}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Bed className="w-4 h-4" />
-                    <span>{villa.bedrooms} camere</span>
+                    <span>{villa.bedrooms} {t('villa.details.rooms')}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Bath className="w-4 h-4" />
-                    <span>{villa.bathrooms} bagni</span>
+                    <span>{villa.bathrooms} {t('villa.details.bathrooms')}</span>
                   </div>
                   <div className="text-sm font-medium">
                     {villa.size}
@@ -294,7 +294,7 @@ export default function VillaAmbraDetails() {
 
               {/* Description */}
               <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-4">La Villa</h2>
+                <h2 className="text-2xl font-bold mb-4">{t('villa.details.theVilla')}</h2>
                 <p className="text-white/80 leading-relaxed text-lg">
                   {villa.description}
                 </p>
@@ -302,7 +302,7 @@ export default function VillaAmbraDetails() {
 
               {/* Comfort e Servizi */}
               <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">Comfort e Servizi</h2>
+                <h2 className="text-2xl font-bold mb-6">{t('villa.details.comfortServices')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {villa.amenities.map((amenity, index) => (
                     <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
@@ -315,7 +315,7 @@ export default function VillaAmbraDetails() {
 
               {/* Spazi Interni */}
               <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">Spazi Interni</h2>
+                <h2 className="text-2xl font-bold mb-6">{t('villa.details.interiorSpaces')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {villa.features.map((feature, index) => (
                     <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
@@ -328,7 +328,7 @@ export default function VillaAmbraDetails() {
 
               {/* Posizione */}
               <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">Posizione</h2>
+                <h2 className="text-2xl font-bold mb-6">{t('villa.details.position')}</h2>
                 <p className="text-white/80 mb-6">
                   Situata in una posizione privilegiata sulla Costa Smeralda, Villa Ambra offre un accesso esclusivo al mare e viste panoramiche mozzafiato. 
                   La villa si trova in una zona tranquilla e riservata, perfetta per chi cerca privacy e lusso.
@@ -344,7 +344,7 @@ export default function VillaAmbraDetails() {
 
               {/* Servizi Extra */}
               <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">Servizi Extra (su richiesta)</h2>
+                <h2 className="text-2xl font-bold mb-6">{t('villa.details.extraServices')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {villa.extraServices.map((service, index) => (
                     <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
@@ -363,14 +363,14 @@ export default function VillaAmbraDetails() {
                   <CardContent className="p-6">
                     <div className="mb-6">
                       <div className="text-3xl font-bold">{villa.price}</div>
-                      <div className="text-white/70">per notte</div>
+                      <div className="text-white/70">{t('villa.listings.perNight')}</div>
                     </div>
 
                     {/* Date Pickers */}
                     <div className="space-y-4 mb-6">
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="text-sm text-white/70 mb-1 block">Check-in</label>
+                          <label className="text-sm text-white/70 mb-1 block">{t('villa.details.checkIn')}</label>
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button
@@ -381,7 +381,7 @@ export default function VillaAmbraDetails() {
                                 )}
                               >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {checkIn ? checkIn.toLocaleDateString('it-IT') : "Seleziona"}
+                                {checkIn ? checkIn.toLocaleDateString('it-IT') : t('villa.details.select')}
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0 pointer-events-auto" align="start">
@@ -398,7 +398,7 @@ export default function VillaAmbraDetails() {
                         </div>
 
                         <div>
-                          <label className="text-sm text-white/70 mb-1 block">Check-out</label>
+                          <label className="text-sm text-white/70 mb-1 block">{t('villa.details.checkOut')}</label>
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button
@@ -409,7 +409,7 @@ export default function VillaAmbraDetails() {
                                 )}
                               >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {checkOut ? checkOut.toLocaleDateString('it-IT') : "Seleziona"}
+                                {checkOut ? checkOut.toLocaleDateString('it-IT') : t('villa.details.select')}
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0 pointer-events-auto" align="start">
@@ -428,7 +428,7 @@ export default function VillaAmbraDetails() {
 
                       {/* Guests Selector */}
                       <div>
-                        <label className="text-sm text-white/70 mb-1 block">Ospiti</label>
+                        <label className="text-sm text-white/70 mb-1 block">{t('villa.details.guests')}</label>
                         <div className="flex items-center justify-between p-3 bg-white/5 border border-white/20 rounded-md">
                           <Button
                             variant="outline"
@@ -439,7 +439,7 @@ export default function VillaAmbraDetails() {
                           >
                             <Minus className="h-4 w-4" />
                           </Button>
-                          <span className="text-white font-medium">{guests} ospiti</span>
+                          <span className="text-white font-medium">{guests} {t('villa.details.guests')}</span>
                           <Button
                             variant="outline"
                             size="icon"
@@ -457,20 +457,20 @@ export default function VillaAmbraDetails() {
                     {pricing.nights > 0 && (
                       <div className="space-y-2 mb-6 p-4 bg-white/5 rounded-lg border border-white/10">
                         <div className="flex justify-between text-sm">
-                          <span className="text-white/70">{villa.price} × {pricing.nights} notti</span>
+                          <span className="text-white/70">{villa.price} × {pricing.nights} {t('villa.details.nights')}</span>
                           <span className="text-white">€{pricing.subtotal.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-white/70">Pulizie</span>
+                          <span className="text-white/70">{t('villa.details.cleaning')}</span>
                           <span className="text-white">€{pricing.cleaning}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-white/70">Commissioni servizio</span>
+                          <span className="text-white/70">{t('villa.details.serviceFee')}</span>
                           <span className="text-white">€{pricing.service}</span>
                         </div>
                         <div className="border-t border-white/10 pt-2">
                           <div className="flex justify-between font-bold">
-                            <span>Totale</span>
+                            <span>{t('villa.details.total')}</span>
                             <span>€{pricing.total.toLocaleString()}</span>
                           </div>
                         </div>
@@ -483,11 +483,11 @@ export default function VillaAmbraDetails() {
                       disabled={!canBook}
                       className="w-full bg-white text-black hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed font-medium py-3"
                     >
-                      Prenota Ora
+                      {t('villa.details.bookNow')}
                     </Button>
 
                     <p className="text-xs text-white/60 text-center mt-3">
-                      Conferma istantanea via WhatsApp
+                      {t('villa.details.instantConfirm')}
                     </p>
                   </CardContent>
                 </Card>
@@ -500,10 +500,10 @@ export default function VillaAmbraDetails() {
             <Card className="bg-white/5 border-white/20">
               <CardContent className="p-8 text-center">
                 <h2 className="text-2xl font-bold mb-4">
-                  Hai domande su Villa Ambra?
+                  {t('villa.details.questionsTitle')}
                 </h2>
                 <p className="text-white/80 mb-6">
-                  Il nostro team concierge è disponibile 24/7 per assistenza personalizzata e servizi esclusivi
+                  {t('villa.details.questionsDesc')}
                 </p>
                 <Button
                   onClick={handleWhatsApp}
@@ -511,7 +511,7 @@ export default function VillaAmbraDetails() {
                   size="lg"
                   className="border-white/20 text-white hover:bg-white/10"
                 >
-                  Contatta il Nostro Concierge
+                  {t('villa.details.contactTeam')}
                 </Button>
               </CardContent>
             </Card>
