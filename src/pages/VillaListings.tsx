@@ -124,6 +124,86 @@ const villas: Villa[] = [
     description: "Villa tradizionale sarda a soli 100 metri dalla spiaggia con giardino mediterraneo.",
     rating: 4.6,
     reviewCount: 25
+  },
+  {
+    id: 6,
+    title: "LAJ House, Cagliari center",
+    location: "Cagliari Centro, Sardegna",
+    distanceToBeach: "Centro città",
+    price: "€1,200",
+    nightly: 1200,
+    maxGuests: 4,
+    bedrooms: 2,
+    bathrooms: 2,
+    images: [
+      "/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png",
+      "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
+      "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
+      "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png"
+    ],
+    description: "Casa elegante di 250m² nel centro storico di Cagliari con vista sulla città e comfort moderni.",
+    rating: 4.5,
+    reviewCount: 15
+  },
+  {
+    id: 7,
+    title: "Villa Josy - Villa by the Sea with Heated Outdoor Jacuzzi",
+    location: "Costa del Sud, Sardegna",
+    distanceToBeach: "Accesso diretto al mare",
+    price: "€1,900",
+    nightly: 1900,
+    maxGuests: 6,
+    bedrooms: 3,
+    bathrooms: 2,
+    images: [
+      "/lovable-uploads/1630985d-a23b-4344-a01f-886c5fa2be7b.png",
+      "/lovable-uploads/5e5637a8-a5f2-4706-82f7-04258ae88ed9.png",
+      "/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png",
+      "/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png"
+    ],
+    description: "Villa esclusiva sul mare con jacuzzi riscaldata all'aperto e accesso privato alla spiaggia.",
+    rating: 4.8,
+    reviewCount: 29
+  },
+  {
+    id: 8,
+    title: "White Villa",
+    location: "Costa Smeralda, Sardegna",
+    distanceToBeach: "Vista mare",
+    price: "€2,800",
+    nightly: 2800,
+    maxGuests: 8,
+    bedrooms: 4,
+    bathrooms: 3,
+    images: [
+      "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
+      "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
+      "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png",
+      "/lovable-uploads/18f8724c-e423-4c66-a32d-807b53d368f5.png"
+    ],
+    description: "Villa moderna di 200m² con design minimalista, vista panoramica sul mare e spazi esterni raffinati.",
+    rating: 4.7,
+    reviewCount: 33
+  },
+  {
+    id: 9,
+    title: "Villa Crystal Rock privacy on the sea, heated pool",
+    location: "Costa Smeralda, Sardegna",
+    distanceToBeach: "Accesso privato al mare",
+    price: "€3,500",
+    nightly: 3500,
+    maxGuests: 4,
+    bedrooms: 2,
+    bathrooms: 2,
+    images: [
+      "/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png",
+      "/lovable-uploads/5e5637a8-a5f2-4706-82f7-04258ae88ed9.png",
+      "/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png",
+      "/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png"
+    ],
+    description: "Villa esclusiva di 150m² con piscina riscaldata, privacy totale sul mare e design di lusso contemporaneo.",
+    rating: 4.9,
+    reviewCount: 18
   }
 ];
 
@@ -167,7 +247,7 @@ export default function VillaListings() {
           </div>
 
           {/* Villa Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {villas.map((villa) => (
               <Card
                 key={villa.id}
