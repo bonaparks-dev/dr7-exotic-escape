@@ -47,7 +47,7 @@ const villas: Villa[] = [
   },
   {
     id: 2,
-    title: "Ginepro House - Villa by the Sea",
+    title: "Juniper House - Villa by the Sea",
     location: "Costa del Sud, Sardegna",
     distanceToBeach: "Accesso diretto al mare",
     price: "€1,800",
@@ -56,10 +56,10 @@ const villas: Villa[] = [
     bedrooms: 3,
     bathrooms: 2,
     images: [
-      "/lovable-uploads/5e5637a8-a5f2-4706-82f7-04258ae88ed9.png",
-      "/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png",
-      "/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png",
-      "/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png"
+      "/ginepro1.png",
+      "/ginepro2.png",
+      "/ginepro3.png",
+      "/ginepro4.png"
     ],
     description: "Villa elegante con vista mare mozzafiato e accesso diretto alla spiaggia privata.",
     rating: 4.8,
