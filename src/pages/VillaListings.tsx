@@ -76,9 +76,9 @@ const villas: Villa[] = [
     bedrooms: 6,
     bathrooms: 5,
     images: [
-      "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
-      "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
-      "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png",
+      "/ambra1.png",
+      "/ambra2.png",
+      "/ambra3.png",
       "/lovable-uploads/18f8724c-e423-4c66-a32d-807b53d368f5.png"
     ],
     description: "Villa esclusiva di 400m² con piscina a strapiombo sul mare e accesso privato alla spiaggia.",
