@@ -47,7 +47,7 @@ const villas: Villa[] = [
   },
   {
     id: 2,
-    title: "Juniper House - Villa by the Sea",
+    title: "Ginepro House - Villa by the Sea",
     location: "Costa del Sud, Sardegna",
     distanceToBeach: "Accesso diretto al mare",
     price: "€1,800",
