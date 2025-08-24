@@ -134,9 +134,10 @@ export default function VillaListings() {
   const handleVillaClick = (villaId: number) => {
     if (villaId === 1) {
       navigate("/villa-rental");
+    } else if (villaId === 3) {
+      navigate("/villa-ambra-details");
     } else {
-      // For now, all other villas go to the same detail page
-      // In the future, you can create individual pages for each villa
+      // For other villas, go to the general detail page
       navigate("/villa-rental");
     }
   };
