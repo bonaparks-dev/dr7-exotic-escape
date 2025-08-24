@@ -311,12 +311,8 @@ export default function VillaListings() {
                     {villa.description}
                   </p>
 
-                  {/* Price */}
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <div className="text-2xl font-bold">{villa.price}</div>
-                      <div className="text-white/70 text-sm">{t('villa.listings.perNight')}</div>
-                    </div>
+                  {/* Action Button */}
+                  <div className="flex justify-end">
                     <Button
                       variant="outline"
                       size="sm"

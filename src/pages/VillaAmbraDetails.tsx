@@ -362,8 +362,8 @@ export default function VillaAmbraDetails() {
                 <Card className="bg-white/5 border-white/20">
                   <CardContent className="p-6">
                     <div className="mb-6">
-                      <div className="text-3xl font-bold">{villa.price}</div>
-                      <div className="text-white/70">{t('villa.listings.perNight')}</div>
+                      <div className="text-2xl font-bold">{t('villa.details.bookingTitle')}</div>
+                      <div className="text-white/70">{t('villa.details.selectDates')}</div>
                     </div>
 
                     {/* Date Pickers */}

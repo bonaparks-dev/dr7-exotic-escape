@@ -21,28 +21,28 @@ function Calendar({
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
         caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium text-luxury-black",
+        caption_label: "text-sm font-medium text-white",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-luxury-black border-luxury-black/20 hover:bg-luxury-white/20"
+          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-white border-white/20 hover:bg-white/20"
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
         head_cell:
-          "text-luxury-black rounded-md w-9 font-normal text-[0.8rem]",
+          "text-white rounded-md w-9 font-normal text-[0.8rem]",
         row: "flex w-full mt-2",
         cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal text-luxury-black aria-selected:opacity-100 hover:bg-luxury-black/10 hover:text-luxury-black"
+          "h-9 w-9 p-0 font-normal text-white aria-selected:opacity-100 hover:bg-white/10 hover:text-white"
         ),
         day_range_end: "day-range-end",
         day_selected:
-          "bg-luxury-black text-luxury-white hover:bg-luxury-black/90 hover:text-luxury-white focus:bg-luxury-black focus:text-luxury-white",
-        day_today: "bg-luxury-black/20 text-luxury-black font-semibold",
+          "bg-white text-black hover:bg-white/90 hover:text-black focus:bg-white focus:text-black",
+        day_today: "bg-white/20 text-white font-semibold",
         day_outside:
           "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
         day_disabled: "text-muted-foreground opacity-50",

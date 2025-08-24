@@ -278,6 +278,8 @@ const translations = {
     'villa.details.questionsTitle': 'Hai domande su Villa Ambra?',
     'villa.details.questionsDesc': 'Il nostro team concierge è disponibile 24/7 per assistenza personalizzata e servizi esclusivi',
     'villa.details.contactTeam': 'Contatta il Nostro Concierge',
+    'villa.details.bookingTitle': 'Prenotazione',
+    'villa.details.selectDates': 'Seleziona le date per richiedere informazioni',
   },
   en: {
     // Navigation
@@ -548,6 +550,8 @@ const translations = {
     'villa.details.questionsTitle': 'Have questions about Villa Ambra?',
     'villa.details.questionsDesc': 'Our concierge team is available 24/7 for personalized assistance and exclusive services',
     'villa.details.contactTeam': 'Contact Our Concierge',
+    'villa.details.bookingTitle': 'Booking',
+    'villa.details.selectDates': 'Select your dates to inquire',
   }
 };
 
