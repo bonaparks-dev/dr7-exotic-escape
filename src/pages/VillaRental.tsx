@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 import {
   addDays,
   format,
@@ -338,15 +339,16 @@ export default function VillaRental() {
                           <CalendarIcon className="w-4 h-4 opacity-70" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="p-0 bg-black border-white/20" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={checkIn}
-                          onSelect={(d) => setCheckInSafe(d)}
-                          disabled={(d) => isBefore(startOfDay(d), today)}
-                          initialFocus
-                        />
-                      </PopoverContent>
+                       <PopoverContent className="p-0 bg-black border-white/20" align="start">
+                         <Calendar
+                           mode="single"
+                           selected={checkIn}
+                           onSelect={(d) => setCheckInSafe(d)}
+                           disabled={(d) => isBefore(startOfDay(d), today)}
+                           initialFocus
+                           className={cn("p-3 pointer-events-auto")}
+                         />
+                       </PopoverContent>
                     </Popover>
                   </div>
 
@@ -363,15 +365,16 @@ export default function VillaRental() {
                           <CalendarIcon className="w-4 h-4 opacity-70" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="p-0 bg-black border-white/20" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={checkOut}
-                          onSelect={(d) => setCheckOutSafe(d)}
-                          disabled={(d) => !checkIn || !isBefore(startOfDay(checkIn), startOfDay(d))}
-                          initialFocus
-                        />
-                      </PopoverContent>
+                       <PopoverContent className="p-0 bg-black border-white/20" align="start">
+                         <Calendar
+                           mode="single"
+                           selected={checkOut}
+                           onSelect={(d) => setCheckOutSafe(d)}
+                           disabled={(d) => !checkIn || !isBefore(startOfDay(checkIn), startOfDay(d))}
+                           initialFocus
+                           className={cn("p-3 pointer-events-auto")}
+                         />
+                       </PopoverContent>
                     </Popover>
                   </div>
                 </div>
