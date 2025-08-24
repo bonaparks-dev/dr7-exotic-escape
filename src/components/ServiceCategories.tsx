@@ -37,7 +37,7 @@ export function ServiceCategories() {
       icon: Home,
       video: '/villa.MP4',
       buttonLabel: t('btn.learnmore'),
-      link: '/villa-rental'
+      link: '/villa-listings'
     },
     {
       id: 'helicopters',

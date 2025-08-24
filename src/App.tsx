@@ -10,6 +10,7 @@ import Services from "./pages/Services";
 import Rentals from "./pages/Rentals";
 import YachtRental from "./pages/YachtRental";
 import VillaRental from "./pages/VillaRental";
+import VillaListings from "./pages/VillaListings";
 import PremiumCarDetailing from "./pages/PremiumCarDetailing";
 import CookiePolicy from "./pages/CookiePolicy";
 import Lottery from "./pages/Lottery";
@@ -31,7 +32,8 @@ const App = () => (
             <Route path="/services" element={<Services />} />
             <Route path="/rentals" element={<Rentals />} />
             <Route path="/yacht-rental" element={<YachtRental />} />
-            <Route path="/villa-rental" element={<VillaRental />} />
+        <Route path="/villa-listings" element={<VillaListings />} />
+        <Route path="/villa-rental" element={<VillaRental />} />
             <Route path="/premium-car-detailing" element={<PremiumCarDetailing />} />
             <Route path="/dr7-concierge" element={<DR7Concierge />} />
             <Route path="/lottery" element={<Lottery />} />
