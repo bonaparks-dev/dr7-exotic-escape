@@ -36,10 +36,10 @@ const villas: Villa[] = [
     bedrooms: 4,
     bathrooms: 4,
     images: [
-      "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
-      "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png",
-      "/lovable-uploads/18f8724c-e423-4c66-a32d-807b53d368f5.png",
-      "/lovable-uploads/1630985d-a23b-4344-a01f-886c5fa2be7b.png"
+      "/elicriso1.png",
+      "/elicriso2.png",
+      "/elicriso3.png",
+      "/elicriso4.png"
     ],
     description: "Villa di lusso con piscina riscaldata e vista mare a soli 50 metri dalla spiaggia incontaminata di Geremeas.",
     rating: 4.9,
