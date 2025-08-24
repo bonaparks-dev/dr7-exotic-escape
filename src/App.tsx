@@ -15,6 +15,7 @@ import PremiumCarDetailing from "./pages/PremiumCarDetailing";
 import CookiePolicy from "./pages/CookiePolicy";
 import Lottery from "./pages/Lottery";
 import VillaAmbraDetails from "./pages/VillaAmbraDetails";
+import JuniperHouseDetails from "./pages/JuniperHouseDetails";
 import NotFound from "./pages/NotFound";
 import DR7Concierge from "./components/DR7Concierge";
 
@@ -35,7 +36,8 @@ const App = () => (
             <Route path="/yacht-rental" element={<YachtRental />} />
             <Route path="/villa-rental" element={<VillaRental />} />
             <Route path="/villa-listings" element={<VillaListings />} />
-            <Route path="/villa-ambra-details" element={<VillaAmbraDetails />} />
+          <Route path="/villa-ambra-details" element={<VillaAmbraDetails />} />
+          <Route path="/juniper-house-details" element={<JuniperHouseDetails />} />
             <Route path="/premium-car-detailing" element={<PremiumCarDetailing />} />
             <Route path="/dr7-concierge" element={<DR7Concierge />} />
             <Route path="/lottery" element={<Lottery />} />

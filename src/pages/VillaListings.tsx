@@ -214,6 +214,8 @@ export default function VillaListings() {
   const handleVillaClick = (villaId: number) => {
     if (villaId === 1) {
       navigate("/villa-rental");
+    } else if (villaId === 2) {
+      navigate("/juniper-house-details");
     } else if (villaId === 3) {
       navigate("/villa-ambra-details");
     } else {
