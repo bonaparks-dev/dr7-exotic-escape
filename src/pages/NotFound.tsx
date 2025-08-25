@@ -1,9 +1,11 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
 
 const NotFound = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -18,9 +20,13 @@ const NotFound = () => {
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-4 text-luxury-gold">{t('notfound.title')}</h1>
         <p className="text-xl text-muted-foreground mb-4">{t('notfound.subtitle')}</p>
-        <a href="/" className="text-luxury-gold hover:text-luxury-gold/80 underline">
+        <Button 
+          onClick={() => navigate("/")} 
+          variant="outline"
+          className="text-luxury-gold border-luxury-gold hover:bg-luxury-gold hover:text-black"
+        >
           {t('notfound.returnhome')}
-        </a>
+        </Button>
       </div>
     </div>
   );

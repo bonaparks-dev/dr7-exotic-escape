@@ -98,26 +98,33 @@ export function Header() {
                       {t("nav.detailing")}
                     </a>
                   </li>
-                  <li>
-                    <a
-                      href="/services"
-                      className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
-                    >
-                      {t("nav.rapidservices")}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+                   <li>
+                     <a
+                       href="/services"
+                       className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
+                     >
+                       {t("nav.rapidservices")}
+                     </a>
+                   </li>
+                 </ul>
+               </div>
+             </div>
 
-            <a
-              href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground hover:text-muted-foreground transition-colors text-sm uppercase"
-            >
-              {t("nav.contact")}
-            </a>
+             <a
+               href="/villa-listings"
+               className="text-foreground hover:text-muted-foreground transition-colors text-sm uppercase"
+             >
+               {t("nav.villas")}
+             </a>
+
+             <a
+               href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services."
+               target="_blank"
+               rel="noopener noreferrer"
+               className="text-foreground hover:text-muted-foreground transition-colors text-sm uppercase"
+             >
+               {t("nav.contact")}
+             </a>
           </nav>
         </div>
       </header>
@@ -162,25 +169,33 @@ export function Header() {
                 >
                   {t("nav.detailing")}
                 </a>
-                <a
-                  href="/services"
-                  className="block text-sm text-foreground hover:text-muted-foreground"
-                >
-                  {t("nav.rapidservices")}
-                </a>
-              </div>
-            )}
-          </div>
+                 <a
+                   href="/services"
+                   className="block text-sm text-foreground hover:text-muted-foreground"
+                 >
+                   {t("nav.rapidservices")}
+                 </a>
+               </div>
+             )}
+           </div>
 
-          <a
-            href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services."
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setIsMenuOpen(false)}
-            className="text-xl font-semibold"
-          >
-            {t("nav.contact")}
-          </a>
+           <a
+             href="/villa-listings"
+             onClick={() => setIsMenuOpen(false)}
+             className="text-xl font-semibold"
+           >
+             {t("nav.villas")}
+           </a>
+
+           <a
+             href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services."
+             target="_blank"
+             rel="noopener noreferrer"
+             onClick={() => setIsMenuOpen(false)}
+             className="text-xl font-semibold"
+           >
+             {t("nav.contact")}
+           </a>
         </div>
       )}
     </>

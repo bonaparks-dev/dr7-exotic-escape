@@ -35,12 +35,12 @@ export default function VillaLollyDetails() {
 
       {/* Back Button */}
       <Button
-        onClick={() => navigate("/villa-listings")}
+        onClick={() => navigate("/")}
         className="fixed top-24 left-4 z-40 bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-sm"
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        {t("rentals.backto")} Ville
+        {t("rentals.backto")}
       </Button>
 
       <main className="pt-32 pb-16">
