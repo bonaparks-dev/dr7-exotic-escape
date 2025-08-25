@@ -156,10 +156,10 @@ const villas: Villa[] = [
     bedrooms: 3,
     bathrooms: 2,
     images: [
-      "/lovable-uploads/1630985d-a23b-4344-a01f-886c5fa2be7b.png",
-      "/lovable-uploads/5e5637a8-a5f2-4706-82f7-04258ae88ed9.png",
-      "/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png",
-      "/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png"
+      "/josy1.png",
+      "/josy2.png",
+      "/josy3.png",
+      "/josy4.png"
     ],
     description: "Villa esclusiva sul mare con jacuzzi riscaldata all'aperto e accesso privato alla spiaggia.",
     rating: 4.8,
