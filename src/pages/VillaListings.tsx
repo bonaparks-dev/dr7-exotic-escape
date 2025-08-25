@@ -218,6 +218,8 @@ export default function VillaListings() {
       navigate("/juniper-house-details");
     } else if (villaId === 3) {
       navigate("/villa-ambra-details");
+    } else if (villaId === 4) {
+      navigate("/villa-lolly-details");
     } else {
       // For other villas, go to the general detail page
       navigate("/villa-rental");
