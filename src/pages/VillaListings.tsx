@@ -136,10 +136,10 @@ const villas: Villa[] = [
     bedrooms: 2,
     bathrooms: 2,
     images: [
-      "/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png",
-      "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
-      "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
-      "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png"
+      "/laj1.png",
+      "/laj2.png",
+      "/laj3.png",
+      "/laj4.png"
     ],
     description: "Casa elegante di 250m² nel centro storico di Cagliari con vista sulla città e comfort moderni.",
     rating: 4.5,
