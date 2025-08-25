@@ -222,6 +222,8 @@ export default function VillaListings() {
       navigate("/villa-lolly-details");
     } else if (villaId === 5) {
       navigate("/villa-glicine-details");
+    } else if (villaId === 6) {
+      navigate("/villa-laj-details");
     } else if (villaId === 8) {
       navigate("/villa-white-details");
     } else {

@@ -19,6 +19,7 @@ import JuniperHouseDetails from "./pages/JuniperHouseDetails";
 import VillaLollyDetails from "./pages/VillaLollyDetails";
 import VillaGlicineDetails from "./pages/VillaGlicineDetails";
 import VillaWhiteDetails from "./pages/VillaWhiteDetails";
+import VillaLAJDetails from "./pages/VillaLAJDetails";
 import NotFound from "./pages/NotFound";
 import DR7Concierge from "./components/DR7Concierge";
 
@@ -44,6 +45,7 @@ const App = () => (
            <Route path="/villa-lolly-details" element={<VillaLollyDetails />} />
            <Route path="/villa-glicine-details" element={<VillaGlicineDetails />} />
            <Route path="/villa-white-details" element={<VillaWhiteDetails />} />
+           <Route path="/villa-laj-details" element={<VillaLAJDetails />} />
             <Route path="/premium-car-detailing" element={<PremiumCarDetailing />} />
             <Route path="/dr7-concierge" element={<DR7Concierge />} />
             <Route path="/lottery" element={<Lottery />} />
