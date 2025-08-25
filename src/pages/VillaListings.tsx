@@ -220,6 +220,8 @@ export default function VillaListings() {
       navigate("/villa-ambra-details");
     } else if (villaId === 4) {
       navigate("/villa-lolly-details");
+    } else if (villaId === 5) {
+      navigate("/villa-glicine-details");
     } else {
       // For other villas, go to the general detail page
       navigate("/villa-rental");
