@@ -116,10 +116,10 @@ const villas: Villa[] = [
     bedrooms: 4,
     bathrooms: 3,
     images: [
-      "/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png",
-      "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
-      "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
-      "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png"
+      "/glicine1.png",
+      "/glicine2.png",
+      "/glicine3.png",
+      "/glicine4.png"
     ],
     description: "Villa tradizionale sarda a soli 100 metri dalla spiaggia con giardino mediterraneo.",
     rating: 4.6,
@@ -176,10 +176,10 @@ const villas: Villa[] = [
     bedrooms: 4,
     bathrooms: 3,
     images: [
-      "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
-      "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
-      "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png",
-      "/lovable-uploads/18f8724c-e423-4c66-a32d-807b53d368f5.png"
+      "/white1.png",
+      "/white2.png",
+      "/white3.png",
+      "/white4.png"
     ],
     description: "Villa moderna di 200m² con design minimalista, vista panoramica sul mare e spazi esterni raffinati.",
     rating: 4.7,
@@ -196,10 +196,10 @@ const villas: Villa[] = [
     bedrooms: 2,
     bathrooms: 2,
     images: [
-      "/lovable-uploads/f625c9f3-98fc-4327-8e35-dea92f9b3761.png",
-      "/lovable-uploads/5e5637a8-a5f2-4706-82f7-04258ae88ed9.png",
-      "/lovable-uploads/35baebd1-ed65-4b10-9e99-85238b1a1e94.png",
-      "/lovable-uploads/1a77a331-00a9-4d17-966c-3e101a9fa94b.png"
+      "/crystal1.png",
+      "/crystal2.png",
+      "/crystal3.png",
+      "/crystal4.png"
     ],
     description: "Villa esclusiva di 150m² con piscina riscaldata, privacy totale sul mare e design di lusso contemporaneo.",
     rating: 4.9,
