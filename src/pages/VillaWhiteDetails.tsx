@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookingModal } from "@/components/BookingModal";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { ArrowLeft, MapPin, Users, Bed, Bath, Wifi, Car, Waves, Home, Sparkles, Shield, Calendar as CalendarIcon, MessageCircle } from "lucide-react";
@@ -15,10 +15,11 @@ import { cn } from "@/lib/utils";
 export default function VillaWhiteDetails() {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [showBookingModal, setShowBookingModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
+  const [isCheckOutOpen, setIsCheckOutOpen] = useState(false);
 
   const villa = {
     id: 8,
@@ -98,7 +99,7 @@ Thank you!`;
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        Torna alla Home
+        {t('btn.back')}
       </Button>
 
       <main className="pt-32 pb-16">
@@ -177,15 +178,6 @@ Thank you!`;
               <p className="text-lg text-white/80 mb-8 leading-relaxed">
                 {villa.fullDescription}
               </p>
-
-              <Button
-                onClick={() => setShowBookingModal(true)}
-                variant="luxury"
-                size="lg"
-                className="w-full md:w-auto"
-              >
-                {t('villa.book')}
-              </Button>
             </div>
           </div>
 
@@ -248,11 +240,10 @@ Thank you!`;
                 {t('villa.contact')}
               </p>
               
-              {/* Date Selection */}
               <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
                 <div>
                   <label className="text-sm text-white/70 mb-2 block">Check-in</label>
-                  <Popover>
+                  <Popover open={isCheckInOpen} onOpenChange={setIsCheckInOpen}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -262,14 +253,20 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkIn ? checkIn.toLocaleDateString() : "Select date"}
+                        {checkIn ? checkIn.toLocaleDateString() : "Seleziona data"}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
                         selected={checkIn}
-                        onSelect={setCheckIn}
+                        onSelect={(date) => {
+                          setCheckIn(date);
+                          setIsCheckInOpen(false);
+                          if (date) {
+                            setTimeout(() => setIsCheckOutOpen(true), 200);
+                          }
+                        }}
                         disabled={(date) => date < new Date()}
                         initialFocus
                       />
@@ -279,7 +276,7 @@ Thank you!`;
                 
                 <div>
                   <label className="text-sm text-white/70 mb-2 block">Check-out</label>
-                  <Popover>
+                  <Popover open={isCheckOutOpen} onOpenChange={setIsCheckOutOpen}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -289,14 +286,17 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkOut ? checkOut.toLocaleDateString() : "Select date"}
+                        {checkOut ? checkOut.toLocaleDateString() : "Seleziona data"}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
                         selected={checkOut}
-                        onSelect={setCheckOut}
+                        onSelect={(date) => {
+                          setCheckOut(date);
+                          setIsCheckOutOpen(false);
+                        }}
                         disabled={(date) => date < new Date() || (checkIn && date <= checkIn)}
                         initialFocus
                       />
@@ -313,7 +313,7 @@ Thank you!`;
                   className="bg-green-600 hover:bg-green-700"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
-                  {t('villa.book')}
+                  {t('villa.details.bookNow')}
                 </Button>
               </div>
             </div>
@@ -322,12 +322,6 @@ Thank you!`;
       </main>
 
       <Footer />
-
-      {/* Booking Modal */}
-      <BookingModal
-        open={showBookingModal}
-        onOpenChange={setShowBookingModal}
-      />
     </div>
   );
 }

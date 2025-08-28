@@ -9,16 +9,17 @@ import { Calendar } from "@/components/ui/calendar";
 import { ArrowLeft, MapPin, Star, Users, Bed, Bath, Wifi, Car, Waves, Home, Calendar as CalendarIcon, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { BookingModal } from "@/components/BookingModal";
+
 import { cn } from "@/lib/utils";
 
 export default function VillaLollyDetails() {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
+  const [isCheckOutOpen, setIsCheckOutOpen] = useState(false);
 
   const villaImages = [
     "/loly1.png",
@@ -64,7 +65,7 @@ Thank you!`;
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        Torna alla Home
+        {t('btn.back')}
       </Button>
 
       <main className="pt-32 pb-16">
@@ -149,15 +150,6 @@ Thank you!`;
                 </p>
               </div>
 
-              {/* Booking Button */}
-              <Button
-                onClick={() => setIsBookingModalOpen(true)}
-                size="lg"
-                variant="luxury"
-                className="w-full"
-              >
-                {t('villa.bookNow')}
-              </Button>
             </div>
           </div>
 
@@ -251,11 +243,10 @@ Thank you!`;
                 Il nostro team è a disposizione per aiutarti a pianificare la tua vacanza perfetta.
               </p>
               
-              {/* Date Selection */}
               <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
                 <div>
                   <label className="text-sm text-white/70 mb-2 block">Check-in</label>
-                  <Popover>
+                  <Popover open={isCheckInOpen} onOpenChange={setIsCheckInOpen}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -272,7 +263,13 @@ Thank you!`;
                       <Calendar
                         mode="single"
                         selected={checkIn}
-                        onSelect={setCheckIn}
+                        onSelect={(date) => {
+                          setCheckIn(date);
+                          setIsCheckInOpen(false);
+                          if (date) {
+                            setTimeout(() => setIsCheckOutOpen(true), 200);
+                          }
+                        }}
                         disabled={(date) => date < new Date()}
                         initialFocus
                       />
@@ -282,7 +279,7 @@ Thank you!`;
                 
                 <div>
                   <label className="text-sm text-white/70 mb-2 block">Check-out</label>
-                  <Popover>
+                  <Popover open={isCheckOutOpen} onOpenChange={setIsCheckOutOpen}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -299,7 +296,10 @@ Thank you!`;
                       <Calendar
                         mode="single"
                         selected={checkOut}
-                        onSelect={setCheckOut}
+                        onSelect={(date) => {
+                          setCheckOut(date);
+                          setIsCheckOutOpen(false);
+                        }}
                         disabled={(date) => date < new Date() || (checkIn && date <= checkIn)}
                         initialFocus
                       />
@@ -315,7 +315,7 @@ Thank you!`;
                 className="bg-green-600 hover:bg-green-700"
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
-                Prenota via WhatsApp
+                {t('villa.details.bookNow')}
               </Button>
             </div>
           </div>
@@ -323,11 +323,6 @@ Thank you!`;
       </main>
 
       <Footer />
-      
-      <BookingModal 
-        open={isBookingModalOpen}
-        onOpenChange={setIsBookingModalOpen}
-      />
     </div>
   );
 }
