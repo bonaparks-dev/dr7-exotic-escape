@@ -163,7 +163,7 @@ export default function VillaAmbraDetails() {
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        {t('rentals.backto')}
+        Torna alla Home
       </Button>
 
       {/* WhatsApp FAB */}
