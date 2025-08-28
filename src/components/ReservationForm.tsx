@@ -115,50 +115,75 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     return years;
   };
 
-  const isInsuranceEligible = (): { valid: boolean; message: string | null } => {
+  const getInsuranceEligibility = () => {
     const birthDate = parseDate(dob);
     const licenseStart = parseDate(licenseDate);
     const age = getAge(birthDate);
     const licenseYears = getLicenseYears(licenseStart);
 
+    return {
+      kasko: {
+        eligible: licenseYears >= 2,
+        reason: licenseYears < 2 ? (language === "it" ? "Richiede almeno 2 anni di patente" : "Requires at least 2 years license") : null
+      },
+      kaskoBlack: {
+        eligible: age >= 25 && licenseYears >= 5,
+        reason: age < 25 || licenseYears < 5 ? (
+          language === "it" 
+            ? `Richiede almeno 25 anni ${age < 25 ? `(hai ${age} anni)` : ''} e 5 anni di patente ${licenseYears < 5 ? `(hai ${licenseYears} anni di patente)` : ''}`
+            : `Requires at least 25 years old ${age < 25 ? `(you are ${age})` : ''} and 5 years license ${licenseYears < 5 ? `(you have ${licenseYears} years)` : ''}`
+        ) : null
+      },
+      kaskoSignature: {
+        eligible: age >= 30 && licenseYears >= 10,
+        reason: age < 30 || licenseYears < 10 ? (
+          language === "it" 
+            ? `Richiede almeno 30 anni ${age < 30 ? `(hai ${age} anni)` : ''} e 10 anni di patente ${licenseYears < 10 ? `(hai ${licenseYears} anni di patente)` : ''}`
+            : `Requires at least 30 years old ${age < 30 ? `(you are ${age})` : ''} and 10 years license ${licenseYears < 10 ? `(you have ${licenseYears} years)` : ''}`
+        ) : null
+      }
+    };
+  };
+
+  const isInsuranceEligible = (): { valid: boolean; message: string | null } => {
+    const eligibility = getInsuranceEligibility();
+    
     switch (insurance) {
       case "kasko":
-        if (licenseYears < 2) {
-          return {
-            valid: false,
-            message:
-              language === "it"
-                ? "Per la KASKO è necessario avere almeno 2 anni di patente."
-                : "KASKO requires at least 2 years of driving license.",
-          };
-        }
-        break;
+        return {
+          valid: eligibility.kasko.eligible,
+          message: eligibility.kasko.reason
+        };
       case "kasko-black":
-        if (age < 25 || licenseYears < 5) {
-          return {
-            valid: false,
-            message:
-              language === "it"
-                ? "Per la KASKO BLACK devi avere almeno 25 anni e 5 anni di patente."
-                : "KASKO BLACK requires at least 25 years of age and 5 years of driving license.",
-          };
-        }
-        break;
+        return {
+          valid: eligibility.kaskoBlack.eligible,
+          message: eligibility.kaskoBlack.reason
+        };
       case "kasko-signature":
-        if (age < 30 || licenseYears < 10) {
-          return {
-            valid: false,
-            message:
-              language === "it"
-                ? "Per la KASKO SIGNATURE devi avere almeno 30 anni e 10 anni di patente."
-                : "KASKO SIGNATURE requires at least 30 years of age and 10 years of driving license.",
-          };
-        }
-        break;
+        return {
+          valid: eligibility.kaskoSignature.eligible,
+          message: eligibility.kaskoSignature.reason
+        };
     }
 
     return { valid: true, message: null };
   };
+
+  // Auto-select valid insurance when current selection becomes invalid
+  useEffect(() => {
+    const eligibility = getInsuranceEligibility();
+    
+    if (!isInsuranceEligible().valid) {
+      // Find the best available insurance option
+      if (eligibility.kaskoSignature.eligible) {
+        setInsurance("kasko-signature");
+      } else if (eligibility.kaskoBlack.eligible) {
+        setInsurance("kasko-black");
+      } else if (eligibility.kasko.eligible) {
+        setInsurance("kasko");
+      }
+    }
+  }, [dob, licenseDate, language]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -393,10 +418,27 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                 id="licenseDate"
                 type="date"
                 value={licenseDate}
-                onChange={(e) => setLicenseDate(e.target.value)}
+                onChange={(e) => {
+                  setLicenseDate(e.target.value);
+                  // Show immediate feedback when license date changes
+                  const years = getLicenseYears(parseDate(e.target.value));
+                  if (years < 2 && insurance === "kasko") {
+                    toast({
+                      title: language === "it" ? "Assicurazione non disponibile" : "Insurance not available",
+                      description: language === "it" ? "Con meno di 2 anni di patente, l'assicurazione KASKO non è disponibile." : "With less than 2 years license, KASKO insurance is not available.",
+                      variant: "destructive"
+                    });
+                  }
+                }}
+                max={new Date().toISOString().split('T')[0]} // Can't be future date
                 className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
                 required
               />
+              {licenseDate && getLicenseYears(parseDate(licenseDate)) < 2 && (
+                <p className="text-amber-400 text-xs flex items-center gap-1">
+                  ⚠️ {language === "it" ? `Solo ${getLicenseYears(parseDate(licenseDate))} anni di patente - Opzioni assicurative limitate` : `Only ${getLicenseYears(parseDate(licenseDate))} years license - Limited insurance options`}
+                </p>
+              )}
             </div>
           </div>
 
@@ -406,31 +448,87 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
               {language === 'it' ? 'Assicurazione' : 'Insurance'}
             </Label>
             <RadioGroup value={insurance} onValueChange={setInsurance} className="space-y-3">
-              <div className="flex items-center space-x-2 p-3 rounded-lg border border-luxury-white/20">
-                <RadioGroupItem value="kasko" id="kasko" />
-                <Label htmlFor="kasko" className="text-luxury-white cursor-pointer flex-1">
+              {/* KASKO */}
+              <div className={cn(
+                "flex items-center space-x-2 p-3 rounded-lg border transition-all duration-200",
+                getInsuranceEligibility().kasko.eligible 
+                  ? "border-luxury-white/20 hover:border-luxury-white/40 cursor-pointer" 
+                  : "border-red-500/50 bg-red-500/10 cursor-not-allowed opacity-60"
+              )}>
+                <RadioGroupItem 
+                  value="kasko" 
+                  id="kasko" 
+                  disabled={!getInsuranceEligibility().kasko.eligible}
+                />
+                <Label htmlFor="kasko" className={cn(
+                  "flex-1",
+                  getInsuranceEligibility().kasko.eligible ? "text-luxury-white cursor-pointer" : "text-red-400 cursor-not-allowed"
+                )}>
                   <div className="font-medium">KASKO - €100/day</div>
                   <div className="text-sm text-luxury-white/70">
                     {language === 'it' ? 'Minimo 2 anni di patente' : 'Minimum 2 years license'}
                   </div>
+                  {getInsuranceEligibility().kasko.reason && (
+                    <div className="text-xs text-red-400 mt-1">
+                      ❌ {getInsuranceEligibility().kasko.reason}
+                    </div>
+                  )}
                 </Label>
               </div>
-              <div className="flex items-center space-x-2 p-3 rounded-lg border border-luxury-white/20">
-                <RadioGroupItem value="kasko-black" id="kasko-black" />
-                <Label htmlFor="kasko-black" className="text-luxury-white cursor-pointer flex-1">
+
+              {/* KASKO BLACK */}
+              <div className={cn(
+                "flex items-center space-x-2 p-3 rounded-lg border transition-all duration-200",
+                getInsuranceEligibility().kaskoBlack.eligible 
+                  ? "border-luxury-white/20 hover:border-luxury-white/40 cursor-pointer" 
+                  : "border-red-500/50 bg-red-500/10 cursor-not-allowed opacity-60"
+              )}>
+                <RadioGroupItem 
+                  value="kasko-black" 
+                  id="kasko-black" 
+                  disabled={!getInsuranceEligibility().kaskoBlack.eligible}
+                />
+                <Label htmlFor="kasko-black" className={cn(
+                  "flex-1",
+                  getInsuranceEligibility().kaskoBlack.eligible ? "text-luxury-white cursor-pointer" : "text-red-400 cursor-not-allowed"
+                )}>
                   <div className="font-medium">KASKO BLACK - €150/day</div>
                   <div className="text-sm text-luxury-white/70">
                     {language === 'it' ? 'Minimo 25 anni e 5 anni di patente' : 'Minimum 25 years old and 5 years license'}
                   </div>
+                  {getInsuranceEligibility().kaskoBlack.reason && (
+                    <div className="text-xs text-red-400 mt-1">
+                      ❌ {getInsuranceEligibility().kaskoBlack.reason}
+                    </div>
+                  )}
                 </Label>
               </div>
-              <div className="flex items-center space-x-2 p-3 rounded-lg border border-luxury-white/20">
-                <RadioGroupItem value="kasko-signature" id="kasko-signature" />
-                <Label htmlFor="kasko-signature" className="text-luxury-white cursor-pointer flex-1">
+
+              {/* KASKO SIGNATURE */}
+              <div className={cn(
+                "flex items-center space-x-2 p-3 rounded-lg border transition-all duration-200",
+                getInsuranceEligibility().kaskoSignature.eligible 
+                  ? "border-luxury-white/20 hover:border-luxury-white/40 cursor-pointer" 
+                  : "border-red-500/50 bg-red-500/10 cursor-not-allowed opacity-60"
+              )}>
+                <RadioGroupItem 
+                  value="kasko-signature" 
+                  id="kasko-signature" 
+                  disabled={!getInsuranceEligibility().kaskoSignature.eligible}
+                />
+                <Label htmlFor="kasko-signature" className={cn(
+                  "flex-1",
+                  getInsuranceEligibility().kaskoSignature.eligible ? "text-luxury-white cursor-pointer" : "text-red-400 cursor-not-allowed"
+                )}>
                   <div className="font-medium">KASKO SIGNATURE - €200/day</div>
                   <div className="text-sm text-luxury-white/70">
                     {language === 'it' ? 'Minimo 30 anni e 10 anni di patente' : 'Minimum 30 years old and 10 years license'}
                   </div>
+                  {getInsuranceEligibility().kaskoSignature.reason && (
+                    <div className="text-xs text-red-400 mt-1">
+                      ❌ {getInsuranceEligibility().kaskoSignature.reason}
+                    </div>
+                  )}
                 </Label>
               </div>
             </RadioGroup>
