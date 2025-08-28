@@ -42,10 +42,10 @@ export function Header() {
               {t("btn.whatsapp")}
             </Button>
 
-            {/* Mobile burger menu button – blanc transparent, burger noir */}
+            {/* Burger menu button – blanc transparent, burger noir */}
             <Button
               size="sm"
-              className="bg-white/20 text-black border border-white/30 hover:bg-white/30 transition md:hidden"
+              className="bg-white/20 text-black border border-white/30 hover:bg-white/30 transition"
               onClick={() => setIsMenuOpen(true)}
             >
               <Menu className="w-5 h-5" />
@@ -61,71 +61,6 @@ export function Header() {
             />
           </a>
 
-          {/* Menu desktop */}
-          <nav className="hidden md:flex items-center justify-center space-x-8 mt-4 font-seasons relative z-50">
-            <div className="relative group">
-              <a
-                href="#"
-                className="text-foreground hover:text-muted-foreground transition-colors text-sm uppercase"
-              >
-                {t("nav.services")}
-              </a>
-
-              {/* ✅ Correction ici : ajout de hover:block */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-52 bg-background/95 border border-border backdrop-blur-lg rounded-xl shadow-elegant hidden group-hover:block hover:block">
-                <ul className="flex flex-col py-2">
-                  <li>
-                    <a
-                      href="/rentals"
-                      className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
-                    >
-                      {t("nav.rentcar")}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/yacht-rental"
-                      className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
-                    >
-                      {t("nav.yacht")}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/premium-car-detailing"
-                      className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
-                    >
-                      {t("nav.detailing")}
-                    </a>
-                  </li>
-                   <li>
-                     <a
-                       href="/services"
-                       className="block px-4 py-2 text-sm text-foreground hover:text-muted-foreground"
-                     >
-                       {t("nav.rapidservices")}
-                     </a>
-                   </li>
-                 </ul>
-               </div>
-             </div>
-
-             <a
-               href="/villa-listings"
-               className="text-foreground hover:text-muted-foreground transition-colors text-sm uppercase"
-             >
-               {t("nav.villas")}
-             </a>
-
-             <a
-               href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services."
-               target="_blank"
-               rel="noopener noreferrer"
-               className="text-foreground hover:text-muted-foreground transition-colors text-sm uppercase"
-             >
-               {t("nav.contact")}
-             </a>
-          </nav>
         </div>
       </header>
 
@@ -158,6 +93,12 @@ export function Header() {
                   {t("nav.rentcar")}
                 </a>
                 <a
+                  href="/villa-listings"
+                  className="block text-sm text-foreground hover:text-muted-foreground"
+                >
+                  {t("nav.villas")}
+                </a>
+                <a
                   href="/yacht-rental"
                   className="block text-sm text-foreground hover:text-muted-foreground"
                 >
@@ -179,13 +120,6 @@ export function Header() {
              )}
            </div>
 
-           <a
-             href="/villa-listings"
-             onClick={() => setIsMenuOpen(false)}
-             className="text-xl font-semibold"
-           >
-             {t("nav.villas")}
-           </a>
 
            <a
              href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services."
