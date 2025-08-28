@@ -248,15 +248,15 @@ Thank you!`;
             <div className="flex items-center gap-6 text-white/80">
               <div className="flex items-center gap-1">
                 <Users className="w-4 h-4" />
-                <span>{villa.maxGuests} {t('villa.details.guests')}</span>
+                <span>{villa.maxGuests} guests</span>
               </div>
               <div className="flex items-center gap-1">
                 <Bed className="w-4 h-4" />
-                <span>{villa.bedrooms} {t('villa.details.rooms')}</span>
+                <span>{villa.bedrooms} bedrooms</span>
               </div>
               <div className="flex items-center gap-1">
                 <Bath className="w-4 h-4" />
-                <span>{villa.bathrooms} {t('villa.details.bathrooms')}</span>
+                <span>{villa.bathrooms} bathrooms</span>
               </div>
               <div className="text-sm font-medium">
                 {villa.size}
@@ -266,7 +266,7 @@ Thank you!`;
 
           {/* Description */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">{t('villa.details.theVilla')}</h2>
+            <h2 className="text-2xl font-bold mb-4">The Villa</h2>
             <p className="text-white/80 leading-relaxed text-lg">
               {villa.description}
             </p>
@@ -274,7 +274,7 @@ Thank you!`;
 
           {/* Comfort e Servizi */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">{t('villa.details.comfortServices')}</h2>
+            <h2 className="text-2xl font-bold mb-6">Comfort & Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {villa.amenities.map((amenity, index) => (
                 <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
@@ -287,7 +287,7 @@ Thank you!`;
 
           {/* Spazi Interni */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">{t('villa.details.interiorSpaces')}</h2>
+            <h2 className="text-2xl font-bold mb-6">Interior Spaces</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {villa.features.map((feature, index) => (
                 <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
@@ -300,7 +300,7 @@ Thank you!`;
 
           {/* Posizione */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">{t('villa.details.position')}</h2>
+            <h2 className="text-2xl font-bold mb-6">Location</h2>
             <p className="text-white/80 mb-6">
               Situata in una posizione privilegiata sulla Costa Smeralda, Villa Ambra offre un accesso esclusivo al mare e viste panoramiche mozzafiato. 
               La villa si trova in una zona tranquilla e riservata, perfetta per chi cerca privacy e lusso.
@@ -316,7 +316,7 @@ Thank you!`;
 
           {/* Servizi Extra */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">{t('villa.details.extraServices')}</h2>
+            <h2 className="text-2xl font-bold mb-6">Extra Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {villa.extraServices.map((service, index) => (
                 <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
@@ -435,7 +435,7 @@ Thank you!`;
                   className="bg-green-600 hover:bg-green-700"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
-                  {t('villa.details.bookNow')}
+                  Contact Us
                 </Button>
               </CardContent>
             </Card>

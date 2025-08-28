@@ -331,7 +331,7 @@ Thank you!`;
                   className="bg-green-600 hover:bg-green-700"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
-                  {t('villa.details.bookNow')}
+                  Contact Us
                 </Button>
               </div>
             </div>
