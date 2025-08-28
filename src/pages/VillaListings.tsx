@@ -79,6 +79,7 @@ const villas: Villa[] = [
       "/ambra1.png",
       "/ambra2.png",
       "/ambra3.png",
+      "/ambra4.png",
       "/lovable-uploads/18f8724c-e423-4c66-a32d-807b53d368f5.png"
     ],
     description: "Villa esclusiva di 400m² con piscina a strapiombo sul mare e accesso privato alla spiaggia.",
