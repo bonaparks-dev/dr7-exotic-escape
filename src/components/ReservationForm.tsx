@@ -242,16 +242,8 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto bg-luxury-black border border-luxury-white/20">
         <DialogHeader className="border-b border-luxury-white/20 pb-4">
-          <DialogTitle className="text-2xl font-bold text-luxury-white flex items-center justify-between">
+          <DialogTitle className="text-2xl font-bold text-luxury-white">
             {language === 'it' ? 'Prenota' : 'Reserve'} {carName}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              className="text-luxury-white hover:bg-luxury-white/10"
-            >
-              <X className="h-5 w-5" />
-            </Button>
           </DialogTitle>
         </DialogHeader>
 
