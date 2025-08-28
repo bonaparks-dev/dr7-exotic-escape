@@ -23,10 +23,10 @@ const villa = {
   bathrooms: 5,
   size: "400 m²",
   images: [
-    "/lovable-uploads/5e56409c-5698-4e7a-bf07-4cceb7a09004.png",
-    "/lovable-uploads/762fc2b2-9d97-4d9c-8fdc-0c8874f25643.png",
-    "/lovable-uploads/4b224ab5-3163-4cb1-b641-d98203333d38.png",
-    "/lovable-uploads/18f8724c-e423-4c66-a32d-807b53d368f5.png"
+    "/ambra1.png",
+    "/ambra2.png",
+    "/ambra3.png",
+    "/ambra4.png"
   ],
   description: "Incantevole Villa overlooking the sea with a unique architectural style, with a wonderful sea view that can be observed from any corner of the house, thanks to its outdoor spaces you can spend exclusive moments of relaxation and privacy admiring the colorful sunsets.",
   amenities: [
