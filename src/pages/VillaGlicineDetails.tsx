@@ -162,15 +162,15 @@ Thank you!`;
               <div className="flex items-center gap-6 mb-6">
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  <span>{villa.maxGuests} {t('villa.guests')}</span>
+                  <span>{villa.maxGuests} guests</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bed className="w-5 h-5" />
-                  <span>{villa.bedrooms} {t('villa.bedrooms')}</span>
+                  <span>{villa.bedrooms} bedrooms</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bath className="w-5 h-5" />
-                  <span>{villa.bathrooms} {t('villa.bathrooms')}</span>
+                  <span>{villa.bathrooms} bathrooms</span>
                 </div>
               </div>
 
@@ -182,7 +182,7 @@ Thank you!`;
 
           {/* Amenities Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">{t('villa.amenities')}</h2>
+            <h2 className="text-3xl font-bold mb-8">Amenities</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {villa.amenities.map((amenity, index) => (
                 <Card key={index} className="bg-white/5 border-white/20">
@@ -198,7 +198,7 @@ Thank you!`;
 
           {/* Features Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">{t('villa.features')}</h2>
+            <h2 className="text-3xl font-bold mb-8">Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {villa.features.map((feature, index) => (
                 <div key={index} className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/20">
@@ -211,7 +211,7 @@ Thank you!`;
 
           {/* Gallery Thumbnails */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">{t('villa.gallery')}</h2>
+            <h2 className="text-3xl font-bold mb-8">Gallery</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {villa.images.map((image, index) => (
                 <div

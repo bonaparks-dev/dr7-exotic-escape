@@ -332,10 +332,10 @@ Thank you!`;
             <Card className="bg-white/5 border-white/20">
               <CardContent className="p-8 text-center">
                 <h2 className="text-2xl font-bold mb-4">
-                  {t('villa.details.questionsTitle')}
+                  Have Questions About This Villa?
                 </h2>
                 <p className="text-white/80 mb-6">
-                  {t('villa.details.questionsDesc')}
+                  Our concierge team is available 24/7 for personalized assistance and exclusive services
                 </p>
                 
                 <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
