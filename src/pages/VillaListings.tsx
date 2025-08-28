@@ -13,8 +13,6 @@ interface Villa {
   title: string;
   location: string;
   distanceToBeach: string;
-  price: string;
-  nightly: number;
   maxGuests: number;
   bedrooms: number;
   bathrooms: number;
@@ -30,8 +28,6 @@ const villas: Villa[] = [
     title: "Villa Elicriso - Luxury 50m from the Beach",
     location: "Geremeas, Sardegna",
     distanceToBeach: "50m dalla Spiaggia",
-    price: "€2,500",
-    nightly: 2500,
     maxGuests: 9,
     bedrooms: 4,
     bathrooms: 4,
@@ -50,8 +46,6 @@ const villas: Villa[] = [
     title: "Juniper House - Villa by the Sea",
     location: "Costa del Sud, Sardegna",
     distanceToBeach: "Accesso diretto al mare",
-    price: "€1,800",
-    nightly: 1800,
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
@@ -70,8 +64,6 @@ const villas: Villa[] = [
     title: "Villa Ambra - with cliffside pool and private access to the sea",
     location: "Costa Smeralda, Sardegna",
     distanceToBeach: "Accesso privato al mare",
-    price: "€4,200",
-    nightly: 4200,
     maxGuests: 12,
     bedrooms: 6,
     bathrooms: 5,
@@ -90,8 +82,6 @@ const villas: Villa[] = [
     title: "Villa Lolly - Blue Bay",
     location: "Blue Bay, Sardegna",
     distanceToBeach: "Vista mare",
-    price: "€1,600",
-    nightly: 1600,
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
@@ -110,8 +100,6 @@ const villas: Villa[] = [
     title: "Villa Glicine - Villa 100 mt from the beach",
     location: "Costa del Sud, Sardegna",
     distanceToBeach: "100m dalla Spiaggia",
-    price: "€2,200",
-    nightly: 2200,
     maxGuests: 9,
     bedrooms: 4,
     bathrooms: 3,
@@ -130,8 +118,6 @@ const villas: Villa[] = [
     title: "LAJ House, Cagliari center",
     location: "Cagliari Centro, Sardegna",
     distanceToBeach: "Centro città",
-    price: "€1,200",
-    nightly: 1200,
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 2,
@@ -150,8 +136,6 @@ const villas: Villa[] = [
     title: "Villa Josy - Villa by the Sea with Heated Outdoor Jacuzzi",
     location: "Costa del Sud, Sardegna",
     distanceToBeach: "Accesso diretto al mare",
-    price: "€1,900",
-    nightly: 1900,
     maxGuests: 6,
     bedrooms: 3,
     bathrooms: 2,
@@ -170,8 +154,6 @@ const villas: Villa[] = [
     title: "White Villa",
     location: "Costa Smeralda, Sardegna",
     distanceToBeach: "Vista mare",
-    price: "€2,800",
-    nightly: 2800,
     maxGuests: 8,
     bedrooms: 4,
     bathrooms: 3,
@@ -190,8 +172,6 @@ const villas: Villa[] = [
     title: "Villa Crystal Rock privacy on the sea, heated pool",
     location: "Costa Smeralda, Sardegna",
     distanceToBeach: "Accesso privato al mare",
-    price: "€3,500",
-    nightly: 3500,
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 2,

@@ -37,8 +37,6 @@ interface Villa {
   title: string;
   location: string;
   distanceToBeach: string;
-  price: string;   // affichage
-  nightly: number; // prix numérique / nuit
   maxGuests: number;
   bedrooms: number;
   bathrooms: number;
@@ -58,8 +56,6 @@ const villas: Villa[] = [
     title: "Villa Elicriso Luxury",
     location: "Geremeas (CA), Sardegna",
     distanceToBeach: "50m dalla Spiaggia",
-    price: "€2,500",
-    nightly: 2500,
     maxGuests: 9,
     bedrooms: 4,
     bathrooms: 4,
@@ -137,50 +133,14 @@ export default function VillaRental() {
   const [openCheckOut, setOpenCheckOut] = useState(false);
   const [guests, setGuests] = useState(2);
 
-  const today = startOfDay(new Date());
-  const nights =
-    checkIn && checkOut ? Math.max(0, differenceInCalendarDays(startOfDay(checkOut), startOfDay(checkIn))) : 0;
-
-  // Pricing
-  const cleaningFee = nights > 0 ? 150 : 0;
-  const subtotal = nights * villa.nightly + cleaningFee;
-  const serviceFee = nights > 0 ? Math.round(subtotal * 0.1) : 0;
-  const total = subtotal + serviceFee;
-  const canBook = checkIn && checkOut && nights > 0 && guests > 0;
-
-  const setCheckInSafe = (date?: Date) => {
-    if (!date) return;
-    if (isBefore(date, today)) return;
-    setCheckIn(date);
-    setOpenCheckIn(false);
-    if (!checkOut || !isBefore(date, checkOut) || isSameDay(date, checkOut)) {
-      setCheckOut(addDays(date, 1));
-      setOpenCheckOut(true);
-    }
-  };
-
-  const setCheckOutSafe = (date?: Date) => {
-    if (!date || !checkIn) return;
-    if (!isBefore(checkIn, date)) return;
-    setCheckOut(date);
-    setOpenCheckOut(false);
-  };
-
-  const incGuests = () => setGuests((g) => Math.min(villa.maxGuests, g + 1));
-  const decGuests = () => setGuests((g) => Math.max(1, g - 1));
-
   const generateWhatsAppMessage = (v: Villa) => {
     const ci = checkIn ? format(checkIn, "dd/MM/yyyy") : "—";
     const co = checkOut ? format(checkOut, "dd/MM/yyyy") : "—";
     const message =
       `Hello DR7 Exotic, I would like to book ${v.title}.\n\n` +
       `Location: ${v.location}\n` +
-      `Dates: ${ci} → ${co} (${nights} night${nights !== 1 ? "s" : ""})\n` +
-      `Guests: ${guests}\n` +
-      `Price: €${v.nightly.toLocaleString()}/night\n` +
-      `Cleaning fee: €${cleaningFee}\n` +
-      `Service fee: €${serviceFee}\n` +
-      `Total: €${total.toLocaleString()}\n\n` +
+      `Dates: ${ci} → ${co}\n` +
+      `Guests: ${guests}\n\n` +
       `Please confirm availability and booking details. Thank you!`;
     return encodeURIComponent(message);
   };
@@ -202,10 +162,6 @@ export default function VillaRental() {
       {/* WhatsApp Floater (mobile) */}
       <Button
         onClick={() => {
-          if (!canBook) {
-            window.open("https://wa.me/393457905205", "_blank");
-            return;
-          }
           const msg = generateWhatsAppMessage(villa);
           window.open(`https://wa.me/393457905205?text=${msg}`, "_blank");
         }}
@@ -319,131 +275,21 @@ export default function VillaRental() {
             <Card className="bg-white/5 border-white/20 w-full lg:w-[420px] lg:sticky lg:top-24">
               <CardContent className="p-6">
                 <div className="flex items-end justify-between mb-4">
-                  <div>
-                    <div className="text-3xl font-bold">{villa.price}</div>
-                    <div className="text-white/70 text-sm">per notte</div>
-                  </div>
+                  <div className="text-2xl font-bold">Contattaci per prenotare</div>
+                  <div className="text-white/70 text-sm">Richiedi disponibilità e prezzi</div>
                 </div>
 
-                {/* Dates */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <div className="text-xs uppercase mb-1 text-white/70">Check-in</div>
-                    <Popover open={openCheckIn} onOpenChange={setOpenCheckIn}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-between bg-transparent border-white/20 text-white hover:bg-white/10"
-                        >
-                          <span>{checkIn ? format(checkIn, "dd MMM yyyy") : "Select"}</span>
-                          <CalendarIcon className="w-4 h-4 opacity-70" />
-                        </Button>
-                      </PopoverTrigger>
-                       <PopoverContent className="p-0 bg-black border-white/20" align="start">
-                         <Calendar
-                           mode="single"
-                           selected={checkIn}
-                           onSelect={(d) => setCheckInSafe(d)}
-                           disabled={(d) => isBefore(startOfDay(d), today)}
-                           initialFocus
-                           className={cn("p-3 pointer-events-auto")}
-                         />
-                       </PopoverContent>
-                    </Popover>
-                  </div>
-
-                  <div>
-                    <div className="text-xs uppercase mb-1 text-white/70">Check-out</div>
-                    <Popover open={openCheckOut} onOpenChange={setOpenCheckOut}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-between bg-transparent border-white/20 text-white hover:bg-white/10"
-                          disabled={!checkIn}
-                        >
-                          <span>{checkOut ? format(checkOut, "dd MMM yyyy") : "Select"}</span>
-                          <CalendarIcon className="w-4 h-4 opacity-70" />
-                        </Button>
-                      </PopoverTrigger>
-                       <PopoverContent className="p-0 bg-black border-white/20" align="start">
-                         <Calendar
-                           mode="single"
-                           selected={checkOut}
-                           onSelect={(d) => setCheckOutSafe(d)}
-                           disabled={(d) => !checkIn || !isBefore(startOfDay(checkIn), startOfDay(d))}
-                           initialFocus
-                           className={cn("p-3 pointer-events-auto")}
-                         />
-                       </PopoverContent>
-                    </Popover>
-                  </div>
-                </div>
-
-                {/* Guests */}
-                <div className="mt-4">
-                  <div className="text-xs uppercase mb-1 text-white/70">Guests</div>
-                  <div className="flex items-center justify-between bg-white/5 border border-white/20 rounded-lg px-3 py-2">
-                    <div className="text-white/90">{guests} {guests === 1 ? "guest" : "guests"}</div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8 border-white/20 text-white hover:bg-white/10"
-                        onClick={decGuests}
-                      >
-                        <Minus className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8 border-white/20 text-white hover:bg-white/10"
-                        onClick={incGuests}
-                      >
-                        <Plus className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="text-xs text-white/50 mt-1">Max {villa.maxGuests} guests</div>
-                </div>
-
-                {/* Pricing */}
-                <div className="mt-6 space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>
-                      {villa.price} × {nights || 0} night{nights !== 1 ? "s" : ""}
-                    </span>
-                    <span>€{(nights * villa.nightly).toLocaleString()}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Cleaning fee</span>
-                    <span>€{cleaningFee.toLocaleString()}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Service fee</span>
-                    <span>€{serviceFee.toLocaleString()}</span>
-                  </div>
-                  <div className="border-t border-white/10 pt-3 flex items-center justify-between font-semibold">
-                    <span>Total</span>
-                    <span>€{total.toLocaleString()}</span>
-                  </div>
-                </div>
-
-                {/* CTA */}
+                {/* Contact Button */}
                 <Button
                   onClick={() => {
-                    if (!canBook) {
-                      window.open("https://wa.me/393457905205", "_blank");
-                      return;
-                    }
                     const message = generateWhatsAppMessage(villa);
                     window.open(`https://wa.me/393457905205?text=${message}`, "_blank");
                   }}
                   className="w-full mt-6"
                   size="lg"
                   variant="luxury"
-                  disabled={!canBook}
                 >
-                  Prenota Ora
+                  Richiedi Disponibilità
                 </Button>
 
                 <div className="text-center mt-3">
@@ -526,10 +372,6 @@ export default function VillaRental() {
             </p>
             <Button
               onClick={() => {
-                if (!canBook) {
-                  window.open("https://wa.me/393457905205", "_blank");
-                  return;
-                }
                 const message = generateWhatsAppMessage(villa);
                 window.open(`https://wa.me/393457905205?text=${message}`, "_blank");
               }}
