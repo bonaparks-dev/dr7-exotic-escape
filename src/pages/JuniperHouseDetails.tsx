@@ -89,10 +89,17 @@ export default function JuniperHouseDetails() {
   };
 
   const formatWhatsAppMessage = () => {
-    const nights = calculateNights();
-    if (nights <= 0) return "";
+    const checkInDate = checkIn ? checkIn.toLocaleDateString('en-GB') : 'TBD';
+    const checkOutDate = checkOut ? checkOut.toLocaleDateString('en-GB') : 'TBD';
     
-    return `Ciao! Sono interessato a prenotare ${villa.title} per ${guests} ${t('villa.details.guests')} dal ${checkIn?.toLocaleDateString('it-IT')} al ${checkOut?.toLocaleDateString('it-IT')} (${nights} ${t('villa.details.nights')}). Potreste inviarmi maggiori informazioni e la disponibilità?`;
+    return `Hello, I want to book ${villa.title}. May I have more information?
+
+Check-in: ${checkInDate}
+Check-out: ${checkOutDate}
+Guests: ${guests}
+Location: ${villa.location}
+
+Thank you!`;
   };
 
   const handleWhatsApp = () => {
@@ -144,12 +151,12 @@ export default function JuniperHouseDetails() {
       
       {/* Back Button */}
       <Button
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/villa-listings")}
         className="fixed top-24 left-4 z-40 bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-sm"
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        {t('rentals.backto')}
+        Back
       </Button>
 
       {/* WhatsApp FAB */}

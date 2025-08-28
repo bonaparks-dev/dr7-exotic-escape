@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { ArrowLeft, MapPin, Star, Users, Bed, Bath, Wifi, Car, Waves, Home, Calendar as CalendarIcon, MessageCircle } from "lucide-react";
+import { ArrowLeft, MapPin, Star, Users, Bed, Bath, Wifi, Car, Waves, Home, Calendar as CalendarIcon, MessageCircle, Minus, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -18,6 +18,7 @@ export default function VillaLollyDetails() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
+  const [guests, setGuests] = useState(2);
   const [isCheckInOpen, setIsCheckInOpen] = useState(false);
   const [isCheckOutOpen, setIsCheckOutOpen] = useState(false);
 
@@ -43,6 +44,7 @@ export default function VillaLollyDetails() {
 
 Check-in: ${checkInDate}
 Check-out: ${checkOutDate}
+Guests: ${guests}
 Location: Blue Bay, Sardegna
 
 Thank you!`;
@@ -65,7 +67,7 @@ Thank you!`;
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        {t('btn.back')}
+        Back
       </Button>
 
       <main className="pt-32 pb-16">
@@ -272,6 +274,7 @@ Thank you!`;
                         }}
                         disabled={(date) => date < new Date()}
                         initialFocus
+                        className="p-3 pointer-events-auto"
                       />
                     </PopoverContent>
                   </Popover>
@@ -302,9 +305,33 @@ Thank you!`;
                         }}
                         disabled={(date) => date < new Date() || (checkIn && date <= checkIn)}
                         initialFocus
+                        className="p-3 pointer-events-auto"
                       />
                     </PopoverContent>
                   </Popover>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="text-sm text-white/70 mb-2 block">Guests</label>
+                <div className="flex items-center justify-center gap-4 max-w-xs mx-auto">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="bg-white/5 border-white/20 text-white hover:bg-white/10"
+                    onClick={() => setGuests(Math.max(1, guests - 1))}
+                  >
+                    <Minus className="w-4 h-4" />
+                  </Button>
+                  <span className="text-lg font-medium px-4">{guests}</span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="bg-white/5 border-white/20 text-white hover:bg-white/10"
+                    onClick={() => setGuests(Math.min(6, guests + 1))}
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
               

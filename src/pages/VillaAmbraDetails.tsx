@@ -5,7 +5,9 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, MessageCircle, MapPin, Users, Bed, Bath, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { ArrowLeft, MessageCircle, MapPin, Users, Bed, Bath, ChevronLeft, ChevronRight, Star, Calendar as CalendarIcon, Minus, Plus } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 
@@ -72,11 +74,32 @@ export default function VillaAmbraDetails() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [checkIn, setCheckIn] = useState<Date>();
+  const [checkOut, setCheckOut] = useState<Date>();
+  const [guests, setGuests] = useState(2);
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
+  const [isCheckOutOpen, setIsCheckOutOpen] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
+  const generateWhatsAppMessage = () => {
+    const checkInDate = checkIn ? checkIn.toLocaleDateString('en-GB') : 'TBD';
+    const checkOutDate = checkOut ? checkOut.toLocaleDateString('en-GB') : 'TBD';
+    
+    return `Hello, I want to book ${villa.title}. May I have more information?
+
+Check-in: ${checkInDate}
+Check-out: ${checkOutDate}
+Guests: ${guests}
+Location: ${villa.location}
+
+Thank you!`;
+  };
+
   const handleWhatsApp = () => {
-    window.open("https://wa.me/393457905205", "_blank");
+    const message = generateWhatsAppMessage();
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/393457905205?text=${encodedMessage}`, "_blank");
   };
 
   const nextImage = () => {
@@ -115,7 +138,7 @@ export default function VillaAmbraDetails() {
         size="sm"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        Torna alla Home
+        Back
       </Button>
 
       {/* WhatsApp FAB */}
@@ -314,12 +337,105 @@ export default function VillaAmbraDetails() {
                 <p className="text-white/80 mb-6">
                   {t('villa.details.questionsDesc')}
                 </p>
+                
+                <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
+                  <div>
+                    <label className="text-sm text-white/70 mb-2 block">Check-in</label>
+                    <Popover open={isCheckInOpen} onOpenChange={setIsCheckInOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10",
+                            !checkIn && "text-white/50"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {checkIn ? checkIn.toLocaleDateString() : "Select date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={checkIn}
+                          onSelect={(date) => {
+                            setCheckIn(date);
+                            setIsCheckInOpen(false);
+                            if (date) {
+                              setTimeout(() => setIsCheckOutOpen(true), 200);
+                            }
+                          }}
+                          disabled={(date) => date < new Date()}
+                          initialFocus
+                          className="p-3 pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm text-white/70 mb-2 block">Check-out</label>
+                    <Popover open={isCheckOutOpen} onOpenChange={setIsCheckOutOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10",
+                            !checkOut && "text-white/50"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {checkOut ? checkOut.toLocaleDateString() : "Select date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={checkOut}
+                          onSelect={(date) => {
+                            setCheckOut(date);
+                            setIsCheckOutOpen(false);
+                          }}
+                          disabled={(date) => date < new Date() || (checkIn && date <= checkIn)}
+                          initialFocus
+                          className="p-3 pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <label className="text-sm text-white/70 mb-2 block">Guests</label>
+                  <div className="flex items-center justify-center gap-4 max-w-xs mx-auto">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="bg-white/5 border-white/20 text-white hover:bg-white/10"
+                      onClick={() => setGuests(Math.max(1, guests - 1))}
+                    >
+                      <Minus className="w-4 h-4" />
+                    </Button>
+                    <span className="text-lg font-medium px-4">{guests}</span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="bg-white/5 border-white/20 text-white hover:bg-white/10"
+                      onClick={() => setGuests(Math.min(villa.maxGuests, guests + 1))}
+                    >
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+
                 <Button
                   onClick={handleWhatsApp}
                   variant="luxury"
                   size="lg"
+                  className="bg-green-600 hover:bg-green-700"
                 >
-                  {t('villa.details.contactTeam')}
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  {t('villa.details.bookNow')}
                 </Button>
               </CardContent>
             </Card>
