@@ -30,38 +30,59 @@ export default function VillaLAJDetails() {
     maxGuests: 4,
     bedrooms: 2,
     bathrooms: 2,
+    size: "250 m²",
     images: [
       "/laj1.png",
       "/laj2.png", 
       "/laj3.png",
       "/laj4.png"
     ],
-    description: "Casa elegante di 250m² nel centro storico di Cagliari con vista sulla città e comfort moderni.",
-    fullDescription: "LAJ House è una splendida casa elegante di 250m² situata nel cuore del centro storico di Cagliari. Questa proprietà unica combina il fascino dell'architettura tradizionale sarda con i comfort moderni, offrendo una vista mozzafiato sulla città e un'esperienza autentica nel centro culturale della Sardegna.",
+    description: {
+      en: "Elegant 250m² house in the historic center of Cagliari with city view and modern comforts. This unique property combines the charm of traditional Sardinian architecture with modern comforts, offering a breathtaking view of the city and an authentic experience in the cultural center of Sardinia.",
+      it: "Casa elegante di 250m² nel centro storico di Cagliari con vista sulla città e comfort moderni. Questa proprietà unica combina il fascino dell'architettura tradizionale sarda con i comfort moderni, offrendo una vista mozzafiato sulla città e un'esperienza autentica nel centro culturale della Sardegna."
+    },
     amenities: [
-      { icon: Building2, title: "Centro Storico", description: "Nel cuore di Cagliari" },
-      { icon: Crown, title: "Vista Città", description: "Panorama sul centro storico" },
-      { icon: Home, title: "250m² di Eleganza", description: "Spazi ampi e raffinati" },
-      { icon: Wifi, title: "WiFi Gratuito", description: "Connessione internet veloce" },
-      { icon: Car, title: "Parcheggio Riservato", description: "Posto auto nel centro" },
-      { icon: Shield, title: "Sicurezza 24/7", description: "Servizio di sorveglianza" }
+      { icon: Building2, title: { en: "Historic Center", it: "Centro Storico" }, description: { en: "In the heart of Cagliari", it: "Nel cuore di Cagliari" } },
+      { icon: Crown, title: { en: "City View", it: "Vista Città" }, description: { en: "Panorama of historic center", it: "Panorama sul centro storico" } },
+      { icon: Home, title: { en: "250m² of Elegance", it: "250m² di Eleganza" }, description: { en: "Spacious and refined spaces", it: "Spazi ampi e raffinati" } },
+      { icon: Wifi, title: { en: "Free WiFi", it: "WiFi Gratuito" }, description: { en: "High-speed internet", it: "Connessione internet veloce" } },
+      { icon: Car, title: { en: "Reserved Parking", it: "Parcheggio Riservato" }, description: { en: "Parking in city center", it: "Posto auto nel centro" } },
+      { icon: Shield, title: { en: "24/7 Security", it: "Sicurezza 24/7" }, description: { en: "Security service", it: "Servizio di sorveglianza" } }
     ],
-    features: [
-      "2 camere da letto eleganti",
-      "2 bagni moderni con finiture di pregio", 
-      "Ampio soggiorno con vista sulla città",
-      "Cucina completamente attrezzata",
-      "Terrazza panoramica con vista storica",
-      "Aria condizionata in tutte le stanze",
-      "Smart TV con canali internazionali",
-      "Sistema audio hi-fi",
-      "Cassaforte digitale",
-      "Asciugacapelli professionale",
-      "Set di cortesia premium",
-      "Posizione centrale strategica",
-      "Vicino a ristoranti e attrazioni",
-      "Accesso facile ai trasporti pubblici"
-    ]
+    features: {
+      en: [
+        "2 elegant bedrooms",
+        "2 modern bathrooms with premium finishes", 
+        "Spacious living room with city view",
+        "Fully equipped kitchen",
+        "Panoramic terrace with historic view",
+        "Air conditioning in all rooms",
+        "Smart TV with international channels",
+        "Hi-fi audio system",
+        "Digital safe",
+        "Professional hair dryer",
+        "Premium courtesy set",
+        "Strategic central location",
+        "Close to restaurants and attractions",
+        "Easy access to public transport"
+      ],
+      it: [
+        "2 camere da letto eleganti",
+        "2 bagni moderni con finiture di pregio", 
+        "Ampio soggiorno con vista sulla città",
+        "Cucina completamente attrezzata",
+        "Terrazza panoramica con vista storica",
+        "Aria condizionata in tutte le stanze",
+        "Smart TV con canali internazionali",
+        "Sistema audio hi-fi",
+        "Cassaforte digitale",
+        "Asciugacapelli professionale",
+        "Set di cortesia premium",
+        "Posizione centrale strategica",
+        "Vicino a ristoranti e attrazioni",
+        "Accesso facile ai trasporti pubblici"
+      ]
+    }
   };
 
   const nextImage = () => {
@@ -91,6 +112,8 @@ Thank you!`;
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/393457905205?text=${encodedMessage}`, "_blank");
   };
+
+  const currentLanguage = t('language') === 'it' ? 'it' : 'en';
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -167,34 +190,39 @@ Thank you!`;
               <div className="flex items-center gap-6 mb-6">
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  <span>{villa.maxGuests} guests</span>
+                  <span>{villa.maxGuests} {currentLanguage === 'it' ? 'ospiti' : 'guests'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bed className="w-5 h-5" />
-                  <span>{villa.bedrooms} bedrooms</span>
+                  <span>{villa.bedrooms} {currentLanguage === 'it' ? 'camere' : 'bedrooms'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bath className="w-5 h-5" />
-                  <span>{villa.bathrooms} bathrooms</span>
+                  <span>{villa.bathrooms} {currentLanguage === 'it' ? 'bagni' : 'bathrooms'}</span>
+                </div>
+                <div className="text-sm font-medium">
+                  {villa.size}
                 </div>
               </div>
 
               <p className="text-lg text-white/80 mb-8 leading-relaxed">
-                {villa.fullDescription}
+                {villa.description[currentLanguage]}
               </p>
             </div>
           </div>
 
           {/* Amenities Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">Amenities</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Servizi e Comfort' : 'Amenities & Comfort'}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {villa.amenities.map((amenity, index) => (
                 <Card key={index} className="bg-white/5 border-white/20">
                   <CardContent className="p-6">
                     <amenity.icon className="w-8 h-8 mb-4 text-white" />
-                    <h3 className="text-xl font-semibold mb-2">{amenity.title}</h3>
-                    <p className="text-white/70">{amenity.description}</p>
+                    <h3 className="text-xl font-semibold mb-2">{amenity.title[currentLanguage]}</h3>
+                    <p className="text-white/70">{amenity.description[currentLanguage]}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -203,9 +231,11 @@ Thank you!`;
 
           {/* Features Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">Features</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Caratteristiche' : 'Features'}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {villa.features.map((feature, index) => (
+              {villa.features[currentLanguage].map((feature, index) => (
                 <div key={index} className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/20">
                   <div className="w-2 h-2 bg-white rounded-full flex-shrink-0"></div>
                   <span className="text-white/90">{feature}</span>
@@ -216,7 +246,9 @@ Thank you!`;
 
           {/* Gallery Thumbnails */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">Gallery</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Galleria' : 'Gallery'}
+            </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {villa.images.map((image, index) => (
                 <div
@@ -236,13 +268,16 @@ Thank you!`;
 
           {/* CTA Section */}
           <div className="text-center">
-              <div className="bg-white/5 border border-white/20 rounded-lg p-8">
-                <h2 className="text-2xl font-bold mb-4">
-                  Ready for Your Dream Vacation?
-                </h2>
-                <p className="text-white/80 mb-6">
-                  Contact us for more information and availability
-                </p>
+            <div className="bg-white/5 border border-white/20 rounded-lg p-8">
+              <h2 className="text-2xl font-bold mb-4">
+                {currentLanguage === 'it' ? 'Pronto per la tua vacanza da sogno?' : 'Ready for your dream vacation?'}
+              </h2>
+              <p className="text-white/80 mb-6">
+                {currentLanguage === 'it' 
+                  ? 'Contattaci per maggiori informazioni e disponibilità'
+                  : 'Contact us for more information and availability'
+                }
+              </p>
               
               <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
                 <div>
@@ -257,7 +292,7 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkIn ? checkIn.toLocaleDateString() : "Seleziona data"}
+                        {checkIn ? checkIn.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -291,7 +326,7 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkOut ? checkOut.toLocaleDateString() : "Seleziona data"}
+                        {checkOut ? checkOut.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -333,7 +368,7 @@ Thank you!`;
                   </Button>
                 </div>
               </div>
-
+              
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
                   onClick={handleWhatsAppContact}

@@ -1,76 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { ArrowLeft, MessageCircle, MapPin, Users, Bed, Bath, ChevronLeft, ChevronRight, Star, Minus, Plus, Calendar as CalendarIcon } from "lucide-react";
+import { ArrowLeft, MapPin, Users, Bed, Bath, Wifi, Car, Waves, Home, TreePine, Shield, Calendar as CalendarIcon, MessageCircle, Minus, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
-
-const villa = {
-  id: 2,
-  title: "Juniper House - Villa by the Sea",
-  location: "Costa del Sud, Sardegna",
-  distanceToBeach: "Accesso diretto al mare",
-  maxGuests: 8,
-  bedrooms: 3,
-  bathrooms: 3,
-  size: "400 m²",
-  images: [
-    "/ginepro1.png",
-    "/ginepro2.png",
-    "/ginepro3.png",
-    "/ginepro4.png"
-  ],
-  description: "Relax with your family in this fantastic Villa overlooking the turquoise waters of South Sardinia. A Villa with a unique Design, with functional and comfortable spaces and areas. Direct access to the Beach...Heated Pool with sea view...a daydream.",
-  amenities: [
-    "Piscina riscaldata 6x4m vista mare",
-    "Accesso diretto alla spiaggia",
-    "Parco mediterraneo 4000 mq",
-    "Pergola con angolo bar",
-    "Doccia esterna",
-    "Smart TV in tutte le stanze",
-    "Aria condizionata",
-    "Wi-Fi ad alta velocità",
-    "Parcheggio privato per 4 auto",
-    "Barbecue all'aperto"
-  ],
-  features: [
-    "Unità principale: soggiorno open space con cucina moderna",
-    "Zona pranzo con vista mare",
-    "2 camere matrimoniali eleganti",
-    "Bagno di design",
-    "Unità indipendente: appartamento autonomo",
-    "Soggiorno con cucina e divano letto",
-    "Camera matrimoniale privata",
-    "Bagno privato con doccia esterna",
-    "Terzo bagno di servizio"
-  ],
-  extraServices: [
-    "Chef privato su richiesta",
-    "Servizio pulizie durante il soggiorno",
-    "Concierge dedicato 24/7",
-    "Transfer privato aeroporto",
-    "Servizio baby sitting",
-    "Massaggi e trattamenti SPA",
-    "Escursioni private in barca",
-    "Servizio fotografo",
-    "Noleggio biciclette",
-    "Servizio lavanderia"
-  ],
-  nearby: [
-    "Spiaggia di Geremeas (accesso diretto)",
-    "Villasimius (15 min)",
-    "Cagliari centro (30 min)", 
-    "Aeroporto Cagliari (45 min)"
-  ],
-  rating: 4.8,
-  reviewCount: 22
-};
 
 export default function JuniperHouseDetails() {
   const navigate = useNavigate();
@@ -79,16 +19,77 @@ export default function JuniperHouseDetails() {
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
   const [guests, setGuests] = useState(2);
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
+  const [isCheckOutOpen, setIsCheckOutOpen] = useState(false);
 
-  const calculateNights = () => {
-    if (!checkIn || !checkOut) return 0;
-    const timeDiff = checkOut.getTime() - checkIn.getTime();
-    return Math.ceil(timeDiff / (1000 * 3600 * 24));
+  const villa = {
+    id: 2,
+    title: "Juniper House - Villa by the Sea",
+    location: "Costa del Sud, Sardegna",
+    distanceToBeach: "Accesso diretto al mare",
+    maxGuests: 8,
+    bedrooms: 3,
+    bathrooms: 3,
+    size: "400 m²",
+    images: [
+      "/ginepro1.png",
+      "/ginepro2.png",
+      "/ginepro3.png",
+      "/ginepro4.png"
+    ],
+    description: {
+      en: "Relax with your family in this fantastic Villa overlooking the turquoise waters of South Sardinia. A Villa with a unique Design, with functional and comfortable spaces and areas. Direct access to the Beach...Heated Pool with sea view...a daydream.",
+      it: "Rilassatevi con la vostra famiglia in questa fantastica Villa che si affaccia sulle acque turchesi della Sardegna del Sud. Una Villa dal Design unico, con spazi e aree funzionali e confortevoli. Accesso diretto alla Spiaggia...Piscina Riscaldata con vista mare...un sogno ad occhi aperti."
+    },
+    amenities: [
+      { icon: Waves, title: { en: "Heated Pool", it: "Piscina Riscaldata" }, description: { en: "6x4m heated pool with sea view", it: "Piscina riscaldata 6x4m vista mare" } },
+      { icon: Home, title: { en: "Direct Beach Access", it: "Accesso Diretto alla Spiaggia" }, description: { en: "Private access to crystal waters", it: "Accesso privato alle acque cristalline" } },
+      { icon: TreePine, title: { en: "Mediterranean Park", it: "Parco Mediterraneo" }, description: { en: "4000 sqm natural park", it: "Parco naturale di 4000 mq" } },
+      { icon: Wifi, title: { en: "Free WiFi", it: "WiFi Gratuito" }, description: { en: "High-speed internet", it: "Connessione internet veloce" } },
+      { icon: Car, title: { en: "Private Parking", it: "Parcheggio Privato" }, description: { en: "Parking for 4 cars", it: "Parcheggio per 4 auto" } },
+      { icon: Shield, title: { en: "24/7 Security", it: "Sicurezza 24/7" }, description: { en: "Security service", it: "Servizio di sorveglianza" } }
+    ],
+    features: {
+      en: [
+        "Main unit: open space living with modern kitchen",
+        "Dining area with sea view",
+        "2 elegant double bedrooms",
+        "Designer bathroom",
+        "Independent unit: autonomous apartment",
+        "Living room with kitchen and sofa bed",
+        "Private double bedroom",
+        "Private bathroom with outdoor shower",
+        "Third service bathroom",
+        "Pergola with bar area",
+        "Outdoor barbecue",
+        "Smart TV in all rooms"
+      ],
+      it: [
+        "Unità principale: soggiorno open space con cucina moderna",
+        "Zona pranzo con vista mare",
+        "2 camere matrimoniali eleganti",
+        "Bagno di design",
+        "Unità indipendente: appartamento autonomo",
+        "Soggiorno con cucina e divano letto",
+        "Camera matrimoniale privata",
+        "Bagno privato con doccia esterna",
+        "Terzo bagno di servizio",
+        "Pergola con angolo bar",
+        "Barbecue all'aperto",
+        "Smart TV in tutte le stanze"
+      ]
+    }
   };
 
-  const formatWhatsAppMessage = () => {
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % villa.images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + villa.images.length) % villa.images.length);
+  };
+
+  const generateWhatsAppMessage = () => {
     const checkInDate = checkIn ? checkIn.toLocaleDateString('en-GB') : 'TBD';
     const checkOutDate = checkOut ? checkOut.toLocaleDateString('en-GB') : 'TBD';
     
@@ -102,53 +103,18 @@ Location: ${villa.location}
 Thank you!`;
   };
 
-  const handleWhatsApp = () => {
-    const message = formatWhatsAppMessage();
+  const handleWhatsAppContact = () => {
+    const message = generateWhatsAppMessage();
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/393457905205?text=${encodedMessage}`, "_blank");
   };
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % villa.images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + villa.images.length) % villa.images.length);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const threshold = 40;
-
-    if (distance > threshold) nextImage();
-    if (distance < -threshold) prevImage();
-  };
-
-  const handleCheckInSelect = (date: Date | undefined) => {
-    setCheckIn(date);
-    if (date && !checkOut) {
-      const nextDay = new Date(date);
-      nextDay.setDate(nextDay.getDate() + 1);
-      setCheckOut(nextDay);
-    }
-  };
-
-  const nights = calculateNights();
-  const canBook = checkIn && checkOut && nights > 0;
+  const currentLanguage = t('language') === 'it' ? 'it' : 'en';
 
   return (
     <div className="min-h-screen bg-black text-white">
       <Header />
-      
+
       {/* Back Button */}
       <Button
         onClick={() => navigate("/villa-listings")}
@@ -159,357 +125,256 @@ Thank you!`;
         Back
       </Button>
 
-      {/* WhatsApp FAB */}
-      <Button
-        onClick={handleWhatsApp}
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 border-0 shadow-lg lg:hidden"
-        size="icon"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </Button>
-
-      <main className="pt-20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - Images & Details */}
-            <div className="lg:col-span-2">
-              {/* Hero Gallery */}
-              <div className="mb-8">
-                <div className="relative">
-                  <div 
-                    className="aspect-[4/3] rounded-lg overflow-hidden relative"
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                  >
-                    <img
-                      src={villa.images[currentImageIndex]}
-                      alt={villa.title}
-                      className="w-full h-full object-cover"
-                    />
-                    
-                    {/* Distance Badge */}
-                    <div className="absolute top-4 left-4">
-                      <Badge className="bg-white text-black font-medium">
-                        {villa.distanceToBeach}
-                      </Badge>
-                    </div>
-
-                    {/* Navigation Buttons */}
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 border-white/20 text-white hover:bg-white/20"
-                      onClick={prevImage}
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 border-white/20 text-white hover:bg-white/20"
-                      onClick={nextImage}
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </Button>
-                  </div>
-
-                  {/* Dots Indicator */}
-                  <div className="flex justify-center mt-4 gap-2">
-                    {villa.images.map((_, index) => (
-                      <button
-                        key={index}
-                        className={cn(
-                          "w-2 h-2 rounded-full transition-all duration-200",
-                          index === currentImageIndex ? "bg-white" : "bg-white/30"
-                        )}
-                        onClick={() => setCurrentImageIndex(index)}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Thumbnails */}
-                  <div className="grid grid-cols-4 gap-2 mt-4">
-                    {villa.images.map((image, index) => (
-                      <button
-                        key={index}
-                        className={cn(
-                          "aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200",
-                          index === currentImageIndex ? "border-white" : "border-white/20"
-                        )}
-                        onClick={() => setCurrentImageIndex(index)}
-                      >
-                        <img
-                          src={image}
-                          alt={`${villa.title} ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </div>
+      <main className="pt-32 pb-16">
+        <div className="container mx-auto px-4">
+          {/* Hero Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            {/* Image Gallery */}
+            <div className="relative">
+              <div className="aspect-[4/3] overflow-hidden rounded-lg">
+                <img
+                  src={villa.images[currentImageIndex]}
+                  alt={villa.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* Navigation Dots */}
+              <div className="flex justify-center mt-4 space-x-2">
+                {villa.images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`w-3 h-3 rounded-full transition-colors ${
+                      index === currentImageIndex ? 'bg-white' : 'bg-white/30'
+                    }`}
+                  />
+                ))}
               </div>
 
-              {/* Title Block */}
-              <div className="mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold mb-4">{villa.title}</h1>
-                
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-5 h-5 fill-current text-white" />
-                    <span className="font-medium">{villa.rating}</span>
-                    <span className="text-white/70">· {villa.reviewCount} {t('language') === 'it' ? 'recensioni' : 'reviews'}</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-white/70">
-                    <MapPin className="w-4 h-4" />
-                    <span>{villa.location}</span>
-                  </div>
-                </div>
+              {/* Navigation Arrows */}
+              <button
+                onClick={prevImage}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+              >
+                ←
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+              >
+                →
+              </button>
 
-                <div className="flex items-center gap-6 text-white/80">
-                  <div className="flex items-center gap-1">
-                    <Users className="w-4 h-4" />
-                    <span>{villa.maxGuests} {t('villa.details.guests')}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Bed className="w-4 h-4" />
-                    <span>{villa.bedrooms} {t('villa.details.rooms')}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Bath className="w-4 h-4" />
-                    <span>{villa.bathrooms} {t('villa.details.bathrooms')}</span>
-                  </div>
-                  <div className="text-sm font-medium">
-                    {villa.size}
-                  </div>
-                </div>
+              {/* Distance Badge */}
+              <div className="absolute top-4 left-4">
+                <Badge className="bg-white text-black font-medium">
+                  {villa.distanceToBeach}
+                </Badge>
               </div>
-
-              {/* Description */}
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-4">{t('villa.details.theVilla')}</h2>
-                <p className="text-white/80 leading-relaxed text-lg">
-                  {villa.description}
-                </p>
-                <div className="mt-6 p-6 bg-white/5 rounded-lg border border-white/10">
-                  <h3 className="text-xl font-semibold mb-4">La Proprietà</h3>
-                  <p className="text-white/80 mb-4">
-                    La villa è composta da due unità indipendenti, per un totale di 8 ospiti, garantendo ampi spazi e privacy.
-                  </p>
-                  <div className="space-y-3 text-white/80">
-                    <p><strong>Unità principale:</strong> luminoso open space con cucina moderna, tavolo da pranzo, area salotto e vista mare; 2 eleganti camere matrimoniali e un bagno di design.</p>
-                    <p><strong>Seconda unità - Appartamento indipendente:</strong> soggiorno con cucina e divano letto, camera matrimoniale e bagno privato, con doccia esterna per rinfrescarsi dopo la spiaggia.</p>
-                  </div>
-                </div>
-              </section>
-
-              {/* Comfort e Servizi */}
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">{t('villa.details.comfortServices')}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {villa.amenities.map((amenity, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
-                      <div className="w-2 h-2 bg-white rounded-full flex-shrink-0" />
-                      <span className="text-white/90">{amenity}</span>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Spazi Interni */}
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">{t('villa.details.interiorSpaces')}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {villa.features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
-                      <div className="w-2 h-2 bg-white rounded-full flex-shrink-0" />
-                      <span className="text-white/90">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Pool Area */}
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">Area Piscina e Esterni</h2>
-                <div className="bg-white/5 rounded-lg border border-white/10 p-6">
-                  <p className="text-white/80 mb-4">
-                    La piscina riscaldata (6x4 metri) con vista mare è il vero gioiello della proprietà. L'area prendisole include:
-                  </p>
-                  <ul className="space-y-2 text-white/80">
-                    <li>• Pergola con angolo bar per aperitivi</li>
-                    <li>• Doccia esterna</li>
-                    <li>• Terzo bagno di servizio</li>
-                    <li>• Parco mediterraneo di 4.000 metri quadrati</li>
-                  </ul>
-                  <p className="text-white/80 mt-4">
-                    Circondata da un parco di 4.000 metri quadrati immerso nella macchia mediterranea, la villa offre un'esperienza rigenerante, 
-                    con accesso diretto alla spiaggia di Geremeas, che dispone di servizi esclusivi come bar e noleggio lettini e ombrelloni.
-                  </p>
-                </div>
-              </section>
-
-              {/* Posizione */}
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">{t('villa.details.position')}</h2>
-                <p className="text-white/80 mb-6">
-                  Situata in una posizione privilegiata sulla Costa del Sud della Sardegna, Juniper House offre un accesso esclusivo al mare 
-                  e viste panoramiche mozzafiato. La villa si trova in una zona tranquilla e riservata, perfetta per chi cerca privacy e lusso.
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {villa.nearby.map((location, index) => (
-                    <div key={index} className="p-3 bg-white/5 rounded-lg border border-white/10 text-center">
-                      <span className="text-white/90 text-sm">{location}</span>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Servizi Extra */}
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">{t('villa.details.extraServices')}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {villa.extraServices.map((service, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
-                      <div className="w-2 h-2 bg-amber-400 rounded-full flex-shrink-0" />
-                      <span className="text-white/90">{service}</span>
-                    </div>
-                  ))}
-                </div>
-              </section>
             </div>
 
-            {/* Right Column - Booking Card */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-24">
-                <Card className="bg-white/5 border-white/20">
+            {/* Villa Info */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <MapPin className="w-5 h-5 text-white/70" />
+                <span className="text-white/70">{villa.location}</span>
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">{villa.title}</h1>
+
+              <div className="flex items-center gap-6 mb-6">
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  <span>{villa.maxGuests} {currentLanguage === 'it' ? 'ospiti' : 'guests'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Bed className="w-5 h-5" />
+                  <span>{villa.bedrooms} {currentLanguage === 'it' ? 'camere' : 'bedrooms'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Bath className="w-5 h-5" />
+                  <span>{villa.bathrooms} {currentLanguage === 'it' ? 'bagni' : 'bathrooms'}</span>
+                </div>
+                <div className="text-sm font-medium">
+                  {villa.size}
+                </div>
+              </div>
+
+              <p className="text-lg text-white/80 mb-8 leading-relaxed">
+                {villa.description[currentLanguage]}
+              </p>
+            </div>
+          </div>
+
+          {/* Amenities Section */}
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Servizi e Comfort' : 'Amenities & Comfort'}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {villa.amenities.map((amenity, index) => (
+                <Card key={index} className="bg-white/5 border-white/20">
                   <CardContent className="p-6">
-                    <div className="mb-6">
-                      <div className="text-2xl font-bold">{t('villa.details.bookingTitle')}</div>
-                      <div className="text-white/70">{t('villa.details.selectDates')}</div>
-                    </div>
-
-                    {/* Date Pickers */}
-                    <div className="space-y-4 mb-6">
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="text-sm text-white/70 mb-1 block">{t('villa.details.checkIn')}</label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10 pointer-events-auto",
-                                  !checkIn && "text-white/50"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {checkIn ? checkIn.toLocaleDateString('it-IT') : t('villa.details.select')}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0 pointer-events-auto" align="start">
-                              <Calendar
-                                mode="single"
-                                selected={checkIn}
-                                onSelect={handleCheckInSelect}
-                                disabled={(date) => date < new Date() || (checkOut && date >= checkOut)}
-                                initialFocus
-                                className="pointer-events-auto"
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-
-                        <div>
-                          <label className="text-sm text-white/70 mb-1 block">{t('villa.details.checkOut')}</label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10 pointer-events-auto",
-                                  !checkOut && "text-white/50"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {checkOut ? checkOut.toLocaleDateString('it-IT') : t('villa.details.select')}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0 pointer-events-auto" align="start">
-                              <Calendar
-                                mode="single"
-                                selected={checkOut}
-                                onSelect={setCheckOut}
-                                disabled={(date) => date < new Date() || (checkIn && date <= checkIn)}
-                                initialFocus
-                                className="pointer-events-auto"
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                      </div>
-
-                      {/* Guests */}
-                      <div>
-                        <label className="text-sm text-white/70 mb-1 block">{t('villa.details.guests')}</label>
-                        <div className="flex items-center justify-between p-3 bg-white/5 border border-white/20 rounded-md">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-8 w-8 bg-transparent border-white/20 text-white hover:bg-white/10"
-                            onClick={() => setGuests(Math.max(1, guests - 1))}
-                            disabled={guests <= 1}
-                          >
-                            <Minus className="h-4 w-4" />
-                          </Button>
-                          <span className="font-medium">{guests} {t('villa.details.guests')}</span>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-8 w-8 bg-transparent border-white/20 text-white hover:bg-white/10"
-                            onClick={() => setGuests(Math.min(villa.maxGuests, guests + 1))}
-                            disabled={guests >= villa.maxGuests}
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Book Button */}
-                    <Button
-                      onClick={handleWhatsApp}
-                      className="w-full bg-white text-black hover:bg-white/90 font-semibold"
-                      size="lg"
-                    >
-                      {canBook ? t('villa.details.bookNow') : t('villa.details.selectDatesFirst')}
-                    </Button>
-
-                    {nights > 0 && (
-                      <div className="mt-4 text-center text-sm text-white/70">
-                        {nights} {t('villa.details.nights')} selezionate
-                      </div>
-                    )}
+                    <amenity.icon className="w-8 h-8 mb-4 text-white" />
+                    <h3 className="text-xl font-semibold mb-2">{amenity.title[currentLanguage]}</h3>
+                    <p className="text-white/70">{amenity.description[currentLanguage]}</p>
                   </CardContent>
                 </Card>
+              ))}
+            </div>
+          </div>
 
-                {/* Contact Section */}
-                <Card className="bg-white/5 border-white/20 mt-6">
-                  <CardContent className="p-6 text-center">
-                    <h3 className="text-lg font-semibold mb-2">{t('villa.details.contactUs')}</h3>
-                    <p className="text-white/70 text-sm mb-4">
-                      {t('villa.details.contactMessage')}
-                    </p>
-                    <Button
-                      onClick={handleWhatsApp}
-                      variant="outline"
-                      className="border-white/20 text-white hover:bg-white/10"
-                    >
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      WhatsApp
-                    </Button>
-                  </CardContent>
-                </Card>
+          {/* Features Section */}
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Caratteristiche' : 'Features'}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {villa.features[currentLanguage].map((feature, index) => (
+                <div key={index} className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/20">
+                  <div className="w-2 h-2 bg-white rounded-full flex-shrink-0"></div>
+                  <span className="text-white/90">{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Gallery Thumbnails */}
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Galleria' : 'Gallery'}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {villa.images.map((image, index) => (
+                <div
+                  key={index}
+                  className="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => setCurrentImageIndex(index)}
+                >
+                  <img
+                    src={image}
+                    alt={`${villa.title} - ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center">
+            <div className="bg-white/5 border border-white/20 rounded-lg p-8">
+              <h2 className="text-2xl font-bold mb-4">
+                {currentLanguage === 'it' ? 'Pronto per la tua vacanza da sogno?' : 'Ready for your dream vacation?'}
+              </h2>
+              <p className="text-white/80 mb-6">
+                {currentLanguage === 'it' 
+                  ? 'Contattaci per maggiori informazioni e disponibilità'
+                  : 'Contact us for more information and availability'
+                }
+              </p>
+              
+              <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
+                <div>
+                  <label className="text-sm text-white/70 mb-2 block">Check-in</label>
+                  <Popover open={isCheckInOpen} onOpenChange={setIsCheckInOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10",
+                          !checkIn && "text-white/50"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {checkIn ? checkIn.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={checkIn}
+                        onSelect={(date) => {
+                          setCheckIn(date);
+                          setIsCheckInOpen(false);
+                          if (date) {
+                            setTimeout(() => setIsCheckOutOpen(true), 200);
+                          }
+                        }}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                        className="p-3 pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                
+                <div>
+                  <label className="text-sm text-white/70 mb-2 block">Check-out</label>
+                  <Popover open={isCheckOutOpen} onOpenChange={setIsCheckOutOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10",
+                          !checkOut && "text-white/50"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {checkOut ? checkOut.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={checkOut}
+                        onSelect={(date) => {
+                          setCheckOut(date);
+                          setIsCheckOutOpen(false);
+                        }}
+                        disabled={(date) => date < new Date() || (checkIn && date <= checkIn)}
+                        initialFocus
+                        className="p-3 pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="text-sm text-white/70 mb-2 block">Guests</label>
+                <div className="flex items-center justify-center gap-4 max-w-xs mx-auto">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="bg-white/5 border-white/20 text-white hover:bg-white/10"
+                    onClick={() => setGuests(Math.max(1, guests - 1))}
+                  >
+                    <Minus className="w-4 h-4" />
+                  </Button>
+                  <span className="text-lg font-medium px-4">{guests}</span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="bg-white/5 border-white/20 text-white hover:bg-white/10"
+                    onClick={() => setGuests(Math.min(villa.maxGuests, guests + 1))}
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  onClick={handleWhatsAppContact}
+                  variant="luxury"
+                  size="lg"
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Contact Us
+                </Button>
               </div>
             </div>
           </div>

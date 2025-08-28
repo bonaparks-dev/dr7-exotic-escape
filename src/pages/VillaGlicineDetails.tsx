@@ -30,33 +30,49 @@ export default function VillaGlicineDetails() {
     maxGuests: 9,
     bedrooms: 4,
     bathrooms: 3,
+    size: "180 m²",
     images: [
       "/glicine1.png",
       "/glicine2.png", 
       "/glicine3.png",
       "/glicine4.png"
     ],
-    description: "Villa tradizionale sarda a soli 100 metri dalla spiaggia con giardino mediterraneo.",
-    fullDescription: "Villa Glicine è una splendida villa tradizionale sarda situata a soli 100 metri dalla magnifica spiaggia di Costa del Sud. Questa proprietà unica combina il fascino dell'architettura tradizionale sarda con comfort moderni, offrendo un'esperienza autentica in uno dei luoghi più belli della Sardegna.",
+    description: {
+      en: "Traditional Sardinian villa just 100 meters from the beach with Mediterranean garden. This unique property combines the charm of traditional Sardinian architecture with modern comforts, offering an authentic experience in one of the most beautiful places in Sardinia.",
+      it: "Villa tradizionale sarda a soli 100 metri dalla spiaggia con giardino mediterraneo. Questa proprietà unica combina il fascino dell'architettura tradizionale sarda con comfort moderni, offrendo un'esperienza autentica in uno dei luoghi più belli della Sardegna."
+    },
     amenities: [
-      { icon: Home, title: "Villa Tradizionale", description: "Architettura sarda autentica" },
-      { icon: Waves, title: "100m dalla Spiaggia", description: "Accesso rapido al mare cristallino" },
-      { icon: TreePine, title: "Giardino Mediterraneo", description: "Spazi verdi con piante locali" },
-      { icon: Wifi, title: "WiFi Gratuito", description: "Connessione internet veloce" },
-      { icon: Car, title: "Parcheggio Privato", description: "Posto auto riservato" },
-      { icon: Shield, title: "Sicurezza 24/7", description: "Servizio di sorveglianza" }
+      { icon: Home, title: { en: "Traditional Villa", it: "Villa Tradizionale" }, description: { en: "Authentic Sardinian architecture", it: "Architettura sarda autentica" } },
+      { icon: Waves, title: { en: "100m from Beach", it: "100m dalla Spiaggia" }, description: { en: "Quick access to crystal clear sea", it: "Accesso rapido al mare cristallino" } },
+      { icon: TreePine, title: { en: "Mediterranean Garden", it: "Giardino Mediterraneo" }, description: { en: "Green spaces with local plants", it: "Spazi verdi con piante locali" } },
+      { icon: Wifi, title: { en: "Free WiFi", it: "WiFi Gratuito" }, description: { en: "High-speed internet", it: "Connessione internet veloce" } },
+      { icon: Car, title: { en: "Private Parking", it: "Parcheggio Privato" }, description: { en: "Reserved parking space", it: "Posto auto riservato" } },
+      { icon: Shield, title: { en: "24/7 Security", it: "Sicurezza 24/7" }, description: { en: "Security service", it: "Servizio di sorveglianza" } }
     ],
-    features: [
-      "4 camere da letto spaziose",
-      "3 bagni moderni", 
-      "Giardino mediterraneo con patio",
-      "Terrazza panoramica",
-      "Cucina completamente attrezzata",
-      "Aria condizionata in tutte le stanze",
-      "TV satellitare",
-      "Cassaforte in camera",
-      "Asciugacapelli in ogni bagno"
-    ]
+    features: {
+      en: [
+        "4 spacious bedrooms",
+        "3 modern bathrooms", 
+        "Mediterranean garden with patio",
+        "Panoramic terrace",
+        "Fully equipped kitchen",
+        "Air conditioning in all rooms",
+        "Satellite TV",
+        "In-room safe",
+        "Hair dryer in every bathroom"
+      ],
+      it: [
+        "4 camere da letto spaziose",
+        "3 bagni moderni", 
+        "Giardino mediterraneo con patio",
+        "Terrazza panoramica",
+        "Cucina completamente attrezzata",
+        "Aria condizionata in tutte le stanze",
+        "TV satellitare",
+        "Cassaforte in camera",
+        "Asciugacapelli in ogni bagno"
+      ]
+    }
   };
 
   const nextImage = () => {
@@ -86,6 +102,8 @@ Thank you!`;
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/393457905205?text=${encodedMessage}`, "_blank");
   };
+
+  const currentLanguage = t('language') === 'it' ? 'it' : 'en';
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -162,34 +180,39 @@ Thank you!`;
               <div className="flex items-center gap-6 mb-6">
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  <span>{villa.maxGuests} guests</span>
+                  <span>{villa.maxGuests} {currentLanguage === 'it' ? 'ospiti' : 'guests'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bed className="w-5 h-5" />
-                  <span>{villa.bedrooms} bedrooms</span>
+                  <span>{villa.bedrooms} {currentLanguage === 'it' ? 'camere' : 'bedrooms'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bath className="w-5 h-5" />
-                  <span>{villa.bathrooms} bathrooms</span>
+                  <span>{villa.bathrooms} {currentLanguage === 'it' ? 'bagni' : 'bathrooms'}</span>
+                </div>
+                <div className="text-sm font-medium">
+                  {villa.size}
                 </div>
               </div>
 
               <p className="text-lg text-white/80 mb-8 leading-relaxed">
-                {villa.fullDescription}
+                {villa.description[currentLanguage]}
               </p>
             </div>
           </div>
 
           {/* Amenities Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">Amenities</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Servizi e Comfort' : 'Amenities & Comfort'}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {villa.amenities.map((amenity, index) => (
                 <Card key={index} className="bg-white/5 border-white/20">
                   <CardContent className="p-6">
                     <amenity.icon className="w-8 h-8 mb-4 text-white" />
-                    <h3 className="text-xl font-semibold mb-2">{amenity.title}</h3>
-                    <p className="text-white/70">{amenity.description}</p>
+                    <h3 className="text-xl font-semibold mb-2">{amenity.title[currentLanguage]}</h3>
+                    <p className="text-white/70">{amenity.description[currentLanguage]}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -198,9 +221,11 @@ Thank you!`;
 
           {/* Features Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">Features</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Caratteristiche' : 'Features'}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {villa.features.map((feature, index) => (
+              {villa.features[currentLanguage].map((feature, index) => (
                 <div key={index} className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/20">
                   <div className="w-2 h-2 bg-white rounded-full flex-shrink-0"></div>
                   <span className="text-white/90">{feature}</span>
@@ -211,7 +236,9 @@ Thank you!`;
 
           {/* Gallery Thumbnails */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">Gallery</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Galleria' : 'Gallery'}
+            </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {villa.images.map((image, index) => (
                 <div
@@ -232,6 +259,15 @@ Thank you!`;
           {/* CTA Section */}
           <div className="text-center">
             <div className="bg-white/5 border border-white/20 rounded-lg p-8">
+              <h2 className="text-2xl font-bold mb-4">
+                {currentLanguage === 'it' ? 'Pronto per la tua vacanza da sogno?' : 'Ready for your dream vacation?'}
+              </h2>
+              <p className="text-white/80 mb-6">
+                {currentLanguage === 'it' 
+                  ? 'Contattaci per maggiori informazioni e disponibilità'
+                  : 'Contact us for more information and availability'
+                }
+              </p>
               
               <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
                 <div>
@@ -246,7 +282,7 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkIn ? checkIn.toLocaleDateString() : "Select date"}
+                        {checkIn ? checkIn.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -280,7 +316,7 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkOut ? checkOut.toLocaleDateString() : "Select date"}
+                        {checkOut ? checkOut.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -322,7 +358,7 @@ Thank you!`;
                   </Button>
                 </div>
               </div>
-
+              
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
                   onClick={handleWhatsAppContact}

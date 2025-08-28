@@ -6,46 +6,92 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { ArrowLeft, MapPin, Star, Users, Bed, Bath, Wifi, Car, Waves, Home, Calendar as CalendarIcon, MessageCircle, Minus, Plus } from "lucide-react";
+import { ArrowLeft, MapPin, Users, Bed, Bath, Wifi, Car, Waves, Home, Calendar as CalendarIcon, MessageCircle, Minus, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-
 import { cn } from "@/lib/utils";
 
 export default function VillaLollyDetails() {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
   const [guests, setGuests] = useState(2);
   const [isCheckInOpen, setIsCheckInOpen] = useState(false);
   const [isCheckOutOpen, setIsCheckOutOpen] = useState(false);
 
-  const villaImages = [
-    "/loly1.png",
-    "/loly2.png", 
-    "/loly3.png",
-    "/loly4.png"
-  ];
+  const villa = {
+    id: 7,
+    title: "Villa Lolly - Blue Bay",
+    location: "Blue Bay, Sardegna",
+    distanceToBeach: "Vista mare",
+    maxGuests: 6,
+    bedrooms: 3,
+    bathrooms: 2,
+    size: "150 m²",
+    images: [
+      "/loly1.png",
+      "/loly2.png", 
+      "/loly3.png",
+      "/loly4.png"
+    ],
+    description: {
+      en: "Modern villa with private pool and panoramic view of the beautiful Blue Bay. Located in a privileged position, it offers all the comforts for an unforgettable vacation in Sardinia. The villa has large outdoor spaces, panoramic terraces and a private pool where you can relax admiring the breathtaking landscape of the Sardinian coast.",
+      it: "Villa moderna con piscina privata e vista panoramica sulla splendida Blue Bay. Situata in una posizione privilegiata, offre tutti i comfort per una vacanza indimenticabile in Sardegna. La villa dispone di ampi spazi esterni, terrazze panoramiche e una piscina privata dove rilassarsi ammirando il paesaggio mozzafiato della costa sarda."
+    },
+    amenities: [
+      { icon: Waves, title: { en: "Private Pool", it: "Piscina Privata" }, description: { en: "Pool with sea view", it: "Piscina con vista mare" } },
+      { icon: Home, title: { en: "Sea View Terrace", it: "Terrazza Vista Mare" }, description: { en: "Panoramic outdoor spaces", it: "Spazi esterni panoramici" } },
+      { icon: Wifi, title: { en: "Free WiFi", it: "WiFi Gratuito" }, description: { en: "High-speed internet", it: "Connessione internet veloce" } },
+      { icon: Car, title: { en: "Private Parking", it: "Parcheggio Privato" }, description: { en: "Reserved parking space", it: "Posto auto riservato" } }
+    ],
+    features: {
+      en: [
+        "Panoramic living room with sea view",
+        "Fully equipped kitchen",
+        "3 comfortable bedrooms",
+        "2 modern bathrooms",
+        "Air conditioning in all rooms",
+        "Private pool with sea view",
+        "Panoramic terrace",
+        "Mediterranean garden",
+        "Outdoor dining area",
+        "Private parking"
+      ],
+      it: [
+        "Soggiorno panoramico con vista mare",
+        "Cucina completamente attrezzata",
+        "3 camere da letto confortevoli",
+        "2 bagni moderni",
+        "Aria condizionata in tutte le stanze",
+        "Piscina privata con vista mare",
+        "Terrazza panoramica",
+        "Giardino mediterraneo",
+        "Area pranzo all'aperto",
+        "Parcheggio privato"
+      ]
+    }
+  };
 
-  const amenities = [
-    { icon: Wifi, label: "WiFi Gratuito" },
-    { icon: Car, label: "Parcheggio Privato" },
-    { icon: Waves, label: "Piscina Privata" },
-    { icon: Home, label: "Terrazza Vista Mare" }
-  ];
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % villa.images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + villa.images.length) % villa.images.length);
+  };
 
   const generateWhatsAppMessage = () => {
     const checkInDate = checkIn ? checkIn.toLocaleDateString('en-GB') : 'TBD';
     const checkOutDate = checkOut ? checkOut.toLocaleDateString('en-GB') : 'TBD';
     
-    return `Hello, I want to book Villa Lolly - Blue Bay. May I have more information?
+    return `Hello, I want to book ${villa.title}. May I have more information?
 
 Check-in: ${checkInDate}
 Check-out: ${checkOutDate}
 Guests: ${guests}
-Location: Blue Bay, Sardegna
+Location: ${villa.location}
 
 Thank you!`;
   };
@@ -55,6 +101,8 @@ Thank you!`;
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/393457905205?text=${encodedMessage}`, "_blank");
   };
+
+  const currentLanguage = t('language') === 'it' ? 'it' : 'en';
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -73,97 +121,97 @@ Thank you!`;
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4">
           {/* Hero Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
             {/* Image Gallery */}
-            <div className="space-y-4">
+            <div className="relative">
               <div className="aspect-[4/3] overflow-hidden rounded-lg">
                 <img
-                  src={villaImages[selectedImageIndex]}
-                  alt="Villa Lolly - Blue Bay"
+                  src={villa.images[currentImageIndex]}
+                  alt={villa.title}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="grid grid-cols-4 gap-2">
-                {villaImages.map((image, index) => (
+              
+              {/* Navigation Dots */}
+              <div className="flex justify-center mt-4 space-x-2">
+                {villa.images.map((_, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedImageIndex(index)}
-                    className={`aspect-square overflow-hidden rounded border-2 transition-all ${
-                      selectedImageIndex === index ? "border-white" : "border-white/20"
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`w-3 h-3 rounded-full transition-colors ${
+                      index === currentImageIndex ? 'bg-white' : 'bg-white/30'
                     }`}
-                  >
-                    <img
-                      src={image}
-                      alt={`Villa Lolly ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
+                  />
                 ))}
+              </div>
+
+              {/* Navigation Arrows */}
+              <button
+                onClick={prevImage}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+              >
+                ←
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+              >
+                →
+              </button>
+
+              {/* Distance Badge */}
+              <div className="absolute top-4 left-4">
+                <Badge className="bg-white text-black font-medium">
+                  {villa.distanceToBeach}
+                </Badge>
               </div>
             </div>
 
             {/* Villa Info */}
-            <div className="space-y-6">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge className="bg-white text-black font-medium">
-                    Vista mare
-                  </Badge>
-                  <div className="flex items-center gap-1 text-sm">
-                    <Star className="w-4 h-4 fill-current text-white" />
-                    <span className="font-medium">4.7</span>
-                    <span className="text-white/70">(18 recensioni)</span>
-                  </div>
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <MapPin className="w-5 h-5 text-white/70" />
+                <span className="text-white/70">{villa.location}</span>
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">{villa.title}</h1>
+
+              <div className="flex items-center gap-6 mb-6">
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  <span>{villa.maxGuests} {currentLanguage === 'it' ? 'ospiti' : 'guests'}</span>
                 </div>
-                <h1 className="text-4xl font-bold mb-2">Villa Lolly - Blue Bay</h1>
-                <div className="flex items-center gap-2 text-white/80">
-                  <MapPin className="w-5 h-5" />
-                  <span>Blue Bay, Sardegna</span>
+                <div className="flex items-center gap-2">
+                  <Bed className="w-5 h-5" />
+                  <span>{villa.bedrooms} {currentLanguage === 'it' ? 'camere' : 'bedrooms'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Bath className="w-5 h-5" />
+                  <span>{villa.bathrooms} {currentLanguage === 'it' ? 'bagni' : 'bathrooms'}</span>
+                </div>
+                <div className="text-sm font-medium">
+                  {villa.size}
                 </div>
               </div>
 
-              {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-white/5 rounded-lg border border-white/20">
-                  <Users className="w-6 h-6 mx-auto mb-2" />
-                  <div className="text-sm text-white/70">Ospiti</div>
-                  <div className="font-bold">6</div>
-                </div>
-                <div className="text-center p-4 bg-white/5 rounded-lg border border-white/20">
-                  <Bed className="w-6 h-6 mx-auto mb-2" />
-                  <div className="text-sm text-white/70">Camere</div>
-                  <div className="font-bold">3</div>
-                </div>
-                <div className="text-center p-4 bg-white/5 rounded-lg border border-white/20">
-                  <Bath className="w-6 h-6 mx-auto mb-2" />
-                  <div className="text-sm text-white/70">Bagni</div>
-                  <div className="font-bold">2</div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <h2 className="text-2xl font-bold mb-4">Descrizione</h2>
-                <p className="text-white/80 leading-relaxed">
-                  Villa Lolly è una moderna villa con piscina privata e vista panoramica sulla splendida Blue Bay. 
-                  Situata in una posizione privilegiata, offre tutti i comfort per una vacanza indimenticabile in Sardegna.
-                  La villa dispone di ampi spazi esterni, terrazze panoramiche e una piscina privata dove rilassarsi 
-                  ammirando il paesaggio mozzafiato della costa sarda.
-                </p>
-              </div>
-
+              <p className="text-lg text-white/80 mb-8 leading-relaxed">
+                {villa.description[currentLanguage]}
+              </p>
             </div>
           </div>
 
           {/* Amenities Section */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">Servizi e Comfort</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {amenities.map((amenity, index) => (
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Servizi e Comfort' : 'Amenities & Comfort'}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {villa.amenities.map((amenity, index) => (
                 <Card key={index} className="bg-white/5 border-white/20">
-                  <CardContent className="p-6 text-center">
-                    <amenity.icon className="w-8 h-8 mx-auto mb-3" />
-                    <p className="text-sm font-medium">{amenity.label}</p>
+                  <CardContent className="p-6">
+                    <amenity.icon className="w-8 h-8 mb-4 text-white" />
+                    <h3 className="text-xl font-semibold mb-2">{amenity.title[currentLanguage]}</h3>
+                    <p className="text-white/70">{amenity.description[currentLanguage]}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -171,78 +219,53 @@ Thank you!`;
           </div>
 
           {/* Features Section */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">Caratteristiche Principali</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="bg-white/5 border-white/20">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4">Spazi Interni</h3>
-                  <ul className="space-y-2 text-white/80">
-                    <li>• Soggiorno con vista panoramica</li>
-                    <li>• Cucina completamente attrezzata</li>
-                    <li>• 3 camere da letto confortevoli</li>
-                    <li>• 2 bagni moderni</li>
-                    <li>• Aria condizionata in tutte le stanze</li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-white/5 border-white/20">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4">Spazi Esterni</h3>
-                  <ul className="space-y-2 text-white/80">
-                    <li>• Piscina privata con vista mare</li>
-                    <li>• Terrazza panoramica</li>
-                    <li>• Giardino mediterraneo</li>
-                    <li>• Area pranzo all'aperto</li>
-                    <li>• Parcheggio privato</li>
-                  </ul>
-                </CardContent>
-              </Card>
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Caratteristiche' : 'Features'}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {villa.features[currentLanguage].map((feature, index) => (
+                <div key={index} className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/20">
+                  <div className="w-2 h-2 bg-white rounded-full flex-shrink-0"></div>
+                  <span className="text-white/90">{feature}</span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Location Section */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">Posizione</h2>
-            <Card className="bg-white/5 border-white/20">
-              <CardContent className="p-6">
-                <p className="text-white/80 mb-4">
-                  Villa Lolly si trova nella pittoresca Blue Bay, una delle zone più esclusive della Sardegna meridionale. 
-                  La posizione offre viste mozzafiato sul mare cristallino e facile accesso alle spiagge più belle della zona.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                  <div>
-                    <h4 className="font-bold mb-2">Distanze:</h4>
-                    <ul className="text-sm text-white/80 space-y-1">
-                      <li>• Spiaggia: Vista diretta</li>
-                      <li>• Centro: 15 min</li>
-                      <li>• Aeroporto: 45 min</li>
-                      <li>• Ristoranti: 5 min</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-bold mb-2">Nelle vicinanze:</h4>
-                    <ul className="text-sm text-white/80 space-y-1">
-                      <li>• Spiagge cristalline</li>
-                      <li>• Ristoranti di pesce</li>
-                      <li>• Centro benessere</li>
-                      <li>• Porto turistico</li>
-                    </ul>
-                  </div>
+          {/* Gallery Thumbnails */}
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Galleria' : 'Gallery'}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {villa.images.map((image, index) => (
+                <div
+                  key={index}
+                  className="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => setCurrentImageIndex(index)}
+                >
+                  <img
+                    src={image}
+                    alt={`${villa.title} - ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              </CardContent>
-            </Card>
+              ))}
+            </div>
           </div>
 
-          {/* Contact Section */}
+          {/* CTA Section */}
           <div className="text-center">
             <div className="bg-white/5 border border-white/20 rounded-lg p-8">
               <h2 className="text-2xl font-bold mb-4">
-                Vuoi maggiori informazioni?
+                {currentLanguage === 'it' ? 'Pronto per la tua vacanza da sogno?' : 'Ready for your dream vacation?'}
               </h2>
               <p className="text-white/80 mb-6">
-                Il nostro team è a disposizione per aiutarti a pianificare la tua vacanza perfetta.
+                {currentLanguage === 'it' 
+                  ? 'Contattaci per maggiori informazioni e disponibilità'
+                  : 'Contact us for more information and availability'
+                }
               </p>
               
               <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
@@ -258,7 +281,7 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkIn ? checkIn.toLocaleDateString() : "Seleziona data"}
+                        {checkIn ? checkIn.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -292,7 +315,7 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkOut ? checkOut.toLocaleDateString() : "Seleziona data"}
+                        {checkOut ? checkOut.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -328,22 +351,24 @@ Thank you!`;
                     variant="outline"
                     size="icon"
                     className="bg-white/5 border-white/20 text-white hover:bg-white/10"
-                    onClick={() => setGuests(Math.min(6, guests + 1))}
+                    onClick={() => setGuests(Math.min(villa.maxGuests, guests + 1))}
                   >
                     <Plus className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
               
-              <Button
-                onClick={handleWhatsAppContact}
-                variant="luxury"
-                size="lg"
-                className="bg-green-600 hover:bg-green-700"
-              >
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Contact Us
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  onClick={handleWhatsAppContact}
+                  variant="luxury"
+                  size="lg"
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Contact Us
+                </Button>
+              </div>
             </div>
           </div>
         </div>

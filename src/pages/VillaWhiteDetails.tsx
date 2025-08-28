@@ -30,36 +30,55 @@ export default function VillaWhiteDetails() {
     maxGuests: 8,
     bedrooms: 4,
     bathrooms: 3,
+    size: "200 m²",
     images: [
       "/white1.png",
       "/white2.png", 
       "/white3.png",
       "/white4.png"
     ],
-    description: "Villa moderna di 200m² con design minimalista, vista panoramica sul mare e spazi esterni raffinati.",
-    fullDescription: "White Villa è una straordinaria villa moderna di 200m² situata nella prestigiosa Costa Smeralda. Caratterizzata da un design minimalista contemporaneo e linee pulite, questa villa offre un'esperienza di lusso unica con vista panoramica mozzafiato sul mare cristallino della Sardegna.",
+    description: {
+      en: "Modern 200m² villa with minimalist design, panoramic sea view and refined outdoor spaces. This extraordinary modern villa is located in the prestigious Costa Smeralda, characterized by contemporary minimalist design and clean lines, offering a unique luxury experience with breathtaking panoramic views of Sardinia's crystal clear sea.",
+      it: "Villa moderna di 200m² con design minimalista, vista panoramica sul mare e spazi esterni raffinati. Questa straordinaria villa moderna è situata nella prestigiosa Costa Smeralda, caratterizzata da un design minimalista contemporaneo e linee pulite, offrendo un'esperienza di lusso unica con vista panoramica mozzafiato sul mare cristallino della Sardegna."
+    },
     amenities: [
-      { icon: Home, title: "Design Minimalista", description: "Architettura moderna contemporanea" },
-      { icon: Waves, title: "Vista Mare Panoramica", description: "Panorama mozzafiato sul mare" },
-      { icon: Sparkles, title: "Spazi Raffinati", description: "Ambienti eleganti e curati" },
-      { icon: Wifi, title: "WiFi Gratuito", description: "Connessione internet veloce" },
-      { icon: Car, title: "Parcheggio Privato", description: "Posto auto riservato" },
-      { icon: Shield, title: "Sicurezza 24/7", description: "Servizio di sorveglianza" }
+      { icon: Home, title: { en: "Minimalist Design", it: "Design Minimalista" }, description: { en: "Contemporary modern architecture", it: "Architettura moderna contemporanea" } },
+      { icon: Waves, title: { en: "Panoramic Sea View", it: "Vista Mare Panoramica" }, description: { en: "Breathtaking sea panorama", it: "Panorama mozzafiato sul mare" } },
+      { icon: Sparkles, title: { en: "Refined Spaces", it: "Spazi Raffinati" }, description: { en: "Elegant and curated environments", it: "Ambienti eleganti e curati" } },
+      { icon: Wifi, title: { en: "Free WiFi", it: "WiFi Gratuito" }, description: { en: "High-speed internet", it: "Connessione internet veloce" } },
+      { icon: Car, title: { en: "Private Parking", it: "Parcheggio Privato" }, description: { en: "Reserved parking space", it: "Posto auto riservato" } },
+      { icon: Shield, title: { en: "24/7 Security", it: "Sicurezza 24/7" }, description: { en: "Security service", it: "Servizio di sorveglianza" } }
     ],
-    features: [
-      "4 camere da letto eleganti",
-      "3 bagni moderni con finiture di lusso", 
-      "Ampio soggiorno con vista mare",
-      "Cucina moderna completamente attrezzata",
-      "Terrazza panoramica con area relax",
-      "Spazi esterni raffinati e curati",
-      "Aria condizionata in tutte le stanze",
-      "Smart TV in ogni camera",
-      "Sistema audio Bluetooth",
-      "Cassaforte digitale",
-      "Asciugacapelli professionali",
-      "Set di cortesia di lusso"
-    ]
+    features: {
+      en: [
+        "4 elegant bedrooms",
+        "3 modern bathrooms with luxury finishes", 
+        "Spacious living room with sea view",
+        "Modern fully equipped kitchen",
+        "Panoramic terrace with relaxation area",
+        "Refined and curated outdoor spaces",
+        "Air conditioning in all rooms",
+        "Smart TV in every room",
+        "Bluetooth audio system",
+        "Digital safe",
+        "Professional hair dryers",
+        "Luxury courtesy set"
+      ],
+      it: [
+        "4 camere da letto eleganti",
+        "3 bagni moderni con finiture di lusso", 
+        "Ampio soggiorno con vista mare",
+        "Cucina moderna completamente attrezzata",
+        "Terrazza panoramica con area relax",
+        "Spazi esterni raffinati e curati",
+        "Aria condizionata in tutte le stanze",
+        "Smart TV in ogni camera",
+        "Sistema audio Bluetooth",
+        "Cassaforte digitale",
+        "Asciugacapelli professionali",
+        "Set di cortesia di lusso"
+      ]
+    }
   };
 
   const nextImage = () => {
@@ -89,6 +108,8 @@ Thank you!`;
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/393457905205?text=${encodedMessage}`, "_blank");
   };
+
+  const currentLanguage = t('language') === 'it' ? 'it' : 'en';
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -165,34 +186,39 @@ Thank you!`;
               <div className="flex items-center gap-6 mb-6">
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  <span>{villa.maxGuests} guests</span>
+                  <span>{villa.maxGuests} {currentLanguage === 'it' ? 'ospiti' : 'guests'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bed className="w-5 h-5" />
-                  <span>{villa.bedrooms} bedrooms</span>
+                  <span>{villa.bedrooms} {currentLanguage === 'it' ? 'camere' : 'bedrooms'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bath className="w-5 h-5" />
-                  <span>{villa.bathrooms} bathrooms</span>
+                  <span>{villa.bathrooms} {currentLanguage === 'it' ? 'bagni' : 'bathrooms'}</span>
+                </div>
+                <div className="text-sm font-medium">
+                  {villa.size}
                 </div>
               </div>
 
               <p className="text-lg text-white/80 mb-8 leading-relaxed">
-                {villa.fullDescription}
+                {villa.description[currentLanguage]}
               </p>
             </div>
           </div>
 
           {/* Amenities Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">Amenities</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Servizi e Comfort' : 'Amenities & Comfort'}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {villa.amenities.map((amenity, index) => (
                 <Card key={index} className="bg-white/5 border-white/20">
                   <CardContent className="p-6">
                     <amenity.icon className="w-8 h-8 mb-4 text-white" />
-                    <h3 className="text-xl font-semibold mb-2">{amenity.title}</h3>
-                    <p className="text-white/70">{amenity.description}</p>
+                    <h3 className="text-xl font-semibold mb-2">{amenity.title[currentLanguage]}</h3>
+                    <p className="text-white/70">{amenity.description[currentLanguage]}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -201,9 +227,11 @@ Thank you!`;
 
           {/* Features Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">Features</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Caratteristiche' : 'Features'}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {villa.features.map((feature, index) => (
+              {villa.features[currentLanguage].map((feature, index) => (
                 <div key={index} className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/20">
                   <div className="w-2 h-2 bg-white rounded-full flex-shrink-0"></div>
                   <span className="text-white/90">{feature}</span>
@@ -214,7 +242,9 @@ Thank you!`;
 
           {/* Gallery Thumbnails */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-8">Gallery</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {currentLanguage === 'it' ? 'Galleria' : 'Gallery'}
+            </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {villa.images.map((image, index) => (
                 <div
@@ -234,13 +264,16 @@ Thank you!`;
 
           {/* CTA Section */}
           <div className="text-center">
-              <div className="bg-white/5 border border-white/20 rounded-lg p-8">
-                <h2 className="text-2xl font-bold mb-4">
-                  Ready for Your Dream Vacation?
-                </h2>
-                <p className="text-white/80 mb-6">
-                  Contact us for more information and availability
-                </p>
+            <div className="bg-white/5 border border-white/20 rounded-lg p-8">
+              <h2 className="text-2xl font-bold mb-4">
+                {currentLanguage === 'it' ? 'Pronto per la tua vacanza da sogno?' : 'Ready for your dream vacation?'}
+              </h2>
+              <p className="text-white/80 mb-6">
+                {currentLanguage === 'it' 
+                  ? 'Contattaci per maggiori informazioni e disponibilità'
+                  : 'Contact us for more information and availability'
+                }
+              </p>
               
               <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
                 <div>
@@ -255,7 +288,7 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkIn ? checkIn.toLocaleDateString() : "Seleziona data"}
+                        {checkIn ? checkIn.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -269,13 +302,13 @@ Thank you!`;
                             setTimeout(() => setIsCheckOutOpen(true), 200);
                           }
                         }}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
-                          className="p-3 pointer-events-auto"
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                        className="p-3 pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
                 
                 <div>
                   <label className="text-sm text-white/70 mb-2 block">Check-out</label>
@@ -289,7 +322,7 @@ Thank you!`;
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkOut ? checkOut.toLocaleDateString() : "Seleziona data"}
+                        {checkOut ? checkOut.toLocaleDateString() : (currentLanguage === 'it' ? 'Seleziona data' : 'Select date')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -331,7 +364,7 @@ Thank you!`;
                   </Button>
                 </div>
               </div>
-
+              
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
                   onClick={handleWhatsAppContact}
