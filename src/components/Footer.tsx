@@ -43,11 +43,11 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">{t('footer.services')}</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.supercars')}</a></li>
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.yachts')}</a></li>
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.jets')}</a></li>
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.helicopters')}</a></li>
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('services.villas')}</a></li>
+              <li><a href="/rentals" className="text-white/70 hover:text-white transition-colors">{t('services.supercars')}</a></li>
+              <li><a href="/yacht-rental" className="text-white/70 hover:text-white transition-colors">{t('services.yachts')}</a></li>
+              <li><a href="/services" className="text-white/70 hover:text-white transition-colors">{t('services.jets')}</a></li>
+              <li><a href="/services" className="text-white/70 hover:text-white transition-colors">{t('services.helicopters')}</a></li>
+              <li><a href="/villa-listings" className="text-white/70 hover:text-white transition-colors">{t('services.villas')}</a></li>
             </ul>
           </div>
           
@@ -55,8 +55,8 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">{t('footer.company')}</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('footer.about')}</a></li>
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('footer.howitworks')}</a></li>
+              <li><a href="/services" className="text-white/70 hover:text-white transition-colors">{t('footer.about')}</a></li>
+              <li><a href="/services" className="text-white/70 hover:text-white transition-colors">{t('footer.howitworks')}</a></li>
             </ul>
           </div>
           
@@ -64,9 +64,9 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">{t('footer.support')}</h3>
             <ul className="space-y-2">
-              <li><a href="#contact" className="text-white/70 hover:text-white transition-colors">{t('btn.contact')}</a></li>
+              <li><a href="/#contact" className="text-white/70 hover:text-white transition-colors">{t('btn.contact')}</a></li>
               <li><a href="/cookie-policy" className="text-white/70 hover:text-white transition-colors">Cookie Policy</a></li>
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">{t('footer.terms')}</a></li>
+              <li><a href="/cookie-policy" className="text-white/70 hover:text-white transition-colors">{t('footer.terms')}</a></li>
             </ul>
             
             <div className="pt-4">
