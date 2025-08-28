@@ -159,7 +159,7 @@ const translations = {
     'btn.learnmore': 'Scopri di più',
     'btn.contact': 'Contattaci',
     'btn.whatsapp': 'WhatsApp',
-    'btn.back': 'Torna alla Home',
+    'btn.back': 'Indietro',
     
     // Footer
     'footer.services': 'Servizi',
