@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookingModal } from "@/components/BookingModal";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { ArrowLeft, MapPin, Users, Bed, Bath, Wifi, Car, Waves, Home, TreePine, Shield, Calendar as CalendarIcon, MessageCircle } from "lucide-react";
@@ -230,12 +230,6 @@ Thank you!`;
           {/* CTA Section */}
           <div className="text-center">
             <div className="bg-white/5 border border-white/20 rounded-lg p-8">
-              <h2 className="text-2xl font-bold mb-4">
-                {t('villa.ready')}
-              </h2>
-              <p className="text-white/80 mb-6">
-                {t('villa.contact')}
-              </p>
               
               <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
                 <div>

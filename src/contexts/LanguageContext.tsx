@@ -281,6 +281,7 @@ const translations = {
     'villa.details.contactTeam': 'Contatta il Nostro Concierge',
     'villa.details.bookingTitle': 'Prenotazione',
     'villa.details.selectDates': 'Seleziona le date per richiedere informazioni',
+    'villa.amenities': 'Amenities',
   },
   en: {
     // Navigation
@@ -553,7 +554,8 @@ const translations = {
     'villa.details.questionsDesc': 'Our concierge team is available 24/7 for personalized assistance and exclusive services',
     'villa.details.contactTeam': 'Contact Our Concierge',
     'villa.details.bookingTitle': 'Booking',
-    'villa.details.selectDates': 'Select your dates to inquire',
+    'villa.details.selectDates': 'Select dates to request information',
+    'villa.amenities': 'Amenities',
   }
 };
 
