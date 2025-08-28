@@ -97,10 +97,8 @@ export default function JuniperHouseDetails() {
 
   const handleWhatsApp = () => {
     const message = formatWhatsAppMessage();
-    const url = message 
-      ? `https://wa.me/393457905205?text=${encodeURIComponent(message)}`
-      : "https://wa.me/393457905205";
-    window.open(url, "_blank");
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/393457905205?text=${encodedMessage}`, "_blank");
   };
 
   const nextImage = () => {

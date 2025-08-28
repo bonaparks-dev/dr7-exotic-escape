@@ -4,16 +4,21 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, MapPin, Star, Users, Bed, Bath, Wifi, Car, Waves, Home } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { ArrowLeft, MapPin, Star, Users, Bed, Bath, Wifi, Car, Waves, Home, Calendar as CalendarIcon, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { BookingModal } from "@/components/BookingModal";
+import { cn } from "@/lib/utils";
 
 export default function VillaLollyDetails() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [checkIn, setCheckIn] = useState<Date>();
+  const [checkOut, setCheckOut] = useState<Date>();
 
   const villaImages = [
     "/loly1.png",
@@ -28,6 +33,25 @@ export default function VillaLollyDetails() {
     { icon: Waves, label: "Piscina Privata" },
     { icon: Home, label: "Terrazza Vista Mare" }
   ];
+
+  const generateWhatsAppMessage = () => {
+    const checkInDate = checkIn ? checkIn.toLocaleDateString('en-GB') : 'TBD';
+    const checkOutDate = checkOut ? checkOut.toLocaleDateString('en-GB') : 'TBD';
+    
+    return `Hello, I want to book Villa Lolly - Blue Bay. May I have more information?
+
+Check-in: ${checkInDate}
+Check-out: ${checkOutDate}
+Location: Blue Bay, Sardegna
+
+Thank you!`;
+  };
+
+  const handleWhatsAppContact = () => {
+    const message = generateWhatsAppMessage();
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/393457905205?text=${encodedMessage}`, "_blank");
+  };
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -226,12 +250,72 @@ export default function VillaLollyDetails() {
               <p className="text-white/80 mb-6">
                 Il nostro team è a disposizione per aiutarti a pianificare la tua vacanza perfetta.
               </p>
+              
+              {/* Date Selection */}
+              <div className="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
+                <div>
+                  <label className="text-sm text-white/70 mb-2 block">Check-in</label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10",
+                          !checkIn && "text-white/50"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {checkIn ? checkIn.toLocaleDateString() : "Seleziona data"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={checkIn}
+                        onSelect={setCheckIn}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                
+                <div>
+                  <label className="text-sm text-white/70 mb-2 block">Check-out</label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10",
+                          !checkOut && "text-white/50"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {checkOut ? checkOut.toLocaleDateString() : "Seleziona data"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={checkOut}
+                        onSelect={setCheckOut}
+                        disabled={(date) => date < new Date() || (checkIn && date <= checkIn)}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+              
               <Button
-                onClick={() => window.open("https://wa.me/393457905205", "_blank")}
+                onClick={handleWhatsAppContact}
                 variant="luxury"
                 size="lg"
+                className="bg-green-600 hover:bg-green-700"
               >
-                Contatta il Concierge
+                <MessageCircle className="w-5 h-5 mr-2" />
+                Prenota via WhatsApp
               </Button>
             </div>
           </div>
