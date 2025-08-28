@@ -470,7 +470,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                   </div>
                   {getInsuranceEligibility().kasko.reason && (
                     <div className="text-xs text-red-400 mt-1">
-                      ❌ {getInsuranceEligibility().kasko.reason}
+                      {getInsuranceEligibility().kasko.reason}
                     </div>
                   )}
                 </Label>
@@ -498,7 +498,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                   </div>
                   {getInsuranceEligibility().kaskoBlack.reason && (
                     <div className="text-xs text-red-400 mt-1">
-                      ❌ {getInsuranceEligibility().kaskoBlack.reason}
+                      {getInsuranceEligibility().kaskoBlack.reason}
                     </div>
                   )}
                 </Label>
@@ -526,7 +526,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                   </div>
                   {getInsuranceEligibility().kaskoSignature.reason && (
                     <div className="text-xs text-red-400 mt-1">
-                      ❌ {getInsuranceEligibility().kaskoSignature.reason}
+                      {getInsuranceEligibility().kaskoSignature.reason}
                     </div>
                   )}
                 </Label>
