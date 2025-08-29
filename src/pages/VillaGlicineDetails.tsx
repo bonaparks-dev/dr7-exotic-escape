@@ -24,7 +24,7 @@ export default function VillaGlicineDetails() {
 
   const villa = {
     id: 5,
-    title: "Villa Glicine - Villa 100 mt from the beach",
+    title: "Villa 100 mt from the beach",
     location: "Costa del Sud, Sardegna",
     distanceToBeach: "100m dalla Spiaggia",
     maxGuests: 9,
