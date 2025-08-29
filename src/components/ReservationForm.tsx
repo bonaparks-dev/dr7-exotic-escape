@@ -289,7 +289,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                     {startDate ? format(startDate, "PPP") : "Select date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-white">
+                <PopoverContent className="w-auto p-0 bg-luxury-black border border-luxury-white/20">
                   <Calendar
                     mode="single"
                     selected={startDate}
@@ -299,7 +299,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                     }}
                     disabled={(date) => date < new Date()}
                     initialFocus
-                    className="pointer-events-auto"
+                    className="pointer-events-auto bg-luxury-black text-luxury-white"
                   />
                 </PopoverContent>
               </Popover>
@@ -319,7 +319,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                     {endDate ? format(endDate, "PPP") : "Select date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-white">
+                <PopoverContent className="w-auto p-0 bg-luxury-black border border-luxury-white/20">
                   <Calendar
                     mode="single"
                     selected={endDate}
@@ -329,7 +329,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                     }}
                     disabled={(date) => !startDate || date <= startDate}
                     initialFocus
-                    className="pointer-events-auto"
+                    className="pointer-events-auto bg-luxury-black text-luxury-white"
                   />
                 </PopoverContent>
               </Popover>
