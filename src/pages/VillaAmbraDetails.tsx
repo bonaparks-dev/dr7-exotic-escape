@@ -24,7 +24,7 @@ export default function VillaAmbraDetails() {
 
   const villa = {
     id: 3,
-    title: "Villa Ambra - with cliffside pool and private access to the sea",
+    title: "Villa with cliffside pool and private access to the sea",
     location: "Costa Smeralda, Sardegna",
     distanceToBeach: "Accesso privato al mare",
     maxGuests: 12,
