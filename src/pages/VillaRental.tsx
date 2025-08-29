@@ -53,7 +53,7 @@ interface Villa {
 const villas: Villa[] = [
   {
     id: 1,
-    title: "Villa Elicriso Luxury",
+    title: "Villa - By the sea",
     location: "Geremeas (CA), Sardegna",
     distanceToBeach: "50m dalla Spiaggia",
     maxGuests: 9,
@@ -66,7 +66,7 @@ const villas: Villa[] = [
       "/lovable-uploads/1630985d-a23b-4344-a01f-886c5fa2be7b.png",
     ],
     description:
-      "Benvenuti a Villa Elicriso, una residenza esclusiva situata a Geremeas, a soli 50 metri da una spiaggia incontaminata tra le più belle della Sardegna. Un rifugio privato dove lusso, comfort e natura si fondono in un'esperienza unica.",
+      "Benvenuti a Villa - By the sea, una residenza esclusiva situata a Geremeas, a soli 50 metri da una spiaggia incontaminata tra le più belle della Sardegna. Un rifugio privato dove lusso, comfort e natura si fondono in un'esperienza unica.",
     amenities: [
       "Piscina privata riscaldata (fino a 38°C)",
       "Jacuzzi 5 posti",
@@ -274,9 +274,109 @@ export default function VillaRental() {
             {/* Booking card */}
             <Card className="bg-white/5 border-white/20 w-full lg:w-[420px] lg:sticky lg:top-24">
               <CardContent className="p-6">
-                <div className="flex items-end justify-between mb-4">
-                  <div className="text-2xl font-bold">Contattaci per prenotare</div>
-                  <div className="text-white/70 text-sm">Richiedi disponibilità e prezzi</div>
+                <h3 className="text-xl font-semibold mb-4">Book Your Stay</h3>
+                
+                {/* Date Selection */}
+                <div className="space-y-4 mb-6">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-white/80 mb-2">Check-in</label>
+                      <Popover open={openCheckIn} onOpenChange={setOpenCheckIn}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10",
+                              !checkIn && "text-white/60"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {checkIn ? format(checkIn, "MMM dd") : "Select"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 bg-black border-white/20">
+                          <Calendar
+                            mode="single"
+                            selected={checkIn}
+                            onSelect={(date) => {
+                              setCheckIn(date);
+                              setOpenCheckIn(false);
+                              if (date && checkOut && isBefore(checkOut, date)) {
+                                setCheckOut(undefined);
+                              }
+                            }}
+                            disabled={(date) => isBefore(date, startOfDay(new Date()))}
+                            initialFocus
+                            className="rounded-md border border-white/20 bg-black text-white p-3 pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-white/80 mb-2">Check-out</label>
+                      <Popover open={openCheckOut} onOpenChange={setOpenCheckOut}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal bg-white/5 border-white/20 text-white hover:bg-white/10",
+                              !checkOut && "text-white/60"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {checkOut ? format(checkOut, "MMM dd") : "Select"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 bg-black border-white/20">
+                          <Calendar
+                            mode="single"
+                            selected={checkOut}
+                            onSelect={(date) => {
+                              setCheckOut(date);
+                              setOpenCheckOut(false);
+                            }}
+                            disabled={(date) => 
+                              isBefore(date, startOfDay(new Date())) || 
+                              (checkIn && (isBefore(date, checkIn) || isSameDay(date, checkIn)))
+                            }
+                            initialFocus
+                            className="rounded-md border border-white/20 bg-black text-white p-3 pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+
+                  {/* Guests Counter */}
+                  <div>
+                    <label className="block text-sm font-medium text-white/80 mb-2">Guests</label>
+                    <div className="flex items-center justify-between bg-white/5 border border-white/20 rounded-lg px-4 py-3">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setGuests(Math.max(1, guests - 1))}
+                        disabled={guests <= 1}
+                        className="h-8 w-8 p-0 text-white hover:bg-white/10 disabled:opacity-50"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      
+                      <span className="text-lg font-medium text-white">
+                        {guests} {guests === 1 ? 'Guest' : 'Guests'}
+                      </span>
+                      
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setGuests(Math.min(villa.maxGuests, guests + 1))}
+                        disabled={guests >= villa.maxGuests}
+                        className="h-8 w-8 p-0 text-white hover:bg-white/10 disabled:opacity-50"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Contact Button */}
@@ -285,15 +385,15 @@ export default function VillaRental() {
                     const message = generateWhatsAppMessage(villa);
                     window.open(`https://wa.me/393457905205?text=${message}`, "_blank");
                   }}
-                  className="w-full mt-6"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white border-0"
                   size="lg"
-                  variant="luxury"
                 >
-                  Richiedi Disponibilità
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Contact Us
                 </Button>
 
                 <div className="text-center mt-3">
-                  <p className="text-sm text-white/70">Concierge disponibile 24/7</p>
+                  <p className="text-sm text-white/60">24/7 Concierge Service</p>
                 </div>
               </CardContent>
             </Card>
