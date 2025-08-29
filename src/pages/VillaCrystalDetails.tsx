@@ -24,7 +24,7 @@ export default function VillaCrystalDetails() {
 
   const villa = {
     id: 9,
-    title: "Villa Crystal Rock privacy on the sea, heated pool",
+    title: "Villa privacy on the sea, heated pool",
     location: "Costa Smeralda, Sardegna",
     distanceToBeach: "Accesso privato al mare",
     maxGuests: 4,
