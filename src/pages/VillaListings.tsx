@@ -25,7 +25,7 @@ interface Villa {
 const villas: Villa[] = [
   {
     id: 1,
-    title: "Villa Elicriso - Luxury 50m from the Beach",
+    title: "Villa 50m from the Beach",
     location: "Geremeas, Sardegna",
     distanceToBeach: "50m dalla Spiaggia",
     maxGuests: 9,
@@ -43,7 +43,7 @@ const villas: Villa[] = [
   },
   {
     id: 2,
-    title: "Juniper House - Villa by the Sea",
+    title: "Villa by the Sea",
     location: "Costa del Sud, Sardegna",
     distanceToBeach: "Accesso diretto al mare",
     maxGuests: 6,
@@ -61,7 +61,7 @@ const villas: Villa[] = [
   },
   {
     id: 3,
-    title: "Villa Ambra - with cliffside pool and private access to the sea",
+    title: "Villa with cliffside pool and private access to the sea",
     location: "Costa Smeralda, Sardegna",
     distanceToBeach: "Accesso privato al mare",
     maxGuests: 12,
@@ -79,7 +79,7 @@ const villas: Villa[] = [
   },
   {
     id: 4,
-    title: "Villa Lolly - Blue Bay",
+    title: "Villa Blue Bay",
     location: "Blue Bay, Sardegna",
     distanceToBeach: "Vista mare",
     maxGuests: 6,
@@ -97,7 +97,7 @@ const villas: Villa[] = [
   },
   {
     id: 5,
-    title: "Villa Glicine - Villa 100 mt from the beach",
+    title: "Villa 100 mt from the beach",
     location: "Costa del Sud, Sardegna",
     distanceToBeach: "100m dalla Spiaggia",
     maxGuests: 9,
@@ -115,7 +115,7 @@ const villas: Villa[] = [
   },
   {
     id: 6,
-    title: "LAJ House, Cagliari center",
+    title: "Luxury House, Cagliari center",
     location: "Cagliari Centro, Sardegna",
     distanceToBeach: "Centro città",
     maxGuests: 4,
@@ -133,7 +133,7 @@ const villas: Villa[] = [
   },
   {
     id: 7,
-    title: "Villa Josy - Villa by the Sea with Heated Outdoor Jacuzzi",
+    title: "Villa by the Sea with Heated Outdoor Jacuzzi",
     location: "Costa del Sud, Sardegna",
     distanceToBeach: "Accesso diretto al mare",
     maxGuests: 6,
@@ -151,7 +151,7 @@ const villas: Villa[] = [
   },
   {
     id: 8,
-    title: "White Villa",
+    title: "Villa Costa Smeralda",
     location: "Costa Smeralda, Sardegna",
     distanceToBeach: "Vista mare",
     maxGuests: 8,
@@ -169,7 +169,7 @@ const villas: Villa[] = [
   },
   {
     id: 9,
-    title: "Villa Crystal Rock privacy on the sea, heated pool",
+    title: "Villa privacy on the sea, heated pool",
     location: "Costa Smeralda, Sardegna",
     distanceToBeach: "Accesso privato al mare",
     maxGuests: 4,
