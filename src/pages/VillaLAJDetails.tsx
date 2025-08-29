@@ -24,7 +24,7 @@ export default function VillaLAJDetails() {
 
   const villa = {
     id: 6,
-    title: "LAJ House, Cagliari center",
+    title: "Luxury house, Cagliari center",
     location: "Cagliari Centro, Sardegna",
     distanceToBeach: "Centro città",
     maxGuests: 4,
