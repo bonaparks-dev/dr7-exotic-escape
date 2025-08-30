@@ -68,7 +68,7 @@ export function Header() {
       {isMenuOpen && (
         <div className="fixed inset-0 z-50 bg-background/90 text-foreground flex flex-col justify-center items-center space-y-4">
           <button
-            className="absolute top-4 right-4 text-black"
+            className="absolute top-4 right-4 text-foreground"
             onClick={() => setIsMenuOpen(false)}
           >
             <X className="w-6 h-6" />
