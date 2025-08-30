@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import Services from "./pages/Services";
 import Rentals from "./pages/Rentals";
 import YachtRental from "./pages/YachtRental";
+import YachtListings from "./pages/YachtListings";
 import VillaRental from "./pages/VillaRental";
 import VillaListings from "./pages/VillaListings";
 import PremiumCarDetailing from "./pages/PremiumCarDetailing";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/services" element={<Services />} />
             <Route path="/rentals" element={<Rentals />} />
             <Route path="/yacht-rental" element={<YachtRental />} />
+            <Route path="/yacht-listings" element={<YachtListings />} />
             <Route path="/villa-rental" element={<VillaRental />} />
             <Route path="/villa-listings" element={<VillaListings />} />
            <Route path="/villa-ambra-details" element={<VillaAmbraDetails />} />
