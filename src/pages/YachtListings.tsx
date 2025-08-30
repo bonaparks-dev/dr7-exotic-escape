@@ -173,10 +173,7 @@ const YachtListings = () => {
                     <h3 className="text-xl font-seasons text-white mb-1">
                       {yacht.name}
                     </h3>
-                    <p className="text-sm text-white/70 mb-2">{yacht.description}</p>
-                    <div className="text-2xl font-bold text-white mb-2">
-                      €{yacht.dailyPrice.toLocaleString()}<span className="text-sm font-normal text-white/60">/day</span>
-                    </div>
+                    <p className="text-sm text-white/70 mb-4">{yacht.description}</p>
                   </div>
 
                   <div className="space-y-1 mb-6 text-sm">
