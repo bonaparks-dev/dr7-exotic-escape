@@ -99,7 +99,7 @@ export function Header() {
                   {t("nav.villas")}
                 </a>
                 <a
-                  href="/yacht-rental"
+                  href="/yacht-listings"
                   className="block text-sm text-foreground hover:text-muted-foreground"
                 >
                   {t("nav.yacht")}
