@@ -22,7 +22,7 @@ export function ServiceCategories() {
       icon: Ship,
       video: '/yacht.MP4',
       buttonLabel: t('btn.learnmore'),
-      link: '/yacht-rental'
+      link: '/yacht-listings'
     },
     {
       id: 'jets',
