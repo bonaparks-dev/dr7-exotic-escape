@@ -44,10 +44,11 @@ export function Footer() {
             <h3 className="text-lg font-semibold text-white">{t('footer.services')}</h3>
             <ul className="space-y-2">
               <li><a href="/rentals" className="text-white/70 hover:text-white transition-colors">{t('services.supercars')}</a></li>
-              <li><a href="/yacht-rental" className="text-white/70 hover:text-white transition-colors">{t('services.yachts')}</a></li>
-              <li><a href="/services" className="text-white/70 hover:text-white transition-colors">{t('services.jets')}</a></li>
-              <li><a href="/services" className="text-white/70 hover:text-white transition-colors">{t('services.helicopters')}</a></li>
               <li><a href="/villa-listings" className="text-white/70 hover:text-white transition-colors">{t('services.villas')}</a></li>
+              <li><a href="/yacht-listings" className="text-white/70 hover:text-white transition-colors">{t('services.yachts')}</a></li>
+              <li><a href="/private-jet-listings" className="text-white/70 hover:text-white transition-colors">{t('services.jets')}</a></li>
+              <li><a href="/helicopter-listings" className="text-white/70 hover:text-white transition-colors">{t('services.helicopters')}</a></li>
+              <li><a href="/membership" className="text-white/70 hover:text-white transition-colors">{t('services.membership')}</a></li>
             </ul>
           </div>
           

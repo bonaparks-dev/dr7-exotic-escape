@@ -105,17 +105,23 @@ export function Header() {
                   {t("nav.yacht")}
                 </a>
                 <a
-                  href="/premium-car-detailing"
+                  href="/private-jet-listings"
                   className="block text-sm text-foreground hover:text-muted-foreground"
                 >
-                  {t("nav.detailing")}
+                  {t("services.jets")}
                 </a>
-                 <a
-                   href="/services"
-                   className="block text-sm text-foreground hover:text-muted-foreground"
-                 >
-                   {t("nav.rapidservices")}
-                 </a>
+                <a
+                  href="/helicopter-listings"
+                  className="block text-sm text-foreground hover:text-muted-foreground"
+                >
+                  {t("services.helicopters")}
+                </a>
+                <a
+                  href="/membership"
+                  className="block text-sm text-foreground hover:text-muted-foreground"
+                >
+                  {t("services.membership")}
+                </a>
                </div>
              )}
            </div>
