@@ -62,7 +62,7 @@ const helicopters: Helicopter[] = [
     },
     description: "Spacious cabin with ultimate comfort.",
     image: "/elico2.jpg",
-    available: false
+    available: true
   }
 ];
 
