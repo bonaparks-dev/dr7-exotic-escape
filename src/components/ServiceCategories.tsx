@@ -44,7 +44,8 @@ export function ServiceCategories() {
       title: t('services.helicopters'),
       icon: RotateCcw,
       video: '/helicopter.MP4',
-      buttonLabel: t('btn.learnmore')
+      buttonLabel: t('btn.learnmore'),
+      link: '/helicopter-listings'
     }
   ];
 
