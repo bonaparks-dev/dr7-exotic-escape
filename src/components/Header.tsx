@@ -117,6 +117,18 @@ export function Header() {
                   {t("services.helicopters")}
                 </a>
                 <a
+                  href="/premium-car-detailing"
+                  className="block text-sm text-foreground hover:text-muted-foreground"
+                >
+                  {t("nav.detailing")}
+                </a>
+                <a
+                  href="/services"
+                  className="block text-sm text-foreground hover:text-muted-foreground"
+                >
+                  {t("nav.rapidservices")}
+                </a>
+                <a
                   href="/membership"
                   className="block text-sm text-foreground hover:text-muted-foreground"
                 >
