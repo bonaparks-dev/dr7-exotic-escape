@@ -236,15 +236,16 @@ const cars: Car[] = [
   {
     id: 16,
     name: "Fiat Ducato",
-    dailyPrice: 25,
+    dailyPrice: 100,
     specs: {
       engine: "2.3L MultiJet Turbo Diesel",
       power: "140Cv",
-      special: "Large cargo space"
+      special: "Includes 100km pack",
+      extras: "Unlimited option: +50€"
     },
     description: "Perfect for transporting everything you need.",
     image: "/Ducato.png",
-    available: false
+    available: true
   }
 ];
 
@@ -334,6 +335,11 @@ const Rentals = () => {
                     {car.specs.special && (
                       <div className="flex items-center text-white/70">
                         {car.specs.special}
+                      </div>
+                    )}
+                    {car.specs.extras && (
+                      <div className="flex items-center text-white/70">
+                        {car.specs.extras}
                       </div>
                     )}
                   </div>
