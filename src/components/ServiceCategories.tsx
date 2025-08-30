@@ -29,7 +29,8 @@ export function ServiceCategories() {
       title: t('services.jets'),
       icon: Plane,
       video: '/jetprivate.MP4',
-      buttonLabel: t('btn.learnmore')
+      buttonLabel: t('btn.learnmore'),
+      link: '/private-jet-listings'
     },
     {
       id: 'villas',
