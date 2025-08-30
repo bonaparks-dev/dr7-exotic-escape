@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Car, Ship, Plane, Home, ChefHat, RotateCcw } from "lucide-react";
+import { Car, Ship, Plane, Home, ChefHat, RotateCcw, Crown } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 
@@ -47,6 +47,14 @@ export function ServiceCategories() {
       video: '/helicopter.MP4',
       buttonLabel: t('btn.learnmore'),
       link: '/helicopter-listings'
+    },
+    {
+      id: 'membership',
+      title: t('services.membership'),
+      icon: Crown,
+      video: '/main.MP4',
+      buttonLabel: t('btn.learnmore'),
+      link: '/membership'
     }
   ];
 

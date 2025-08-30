@@ -31,6 +31,7 @@ const translations = {
     'services.jets': 'Jet Privati',
     'services.villas': 'Ville',
     'services.helicopters': 'Elicotteri',
+    'services.membership': 'Membership VIP',
     'services.detailing': 'Car Detailing Premium',
     'services.mechanical': 'Servizi Meccanici',
     
@@ -305,6 +306,7 @@ const translations = {
     'services.jets': 'Private Jets',
     'services.villas': 'Villas',
     'services.helicopters': 'Helicopters',
+    'services.membership': 'VIP Membership',
     'services.detailing': 'Premium Car Detailing',
     'services.mechanical': 'Mechanical Services',
     
