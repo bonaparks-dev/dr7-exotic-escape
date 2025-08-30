@@ -47,7 +47,7 @@ const helicopters: Helicopter[] = [
       type: "Single-Engine Helicopter"
     },
     description: "Versatile helicopter perfect for scenic flights.",
-    image: "/helicopter.MP4",
+    image: "/elico1.jpg",
     available: true
   },
   {
@@ -61,7 +61,7 @@ const helicopters: Helicopter[] = [
       type: "Medium Twin-Engine"
     },
     description: "Spacious cabin with ultimate comfort.",
-    image: "/helicopter.MP4",
+    image: "/elico2.jpg",
     available: false
   }
 ];
