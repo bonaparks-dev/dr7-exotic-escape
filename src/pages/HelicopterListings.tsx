@@ -63,34 +63,6 @@ const helicopters: Helicopter[] = [
     description: "Spacious cabin with ultimate comfort.",
     image: "/helicopter.MP4",
     available: false
-  },
-  {
-    id: 4,
-    name: "Airbus H130",
-    specs: {
-      capacity: "Up to 7 passengers",
-      range: "Flight range: 610km",
-      speed: "Max speed: 252 km/h",
-      crew: "1-2 professional pilots",
-      type: "Single-Engine Helicopter"
-    },
-    description: "Quiet and comfortable with panoramic views.",
-    image: "/helicopter.MP4",
-    available: true
-  },
-  {
-    id: 5,
-    name: "Bell 429",
-    specs: {
-      capacity: "Up to 7 passengers",
-      range: "Flight range: 740km",
-      speed: "Max speed: 287 km/h",
-      crew: "2 professional pilots",
-      type: "Twin-Engine Helicopter"
-    },
-    description: "Advanced avionics and luxury interior.",
-    image: "/helicopter.MP4",
-    available: true
   }
 ];
 
