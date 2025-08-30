@@ -113,14 +113,22 @@ const HelicopterListings = () => {
             {helicopters.map((helicopter) => (
               <Card key={helicopter.id} className={`bg-white/5 border-white/20 hover:bg-white/10 transition-all duration-300 group ${helicopter.available === false ? 'opacity-60' : ''}`}>
                 <div className="aspect-video overflow-hidden rounded-t-lg relative">
-                  <video
-                    src={helicopter.image}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
+                  {helicopter.image.endsWith('.MP4') || helicopter.image.endsWith('.mp4') ? (
+                    <video
+                      src={helicopter.image}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                    />
+                  ) : (
+                    <img
+                      src={helicopter.image}
+                      alt={helicopter.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
                   {helicopter.available === false && (
                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                       <span className="text-white font-bold text-lg">Not Available</span>
