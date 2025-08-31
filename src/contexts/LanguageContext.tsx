@@ -494,6 +494,19 @@ const translations = {
     'notfound.returnhome': 'Return to Home',
     'contact.cta': 'Let us curate your next unforgettable journey.',
     
+    // Reviews section
+    'reviews.title': 'What Our Clients Say',
+    'reviews.subtitle': 'Authentic experiences of luxury and quality',
+    'reviews.topRated': 'Top Rated',
+    'reviews.allReviews': 'All Reviews',
+    'reviews.seeAllOnGoogle': 'See all reviews on Google',
+    'reviews.previous': 'Previous review',
+    'reviews.next': 'Next review',
+    'reviews.goToReview': 'Go to review',
+    'reviews.error': 'Error loading reviews',
+    'reviews.noReviews': 'No reviews available',
+    'reviews.retry': 'Retry',
+    
     // Buttons
     'btn.booknow': 'Book Now',
     'btn.learnmore': 'Learn More',
