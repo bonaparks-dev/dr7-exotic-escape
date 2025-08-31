@@ -44,10 +44,13 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
   const [totalPrice, setTotalPrice] = useState(0);
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
-  const [dob, setDob] = useState("");
   const [dobDay, setDobDay] = useState("");
   const [dobMonth, setDobMonth] = useState("");
   const [dobYear, setDobYear] = useState("");
+  const [licenseDay, setLicenseDay] = useState("");
+  const [licenseMonth, setLicenseMonth] = useState("");
+  const [licenseYear, setLicenseYear] = useState("");
+  const [dob, setDob] = useState("");
   const [licenseDate, setLicenseDate] = useState("");
   const [licenseFile, setLicenseFile] = useState<File | null>(null);
   const [licenseFileUrl, setLicenseFileUrl] = useState<string | null>(null);
@@ -111,6 +114,15 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     const currentYear = new Date().getFullYear();
     const years = [];
     for (let i = currentYear; i >= 1910; i--) {
+      years.push(i.toString());
+    }
+    return years;
+  };
+
+  const generateLicenseYears = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let i = currentYear; i >= 1950; i--) {
       years.push(i.toString());
     }
     return years;
@@ -197,6 +209,15 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
       setDob("");
     }
   }, [dobDay, dobMonth, dobYear]);
+
+  // Update license date when dropdown values change
+  useEffect(() => {
+    if (licenseDay && licenseMonth && licenseYear) {
+      setLicenseDate(`${licenseYear}-${licenseMonth}-${licenseDay}`);
+    } else {
+      setLicenseDate("");
+    }
+  }, [licenseDay, licenseMonth, licenseYear]);
 
   useEffect(() => {
     setTotalPrice(calculateTotal());
@@ -287,6 +308,33 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
           valid: eligibility.kaskoSignature.eligible,
           message: eligibility.kaskoSignature.reason
         };
+    }
+
+    return { valid: true, message: null };
+  };
+
+  const isLicenseDateValid = (): { valid: boolean; message: string | null } => {
+    if (!licenseDate) {
+      return {
+        valid: false,
+        message: language === 'it' 
+          ? 'Seleziona la data di rilascio della patente.'
+          : 'Please select the license issue date.'
+      };
+    }
+
+    if (dob && licenseDate) {
+      const dobParsed = parseDate(dob);
+      const licenseParsed = parseDate(licenseDate);
+      
+      if (dobParsed && licenseParsed && licenseParsed <= dobParsed) {
+        return {
+          valid: false,
+          message: language === 'it'
+            ? 'La data di rilascio della patente deve essere successiva alla data di nascita.'
+            : 'The license issue date must be after your date of birth.'
+        };
+      }
     }
 
     return { valid: true, message: null };
@@ -407,7 +455,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
       return;
     }
     
-    if (!startDate || !endDate || !dobDay || !dobMonth || !dobYear || !isInsuranceEligible().valid || !eligibilityValid) return;
+    if (!startDate || !endDate || !dobDay || !dobMonth || !dobYear || !licenseDay || !licenseMonth || !licenseYear || !isInsuranceEligible().valid || !isLicenseDateValid().valid || !eligibilityValid) return;
 
     setIsSubmitting(true);
 
@@ -739,29 +787,61 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="licenseDate" className="text-luxury-white font-medium">
-                {language === "it" ? "Data rilascio patente" : "License Issue Date"}
+              <Label className="text-luxury-white font-medium">
+                {language === "it" ? "Data di rilascio della patente" : "Driver's License Issue Date"}
               </Label>
-              <Input
-                id="licenseDate"
-                type="date"
-                value={licenseDate}
-                onChange={(e) => {
-                  setLicenseDate(e.target.value);
-                  // Show immediate feedback when license date changes
-                  const years = getLicenseYears(parseDate(e.target.value));
-                  if (years < 2 && insurance === "kasko") {
-                    toast({
-                      title: language === "it" ? "Assicurazione non disponibile" : "Insurance not available",
-                      description: language === "it" ? "Con meno di 2 anni di patente, l'assicurazione KASKO non è disponibile." : "With less than 2 years license, KASKO insurance is not available.",
-                      variant: "destructive"
-                    });
-                  }
-                }}
-                max={new Date().toISOString().split('T')[0]} // Can't be future date
-                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
-                required
-              />
+              <div className="grid grid-cols-3 gap-2">
+                {/* Day Dropdown */}
+                <Select value={licenseDay} onValueChange={setLicenseDay}>
+                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
+                    <SelectValue placeholder={language === "it" ? "GG" : "DD"} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
+                    {generateDays().map((day) => (
+                      <SelectItem key={day} value={day} className="text-black hover:bg-gray-100">
+                        {day}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Month Dropdown */}
+                <Select value={licenseMonth} onValueChange={setLicenseMonth}>
+                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
+                    <SelectValue placeholder={language === "it" ? "MM" : "MM"} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
+                    {generateMonths().map((month) => (
+                      <SelectItem key={month} value={month} className="text-black hover:bg-gray-100">
+                        {month}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Year Dropdown */}
+                <Select value={licenseYear} onValueChange={setLicenseYear}>
+                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
+                    <SelectValue placeholder={language === "it" ? "AAAA" : "YYYY"} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
+                    {generateLicenseYears().map((year) => (
+                      <SelectItem key={year} value={year} className="text-black hover:bg-gray-100">
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {/* Validation message */}
+              {!isLicenseDateValid().valid && licenseDate && (
+                <p className="text-red-400 text-xs flex items-center gap-1">
+                  ⚠️ {isLicenseDateValid().message}
+                </p>
+              )}
+              
+              {/* License years warning */}
               {licenseDate && getLicenseYears(parseDate(licenseDate)) < 2 && (
                 <p className="text-amber-400 text-xs flex items-center gap-1">
                   ⚠️ {language === "it" ? `Solo ${getLicenseYears(parseDate(licenseDate))} anni di patente - Opzioni assicurative limitate` : `Only ${getLicenseYears(parseDate(licenseDate))} years license - Limited insurance options`}
