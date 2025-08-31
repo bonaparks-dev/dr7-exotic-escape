@@ -434,6 +434,8 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
         currency: 'EUR',
         status: 'pending',
         payment_status: 'pending',
+        age_bucket: ageBucket,
+        country_iso2: countryIso2,
         booking_details: {
           firstName,
           lastName,

@@ -55,8 +55,10 @@ export type Database = {
       }
       bookings: {
         Row: {
+          age_bucket: string | null
           booking_details: Json | null
           contract_url: string | null
+          country_iso2: string | null
           created_at: string
           currency: string | null
           dropoff_date: string
@@ -84,8 +86,10 @@ export type Database = {
           vehicle_type: string
         }
         Insert: {
+          age_bucket?: string | null
           booking_details?: Json | null
           contract_url?: string | null
+          country_iso2?: string | null
           created_at?: string
           currency?: string | null
           dropoff_date: string
@@ -113,8 +117,10 @@ export type Database = {
           vehicle_type: string
         }
         Update: {
+          age_bucket?: string | null
           booking_details?: Json | null
           contract_url?: string | null
+          country_iso2?: string | null
           created_at?: string
           currency?: string | null
           dropoff_date?: string
