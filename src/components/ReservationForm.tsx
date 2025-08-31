@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CalendarIcon, X, Check } from "lucide-react";
+import { CalendarIcon, X, Check, Upload, Camera } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -47,6 +47,9 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
   const [dobMonth, setDobMonth] = useState("");
   const [dobYear, setDobYear] = useState("");
   const [licenseDate, setLicenseDate] = useState("");
+  const [licenseFile, setLicenseFile] = useState<File | null>(null);
+  const [licenseFileUrl, setLicenseFileUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
 
   const calculateTotal = () => {
@@ -102,6 +105,79 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
       years.push(i.toString());
     }
     return years;
+  };
+
+  // File upload functions
+  const handleFileSelect = async (file: File) => {
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: language === 'it' ? 'Tipo di file non valido' : 'Invalid file type',
+        description: language === 'it' 
+          ? 'Sono consentiti solo file JPEG, PNG o PDF'
+          : 'Only JPEG, PNG, or PDF files are allowed',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Validate file size (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: language === 'it' ? 'File troppo grande' : 'File too large',
+        description: language === 'it' 
+          ? 'Il file deve essere inferiore a 10MB'
+          : 'File must be less than 10MB',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setLicenseFile(file);
+    setLicenseFileUrl(URL.createObjectURL(file));
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const handleCameraCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const removeLicenseFile = () => {
+    setLicenseFile(null);
+    if (licenseFileUrl) {
+      URL.revokeObjectURL(licenseFileUrl);
+      setLicenseFileUrl(null);
+    }
+  };
+
+  const uploadLicenseToStorage = async (file: File, userId: string): Promise<string> => {
+    setIsUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${userId}/${Date.now()}-license.${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('driver-licenses')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) throw error;
+      return fileName;
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   // Update dob when dropdown values change
@@ -225,11 +301,33 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate license file upload
+    if (!licenseFile) {
+      toast({
+        title: language === 'it' ? 'Documento mancante' : 'Missing document',
+        description: language === 'it' 
+          ? 'È necessario caricare una foto della patente per continuare.'
+          : 'Please upload a driver\'s license photo to continue.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
     if (!startDate || !endDate || !dobDay || !dobMonth || !dobYear || !isInsuranceEligible().valid) return;
 
     setIsSubmitting(true);
 
     try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      // Upload license file to storage
+      const licenseFilePath = await uploadLicenseToStorage(licenseFile, user.id);
+
       const reservationData = {
         carName,
         startDate: format(startDate, 'yyyy-MM-dd'),
@@ -246,7 +344,8 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
         outOfHours,
         totalPrice,
         dob,
-        licenseDate
+        licenseDate,
+        licensePhotoPath: licenseFilePath
       };
 
       const { data, error } = await supabase.functions.invoke('send-reservation', {
@@ -512,6 +611,92 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                   ⚠️ {language === "it" ? `Solo ${getLicenseYears(parseDate(licenseDate))} anni di patente - Opzioni assicurative limitate` : `Only ${getLicenseYears(parseDate(licenseDate))} years license - Limited insurance options`}
                 </p>
               )}
+            </div>
+          </div>
+
+          {/* Driver's License Photo Upload */}
+          <div className="space-y-2">
+            <Label className="text-luxury-white font-medium">
+              {language === "it" ? "Foto della patente (Obbligatorio)" : "Driver's License Photo (Required)"}
+            </Label>
+            <div className="space-y-3">
+              {!licenseFile ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {/* Upload File Button */}
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,application/pdf"
+                      onChange={handleFileUpload}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      id="license-upload"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full bg-white border-luxury-white/20 text-black hover:border-luxury-white hover:bg-luxury-white/5"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      {language === "it" ? "Carica file" : "Upload File"}
+                    </Button>
+                  </div>
+
+                  {/* Take Photo Button */}
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      onChange={handleCameraCapture}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      id="license-camera"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full bg-white border-luxury-white/20 text-black hover:border-luxury-white hover:bg-luxury-white/5"
+                    >
+                      <Camera className="mr-2 h-4 w-4" />
+                      {language === "it" ? "Scatta foto" : "Take Photo"}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20 bg-luxury-white/5">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-luxury-white/20 rounded-lg flex items-center justify-center">
+                      {licenseFile.type.includes('pdf') ? (
+                        <span className="text-xs font-bold text-luxury-white">PDF</span>
+                      ) : (
+                        <Camera className="h-5 w-5 text-luxury-white" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-luxury-white font-medium truncate max-w-48">
+                        {licenseFile.name}
+                      </p>
+                      <p className="text-luxury-white/70 text-xs">
+                        {(licenseFile.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={removeLicenseFile}
+                    className="text-luxury-white hover:text-red-400 hover:bg-red-500/10"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+              
+              <p className="text-luxury-white/70 text-xs">
+                {language === "it" 
+                  ? "Formati supportati: JPEG, PNG, PDF. Dimensione massima: 10MB"
+                  : "Supported formats: JPEG, PNG, PDF. Maximum size: 10MB"}
+              </p>
             </div>
           </div>
 
