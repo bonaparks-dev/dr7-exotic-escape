@@ -462,18 +462,36 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     setIsSubmitting(true);
 
     try {
-      // Get current user (optional for guest bookings)
-      const { data: { user } } = await supabase.auth.getUser();
+      // Show success message without creating a booking for now (guest mode)
+      // This can be enhanced later to collect guest info via email/contact form
       
-      // For guest bookings, we'll store the license file with a temporary path
-      const userId = user?.id || 'guest_' + Date.now();
+      toast({
+        title: language === 'it' ? 'Richiesta ricevuta!' : 'Request received!',
+        description: language === 'it' 
+          ? 'Ti contatteremo presto per completare la prenotazione.'
+          : 'We will contact you soon to complete the booking.',
+      });
+
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+        onClose();
+      }, 3000);
+      return;
+      
+      // For authenticated users, proceed with full booking creation
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        // This shouldn't happen as we handled guest users above
+        throw new Error('Authentication required');
+      }
       
       // Upload license file to storage
-      const licenseFilePath = await uploadLicenseToStorage(licenseFile, userId);
+      const licenseFilePath = await uploadLicenseToStorage(licenseFile, user.id);
 
       // Create booking record first
       const bookingData = {
-        user_id: userId, // This will be guest_timestamp for anonymous users
+        user_id: user.id,
         vehicle_name: carName,
         vehicle_type: 'car',
         pickup_date: startDate.toISOString(),
