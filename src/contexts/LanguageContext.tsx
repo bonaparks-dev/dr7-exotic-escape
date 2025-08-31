@@ -283,6 +283,13 @@ const translations = {
     'villa.details.bookingTitle': 'Prenotazione',
     'villa.details.selectDates': 'Seleziona le date per richiedere informazioni',
     'villa.amenities': 'Amenities',
+    
+    // Inline Eligibility Selectors
+    'validation.ageRequired': 'Conferma la tua fascia d\'età.',
+    'validation.countryRequired': 'Seleziona il tuo paese.',
+    'validation.ageInconsistent.title': 'Età non corrispondente',
+    'validation.ageInconsistent.message': 'L\'età selezionata non coincide con la data di nascita.',
+    'validation.ageInconsistent.short': 'Età non corrispondente alla data di nascita.',
   },
   en: {
     // Navigation
@@ -614,7 +621,14 @@ const translations = {
     'duplicateTransaction': 'Duplicate transaction',
     'securityViolation': 'Security violation detected',
     'cardNotSupported': 'Card type not supported',
-    'unknownPaymentError': 'Unknown payment error'
+    'unknownPaymentError': 'Unknown payment error',
+    
+    // Inline Eligibility Selectors
+    'validation.ageRequired': 'Please confirm your age range.',
+    'validation.countryRequired': 'Please select your country.',
+    'validation.ageInconsistent.title': 'Age Mismatch',
+    'validation.ageInconsistent.message': 'Your selected age doesn\'t match your date of birth.',
+    'validation.ageInconsistent.short': 'Age doesn\'t match date of birth.',
   }
 };
 

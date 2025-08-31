@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { NexiPaymentForm } from "./NexiPaymentForm";
+import { InlineEligibilitySelectors } from "./InlineEligibilitySelectors";
 
 interface ReservationFormProps {
   isOpen: boolean;
@@ -53,6 +54,11 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
   const [isUploading, setIsUploading] = useState(false);
   const [bookingCreated, setBookingCreated] = useState(false);
   const [paymentBookingData, setPaymentBookingData] = useState<any>(null);
+  
+  // Eligibility selector states
+  const [ageBucket, setAgeBucket] = useState('');
+  const [countryIso2, setCountryIso2] = useState('IT');
+  const [eligibilityValid, setEligibilityValid] = useState(false);
   const { toast } = useToast();
 
   const calculateTotal = () => {
@@ -401,7 +407,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
       return;
     }
     
-    if (!startDate || !endDate || !dobDay || !dobMonth || !dobYear || !isInsuranceEligible().valid) return;
+    if (!startDate || !endDate || !dobDay || !dobMonth || !dobYear || !isInsuranceEligible().valid || !eligibilityValid) return;
 
     setIsSubmitting(true);
 
@@ -437,6 +443,8 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
           licenseDate,
           licensePhotoPath: licenseFilePath,
           insurance,
+          ageBucket,
+          countryIso2,
           extras: {
             fullCleaning,
             secondDriver,
@@ -846,6 +854,21 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
             </div>
           </div>
 
+          {/* Inline Eligibility Selectors */}
+          <div className="space-y-2">
+            <Label className="text-luxury-white font-medium">
+              {language === 'it' ? 'Conferma Idoneità' : 'Confirm Eligibility'}
+            </Label>
+            <InlineEligibilitySelectors
+              initialAgeBucket={ageBucket}
+              initialCountryIso2={countryIso2}
+              dob={dob}
+              onAgeBucketChange={setAgeBucket}
+              onCountryChange={setCountryIso2}
+              onValidationChange={setEligibilityValid}
+            />
+          </div>
+
           {/* Insurance Selection */}
           <div className="space-y-4">
             <Label className="text-luxury-white font-medium text-lg">
@@ -1039,10 +1062,10 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
           <div className="pt-4">
             <Button
               type="submit"
-              disabled={isSubmitting || !isInsuranceEligible().valid}
+              disabled={isSubmitting || !isInsuranceEligible().valid || !eligibilityValid}
               className={cn(
                 "w-full py-3 text-lg font-semibold transition-all duration-300",
-                isInsuranceEligible().valid
+                (isInsuranceEligible().valid && eligibilityValid)
                   ? "bg-luxury-white hover:bg-luxury-white/90 text-luxury-black"
                   : "bg-gray-500 text-white cursor-not-allowed"
               )}
@@ -1052,10 +1075,21 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                 : `${language === 'it' ? 'Prenota ora' : 'Reserve Now'} - €${totalPrice}`}
             </Button>
 
-            {!isInsuranceEligible().valid && (
-              <p className="mt-2 text-sm text-red-500 text-center">
-                {isInsuranceEligible().message}
-              </p>
+            {(!isInsuranceEligible().valid || !eligibilityValid) && (
+              <div className="mt-2 space-y-1">
+                {!isInsuranceEligible().valid && (
+                  <p className="text-sm text-red-500 text-center">
+                    {isInsuranceEligible().message}
+                  </p>
+                )}
+                {!eligibilityValid && (
+                  <p className="text-sm text-red-500 text-center">
+                    {language === 'it' 
+                      ? 'Conferma la tua età e paese di residenza per continuare'
+                      : 'Please confirm your age and country of residence to continue'}
+                  </p>
+                )}
+              </div>
             )}
           </div>
         </form>
