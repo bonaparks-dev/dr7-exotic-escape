@@ -462,21 +462,18 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     setIsSubmitting(true);
 
     try {
-      // Get current user
+      // Get current user (optional for guest bookings)
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        // Redirect to auth page instead of throwing error
-        navigate('/auth');
-        setIsSubmitting(false);
-        return;
-      }
-
+      
+      // For guest bookings, we'll store the license file with a temporary path
+      const userId = user?.id || 'guest_' + Date.now();
+      
       // Upload license file to storage
-      const licenseFilePath = await uploadLicenseToStorage(licenseFile, user.id);
+      const licenseFilePath = await uploadLicenseToStorage(licenseFile, userId);
 
       // Create booking record first
       const bookingData = {
-        user_id: user.id,
+        user_id: userId, // This will be guest_timestamp for anonymous users
         vehicle_name: carName,
         vehicle_type: 'car',
         pickup_date: startDate.toISOString(),
