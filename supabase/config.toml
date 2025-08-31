@@ -2,3 +2,12 @@ project_id = "ahpmzjgkfxrrgxyirasa"
 
 [functions.send-reservation]
 verify_jwt = false
+
+[functions.dr7-concierge]
+verify_jwt = false
+
+[functions.nexi-payment]
+verify_jwt = true
+
+[functions.nexi-callback]
+verify_jwt = false

@@ -24,6 +24,11 @@ export type Database = {
           dropoff_location: string | null
           id: string
           invoice_url: string | null
+          nexi_transaction_id: string | null
+          payment_completed_at: string | null
+          payment_error_message: string | null
+          payment_method: string | null
+          payment_status: string | null
           pickup_date: string
           pickup_location: string
           price_total: number
@@ -43,6 +48,11 @@ export type Database = {
           dropoff_location?: string | null
           id?: string
           invoice_url?: string | null
+          nexi_transaction_id?: string | null
+          payment_completed_at?: string | null
+          payment_error_message?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
           pickup_date: string
           pickup_location: string
           price_total: number
@@ -62,6 +72,11 @@ export type Database = {
           dropoff_location?: string | null
           id?: string
           invoice_url?: string | null
+          nexi_transaction_id?: string | null
+          payment_completed_at?: string | null
+          payment_error_message?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
           pickup_date?: string
           pickup_location?: string
           price_total?: number
@@ -213,6 +228,65 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          booking_id: string | null
+          completed_at: string | null
+          created_at: string
+          currency: string
+          error_message: string | null
+          id: string
+          mac_verification_status: string | null
+          nexi_auth_code: string | null
+          nexi_response_code: string | null
+          nexi_transaction_id: string | null
+          payment_method: string
+          payment_status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          booking_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          currency?: string
+          error_message?: string | null
+          id?: string
+          mac_verification_status?: string | null
+          nexi_auth_code?: string | null
+          nexi_response_code?: string | null
+          nexi_transaction_id?: string | null
+          payment_method?: string
+          payment_status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          booking_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          currency?: string
+          error_message?: string | null
+          id?: string
+          mac_verification_status?: string | null
+          nexi_auth_code?: string | null
+          nexi_response_code?: string | null
+          nexi_transaction_id?: string | null
+          payment_method?: string
+          payment_status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
