@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 import { NexiPaymentForm } from "./NexiPaymentForm";
 import { InlineEligibilitySelectors } from "./InlineEligibilitySelectors";
 
@@ -26,6 +27,7 @@ interface ReservationFormProps {
 
 export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: ReservationFormProps) => {
   const { language } = useLanguage();
+  const navigate = useNavigate();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [firstName, setFirstName] = useState("");
@@ -463,7 +465,10 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        throw new Error('User not authenticated');
+        // Redirect to auth page instead of throwing error
+        navigate('/auth');
+        setIsSubmitting(false);
+        return;
       }
 
       // Upload license file to storage
