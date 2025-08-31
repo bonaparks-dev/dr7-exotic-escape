@@ -109,7 +109,8 @@ const cars: Car[] = [
       engine: "3.0L inline 6-cylinder"
     },
     description: "Pure driving essence.",
-    image: "/bmw-m2.png"
+    image: "/bmw-m2.png",
+    available: false
   },
   {
     id: 7,
