@@ -26,6 +26,7 @@ import HelicopterListings from "./pages/HelicopterListings";
 import PrivateJetListings from "./pages/PrivateJetListings";
 import { PaymentSuccess } from "./pages/PaymentSuccess";
 import { PaymentFailure } from "./pages/PaymentFailure";
+import { PaymentCallback } from "./pages/PaymentCallback";
 import NotFound from "./pages/NotFound";
 import DR7Concierge from "./components/DR7Concierge";
 
@@ -60,7 +61,7 @@ const App = () => (
             <Route path="/dr7-concierge" element={<DR7Concierge />} />
             <Route path="/lottery" element={<Lottery />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
-            <Route path="/payment-result" element={<PaymentSuccess />} />
+            <Route path="/payment-result" element={<PaymentCallback />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/payment-failure" element={<PaymentFailure />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
