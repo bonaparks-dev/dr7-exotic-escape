@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { createHash } from "https://deno.land/std@0.190.0/node/crypto.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,8 +13,12 @@ interface PaymentRequest {
   language: string;
 }
 
-const generateMAC = (params: string, macKey: string): string => {
-  return createHash('sha1').update(params + macKey).digest('hex');
+const generateMAC = async (params: string, macKey: string): Promise<string> => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(params + macKey);
+  const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };
 
 const handler = async (req: Request): Promise<Response> => {
@@ -55,7 +58,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Build parameters for MAC calculation (according to Nexi documentation)
     const macParams = `codTrans=${transactionId}divisa=${currency}importo=${amountCents}`;
-    const mac = generateMAC(macParams, macKey);
+    const mac = await generateMAC(macParams, macKey);
 
     // Nexi payment form parameters
     const paymentParams = {
