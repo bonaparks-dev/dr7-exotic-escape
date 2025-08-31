@@ -8,9 +8,33 @@ const corsHeaders = {
 
 interface PaymentRequest {
   bookingId: string;
-  amount: number;
+  bookingDetails: {
+    vehicleName: string;
+    pickupDate: string;
+    dropoffDate: string;
+    pickupLocation: string;
+    dropoffLocation?: string;
+    insurance: string;
+    extras: {
+      fullCleaning: boolean;
+      secondDriver: boolean;
+      under25: boolean;
+      licenseUnder3: boolean;
+      outOfHours: boolean;
+    };
+  };
+  lineItems: Array<{
+    type: string;
+    description: string;
+    quantity: number;
+    unitPrice: number;
+    totalPrice: number;
+  }>;
+  totalAmount: number;
   currency: string;
   language: string;
+  payerEmail: string;
+  payerName: string;
 }
 
 const generateMAC = async (params: string, macKey: string): Promise<string> => {
@@ -39,7 +63,22 @@ const handler = async (req: Request): Promise<Response> => {
     
     if (!user) throw new Error("User not authenticated");
 
-    const { bookingId, amount, currency, language }: PaymentRequest = await req.json();
+    const { 
+      bookingId, 
+      bookingDetails, 
+      lineItems, 
+      totalAmount, 
+      currency, 
+      language,
+      payerEmail,
+      payerName 
+    }: PaymentRequest = await req.json();
+
+    // Validate server-side total calculation
+    const serverCalculatedTotal = calculateServerTotal(bookingDetails, lineItems);
+    if (Math.abs(serverCalculatedTotal - totalAmount) > 1) { // Allow 1 cent difference for rounding
+      throw new Error(`Amount mismatch: client ${totalAmount}, server ${serverCalculatedTotal}`);
+    }
 
     const codiceVendita = Deno.env.get("NEXI_CODICE_PUNTO_VENDITA")!;
     const alias = Deno.env.get("NEXI_ALIAS")!;
@@ -49,8 +88,8 @@ const handler = async (req: Request): Promise<Response> => {
     // Create unique transaction ID
     const transactionId = `TXN${Date.now()}${Math.random().toString(36).substr(2, 9)}`;
     
-    // Calculate amount in cents (Nexi expects amount in smallest currency unit)
-    const amountCents = Math.round(amount * 100);
+    // Use validated total amount in cents
+    const amountCents = Math.round(totalAmount * 100);
     
     const origin = req.headers.get("origin") || "https://d9a6e588-965c-400c-b618-673fe52d03c9.sandbox.lovable.dev";
     const urlBack = `${origin}/payment-result`;
@@ -79,23 +118,63 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
+    // Create payment record with detailed breakdown
     await supabaseService.from("payments").insert({
       booking_id: bookingId,
       user_id: user.id,
       amount: amountCents,
       currency,
       nexi_transaction_id: transactionId,
-      payment_status: "pending"
+      payment_status: "pending",
+      line_items: lineItems,
+      payer_email: payerEmail,
+      payer_name: payerName
     });
 
-    // Update booking with payment info
+    // Create detailed line items
+    for (const item of lineItems) {
+      await supabaseService.from("booking_line_items").insert({
+        booking_id: bookingId,
+        item_type: item.type,
+        description: item.description,
+        quantity: item.quantity,
+        unit_price: Math.round(item.unitPrice * 100),
+        total_price: Math.round(item.totalPrice * 100),
+        currency
+      });
+    }
+
+    // Update booking with payment info and breakdown
     await supabaseService.from("bookings").update({
       payment_status: "pending",
       payment_method: "nexi",
-      nexi_transaction_id: transactionId
+      nexi_transaction_id: transactionId,
+      payment_breakdown: {
+        lineItems,
+        totalAmount,
+        currency,
+        payerEmail,
+        payerName
+      }
     }).eq("id", bookingId);
 
-    console.log("Payment initiated:", { transactionId, amount: amountCents, currency });
+    // Log payment audit
+    await supabaseService.from("payment_audit_logs").insert({
+      booking_id: bookingId,
+      action: "charge",
+      amount: amountCents,
+      currency,
+      gateway_response: { transactionId, status: "initiated" },
+      ip_address: req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip")
+    });
+
+    console.log("Payment initiated:", { 
+      transactionId, 
+      amount: amountCents, 
+      currency, 
+      lineItemsCount: lineItems.length,
+      payerEmail 
+    });
 
     return new Response(JSON.stringify({
       success: true,
@@ -118,5 +197,33 @@ const handler = async (req: Request): Promise<Response> => {
     });
   }
 };
+
+// Server-side total calculation function
+function calculateServerTotal(bookingDetails: any, lineItems: any[]): number {
+  const basePrice = parseFloat(bookingDetails.basePrice) || 0;
+  const days = Math.ceil((new Date(bookingDetails.dropoffDate).getTime() - new Date(bookingDetails.pickupDate).getTime()) / (1000 * 60 * 60 * 24));
+  
+  let total = basePrice * days;
+  
+  // Add insurance costs
+  const insurancePrices: { [key: string]: number } = {
+    'kasko': 15,
+    'kasko-black': 25,
+    'kasko-signature': 35
+  };
+  
+  if (insurancePrices[bookingDetails.insurance]) {
+    total += insurancePrices[bookingDetails.insurance] * days;
+  }
+  
+  // Add extras
+  if (bookingDetails.extras.fullCleaning) total += 30;
+  if (bookingDetails.extras.secondDriver) total += 10 * days;
+  if (bookingDetails.extras.under25) total += 10 * days;
+  if (bookingDetails.extras.licenseUnder3) total += 20 * days;
+  if (bookingDetails.extras.outOfHours) total += 50;
+  
+  return Math.round(total * 100) / 100; // Round to 2 decimal places
+}
 
 serve(handler);

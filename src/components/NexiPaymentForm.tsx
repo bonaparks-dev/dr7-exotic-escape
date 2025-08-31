@@ -7,16 +7,26 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 interface NexiPaymentFormProps {
-  bookingId: string;
-  amount: number;
-  currency: string;
+  bookingData: {
+    bookingId: string;
+    bookingDetails: any;
+    lineItems: Array<{
+      type: string;
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      totalPrice: number;
+    }>;
+    totalAmount: number;
+    currency: string;
+    payerEmail: string;
+    payerName: string;
+  };
   onPaymentInitiated?: () => void;
 }
 
 export const NexiPaymentForm: React.FC<NexiPaymentFormProps> = ({
-  bookingId,
-  amount,
-  currency,
+  bookingData,
   onPaymentInitiated
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -29,10 +39,14 @@ export const NexiPaymentForm: React.FC<NexiPaymentFormProps> = ({
 
       const { data, error } = await supabase.functions.invoke('nexi-payment', {
         body: {
-          bookingId,
-          amount,
-          currency,
-          language
+          bookingId: bookingData.bookingId,
+          bookingDetails: bookingData.bookingDetails,
+          lineItems: bookingData.lineItems,
+          totalAmount: bookingData.totalAmount,
+          currency: bookingData.currency,
+          language,
+          payerEmail: bookingData.payerEmail,
+          payerName: bookingData.payerName
         }
       });
 
@@ -90,7 +104,7 @@ export const NexiPaymentForm: React.FC<NexiPaymentFormProps> = ({
         </CardTitle>
         <CardDescription>
           {t('paymentAmount')}: <span className="font-semibold text-lg">
-            {amount.toFixed(2)} {currency}
+            {bookingData.totalAmount.toFixed(2)} {bookingData.currency}
           </span>
         </CardDescription>
       </CardHeader>
@@ -110,9 +124,19 @@ export const NexiPaymentForm: React.FC<NexiPaymentFormProps> = ({
           </div>
         </div>
 
-        <div className="space-y-2 text-sm text-muted-foreground">
-          <p>{t('nexiPaymentDescription')}</p>
-          <p>{t('cardTypesAccepted')}</p>
+        <div className="space-y-3">
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+            <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+              {language === 'it' 
+                ? "Ti verrà addebitato l'intero importo ora." 
+                : "You will be charged the full amount now."}
+            </p>
+          </div>
+          
+          <div className="space-y-2 text-sm text-muted-foreground">
+            <p>{t('nexiPaymentDescription')}</p>
+            <p>{t('cardTypesAccepted')}</p>
+          </div>
         </div>
 
         <Button 

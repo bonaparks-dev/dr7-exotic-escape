@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { NexiPaymentForm } from "./NexiPaymentForm";
 
 interface ReservationFormProps {
   isOpen: boolean;
@@ -50,6 +51,8 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
   const [licenseFile, setLicenseFile] = useState<File | null>(null);
   const [licenseFileUrl, setLicenseFileUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [bookingCreated, setBookingCreated] = useState(false);
+  const [paymentBookingData, setPaymentBookingData] = useState<any>(null);
   const { toast } = useToast();
 
   const calculateTotal = () => {
@@ -299,6 +302,90 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     }
   }, [dob, licenseDate, language]);
 
+  const generateLineItems = () => {
+    const items = [];
+    const days = Math.ceil((endDate!.getTime() - startDate!.getTime()) / (1000 * 60 * 60 * 24));
+
+    // Base rate
+    items.push({
+      type: 'base_rate',
+      description: `${carName} - ${days} ${days === 1 ? 'day' : 'days'}`,
+      quantity: days,
+      unitPrice: dailyPrice,
+      totalPrice: dailyPrice * days
+    });
+
+    // Insurance
+    const insurancePrices: { [key: string]: number } = {
+      'kasko': 15,
+      'kasko-black': 25,
+      'kasko-signature': 35
+    };
+    
+    if (insurancePrices[insurance]) {
+      items.push({
+        type: 'insurance',
+        description: `Insurance: ${insurance.replace('-', ' ').toUpperCase()}`,
+        quantity: days,
+        unitPrice: insurancePrices[insurance],
+        totalPrice: insurancePrices[insurance] * days
+      });
+    }
+
+    // Extras
+    if (fullCleaning) {
+      items.push({
+        type: 'extra',
+        description: language === 'it' ? 'Pulizia completa' : 'Full Cleaning',
+        quantity: 1,
+        unitPrice: 30,
+        totalPrice: 30
+      });
+    }
+
+    if (secondDriver) {
+      items.push({
+        type: 'extra',
+        description: language === 'it' ? 'Secondo conducente' : 'Second Driver',
+        quantity: days,
+        unitPrice: 10,
+        totalPrice: 10 * days
+      });
+    }
+
+    if (under25) {
+      items.push({
+        type: 'extra',
+        description: language === 'it' ? 'Conducente sotto 25 anni' : 'Driver under 25',
+        quantity: days,
+        unitPrice: 10,
+        totalPrice: 10 * days
+      });
+    }
+
+    if (licenseUnder3) {
+      items.push({
+        type: 'extra',
+        description: language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years',
+        quantity: days,
+        unitPrice: 20,
+        totalPrice: 20 * days
+      });
+    }
+
+    if (outOfHours) {
+      items.push({
+        type: 'extra',
+        description: language === 'it' ? 'Consegna/ritiro fuori orario' : 'Out-of-hours delivery/pickup',
+        quantity: 1,
+        unitPrice: 50,
+        totalPrice: 50
+      });
+    }
+
+    return items;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -328,51 +415,85 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
       // Upload license file to storage
       const licenseFilePath = await uploadLicenseToStorage(licenseFile, user.id);
 
-      const reservationData = {
-        carName,
-        startDate: format(startDate, 'yyyy-MM-dd'),
-        endDate: format(endDate, 'yyyy-MM-dd'),
-        firstName,
-        lastName,
-        email,
-        phone,
-        depositOption,
-        insurance,
-        secondDriver,
-        under25,
-        licenseUnder3,
-        outOfHours,
-        totalPrice,
-        dob,
-        licenseDate,
-        licensePhotoPath: licenseFilePath
+      // Create booking record first
+      const bookingData = {
+        user_id: user.id,
+        vehicle_name: carName,
+        vehicle_type: 'car',
+        pickup_date: startDate.toISOString(),
+        dropoff_date: endDate.toISOString(),
+        pickup_location: 'Main Office', // This should come from form
+        dropoff_location: 'Main Office', // This should come from form
+        price_total: Math.round(totalPrice * 100), // Store in cents
+        currency: 'EUR',
+        status: 'pending',
+        payment_status: 'pending',
+        booking_details: {
+          firstName,
+          lastName,
+          email,
+          phone,
+          dob,
+          licenseDate,
+          licensePhotoPath: licenseFilePath,
+          insurance,
+          extras: {
+            fullCleaning,
+            secondDriver,
+            under25,
+            licenseUnder3,
+            outOfHours
+          },
+          basePrice: dailyPrice
+        }
       };
 
-      const { data, error } = await supabase.functions.invoke('send-reservation', {
-        body: reservationData
-      });
+      const { data: booking, error: bookingError } = await supabase
+        .from('bookings')
+        .insert(bookingData)
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (bookingError) throw bookingError;
 
-      setShowSuccess(true);
-      toast({
-        title: language === 'it' ? 'Prenotazione inviata!' : 'Reservation sent!',
-        description: language === 'it' 
-          ? 'Ti contatteremo presto per confermare la tua prenotazione.'
-          : 'We will contact you soon to confirm your reservation.',
-      });
+      // Prepare payment data
+      const lineItems = generateLineItems();
+      const paymentData = {
+        bookingId: booking.id,
+        bookingDetails: {
+          vehicleName: carName,
+          pickupDate: format(startDate, 'yyyy-MM-dd'),
+          dropoffDate: format(endDate, 'yyyy-MM-dd'),
+          pickupLocation: 'Main Office',
+          dropoffLocation: 'Main Office',
+          insurance,
+          extras: {
+            fullCleaning,
+            secondDriver,
+            under25,
+            licenseUnder3,
+            outOfHours
+          },
+          basePrice: dailyPrice
+        },
+        lineItems,
+        totalAmount: totalPrice,
+        currency: 'EUR',
+        payerEmail: email,
+        payerName: `${firstName} ${lastName}`
+      };
 
-      setTimeout(() => {
-        setShowSuccess(false);
-        onClose();
-      }, 3000);
+      // Show payment modal/form instead of success message
+      setBookingCreated(true);
+      setPaymentBookingData(paymentData);
+
     } catch (error) {
-      console.error('Error submitting reservation:', error);
+      console.error('Error creating booking:', error);
       toast({
         title: language === 'it' ? 'Errore' : 'Error',
         description: language === 'it' 
-          ? 'Si è verificato un errore. Riprova.'
-          : 'An error occurred. Please try again.',
+          ? 'Si è verificato un errore nella creazione della prenotazione.'
+          : 'An error occurred while creating the booking.',
         variant: 'destructive',
       });
     } finally {
@@ -387,14 +508,39 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <Check className="h-16 w-16 text-luxury-white mb-4" />
             <h3 className="text-2xl font-bold text-luxury-white mb-2">
-              {language === 'it' ? 'Prenotazione Confermata!' : 'Reservation Confirmed!'}
+              {language === 'it' ? 'Pagamento Completato!' : 'Payment Completed!'}
             </h3>
             <p className="text-luxury-white/80">
               {language === 'it' 
-                ? 'Ti contatteremo entro 24 ore per finalizzare i dettagli.'
-                : 'We will contact you within 24 hours to finalize the details.'}
+                ? 'La tua prenotazione è stata confermata. Riceverai una conferma via email.'
+                : 'Your booking has been confirmed. You will receive an email confirmation.'}
             </p>
           </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  if (bookingCreated && paymentBookingData) {
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="sm:max-w-lg bg-luxury-black border border-luxury-white/20">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-luxury-white">
+              {language === 'it' ? 'Completa il Pagamento' : 'Complete Payment'}
+            </DialogTitle>
+          </DialogHeader>
+          <NexiPaymentForm 
+            bookingData={paymentBookingData}
+            onPaymentInitiated={() => {
+              setShowSuccess(true);
+              setBookingCreated(false);
+              setTimeout(() => {
+                setShowSuccess(false);
+                onClose();
+              }, 3000);
+            }}
+          />
         </DialogContent>
       </Dialog>
     );
