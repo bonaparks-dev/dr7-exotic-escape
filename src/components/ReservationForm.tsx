@@ -43,6 +43,9 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
   const [dob, setDob] = useState("");
+  const [dobDay, setDobDay] = useState("");
+  const [dobMonth, setDobMonth] = useState("");
+  const [dobYear, setDobYear] = useState("");
   const [licenseDate, setLicenseDate] = useState("");
   const { toast } = useToast();
 
@@ -74,6 +77,41 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     
     return total;
   };
+
+  // Helper functions for dropdowns
+  const generateDays = () => {
+    const days = [];
+    for (let i = 1; i <= 31; i++) {
+      days.push(i.toString().padStart(2, '0'));
+    }
+    return days;
+  };
+
+  const generateMonths = () => {
+    const months = [];
+    for (let i = 1; i <= 12; i++) {
+      months.push(i.toString().padStart(2, '0'));
+    }
+    return months;
+  };
+
+  const generateYears = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let i = currentYear; i >= 1910; i--) {
+      years.push(i.toString());
+    }
+    return years;
+  };
+
+  // Update dob when dropdown values change
+  useEffect(() => {
+    if (dobDay && dobMonth && dobYear) {
+      setDob(`${dobYear}-${dobMonth}-${dobDay}`);
+    } else {
+      setDob("");
+    }
+  }, [dobDay, dobMonth, dobYear]);
 
   useEffect(() => {
     setTotalPrice(calculateTotal());
@@ -187,7 +225,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!startDate || !endDate || !isInsuranceEligible().valid) return;
+    if (!startDate || !endDate || !dobDay || !dobMonth || !dobYear || !isInsuranceEligible().valid) return;
 
     setIsSubmitting(true);
 
@@ -397,17 +435,52 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
           {/* Date of birth and License date */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="dob" className="text-luxury-white font-medium">
+              <Label className="text-luxury-white font-medium">
                 {language === "it" ? "Data di nascita" : "Date of Birth"}
               </Label>
-              <Input
-                id="dob"
-                type="date"
-                value={dob}
-                onChange={(e) => setDob(e.target.value)}
-                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
-                required
-              />
+              <div className="grid grid-cols-3 gap-2">
+                {/* Day Dropdown */}
+                <Select value={dobDay} onValueChange={setDobDay}>
+                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
+                    <SelectValue placeholder={language === "it" ? "GG" : "DD"} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
+                    {generateDays().map((day) => (
+                      <SelectItem key={day} value={day} className="text-black hover:bg-gray-100">
+                        {day}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Month Dropdown */}
+                <Select value={dobMonth} onValueChange={setDobMonth}>
+                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
+                    <SelectValue placeholder={language === "it" ? "MM" : "MM"} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
+                    {generateMonths().map((month) => (
+                      <SelectItem key={month} value={month} className="text-black hover:bg-gray-100">
+                        {month}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Year Dropdown */}
+                <Select value={dobYear} onValueChange={setDobYear}>
+                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
+                    <SelectValue placeholder={language === "it" ? "AAAA" : "YYYY"} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
+                    {generateYears().map((year) => (
+                      <SelectItem key={year} value={year} className="text-black hover:bg-gray-100">
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="space-y-2">
