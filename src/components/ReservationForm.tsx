@@ -484,6 +484,7 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
         payment_status: 'pending',
         age_bucket: ageBucket,
         country_iso2: countryIso2,
+        license_issue_date: licenseDate,
         booking_details: {
           firstName,
           lastName,
@@ -1144,10 +1145,10 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
           <div className="pt-4">
             <Button
               type="submit"
-              disabled={isSubmitting || !isInsuranceEligible().valid || !eligibilityValid}
+              disabled={isSubmitting || !isInsuranceEligible().valid || !isLicenseDateValid().valid || !eligibilityValid}
               className={cn(
                 "w-full py-3 text-lg font-semibold transition-all duration-300",
-                (isInsuranceEligible().valid && eligibilityValid)
+                (isInsuranceEligible().valid && isLicenseDateValid().valid && eligibilityValid)
                   ? "bg-luxury-white hover:bg-luxury-white/90 text-luxury-black"
                   : "bg-gray-500 text-white cursor-not-allowed"
               )}
@@ -1157,11 +1158,16 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
                 : `${language === 'it' ? 'Prenota ora' : 'Reserve Now'} - €${totalPrice}`}
             </Button>
 
-            {(!isInsuranceEligible().valid || !eligibilityValid) && (
+            {(!isInsuranceEligible().valid || !isLicenseDateValid().valid || !eligibilityValid) && (
               <div className="mt-2 space-y-1">
                 {!isInsuranceEligible().valid && (
                   <p className="text-sm text-red-500 text-center">
                     {isInsuranceEligible().message}
+                  </p>
+                )}
+                {!isLicenseDateValid().valid && (
+                  <p className="text-sm text-red-500 text-center">
+                    {isLicenseDateValid().message}
                   </p>
                 )}
                 {!eligibilityValid && (

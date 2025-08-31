@@ -65,6 +65,7 @@ export type Database = {
           dropoff_location: string | null
           id: string
           invoice_url: string | null
+          license_issue_date: string | null
           nexi_transaction_id: string | null
           payment_breakdown: Json | null
           payment_completed_at: string | null
@@ -96,6 +97,7 @@ export type Database = {
           dropoff_location?: string | null
           id?: string
           invoice_url?: string | null
+          license_issue_date?: string | null
           nexi_transaction_id?: string | null
           payment_breakdown?: Json | null
           payment_completed_at?: string | null
@@ -127,6 +129,7 @@ export type Database = {
           dropoff_location?: string | null
           id?: string
           invoice_url?: string | null
+          license_issue_date?: string | null
           nexi_transaction_id?: string | null
           payment_breakdown?: Json | null
           payment_completed_at?: string | null
