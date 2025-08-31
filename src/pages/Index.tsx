@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { ServiceCategories } from "@/components/ServiceCategories";
-import GoogleReviewsCarousel from "@/components/GoogleReviewsCarousel";
+
 import { Footer } from "@/components/Footer";
 import CookieConsentModal from "@/components/CookieConsentModal";
 import AgeVerificationModal from "@/components/AgeVerificationModal";
@@ -63,8 +63,6 @@ const Index = () => {
 
         <ServiceCategories />
 
-        {/* Google Reviews Carousel */}
-        <GoogleReviewsCarousel />
 
         {/* SECTION CONTACT – clean minimalist design */}
         <section
