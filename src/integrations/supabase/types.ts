@@ -190,6 +190,81 @@ export type Database = {
           },
         ]
       }
+      google_reviews_cache: {
+        Row: {
+          author_name: string
+          created_at: string
+          id: string
+          language: string | null
+          profile_photo_url: string | null
+          rating: number
+          relative_time: string | null
+          review_id: string
+          text: string | null
+          time: number | null
+          updated_at: string
+        }
+        Insert: {
+          author_name: string
+          created_at?: string
+          id?: string
+          language?: string | null
+          profile_photo_url?: string | null
+          rating: number
+          relative_time?: string | null
+          review_id: string
+          text?: string | null
+          time?: number | null
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string
+          created_at?: string
+          id?: string
+          language?: string | null
+          profile_photo_url?: string | null
+          rating?: number
+          relative_time?: string | null
+          review_id?: string
+          text?: string | null
+          time?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      google_reviews_config: {
+        Row: {
+          auto_rotate_interval: number | null
+          created_at: string
+          id: string
+          last_fetch: string | null
+          max_reviews: number | null
+          min_rating: number | null
+          place_id: string
+          updated_at: string
+        }
+        Insert: {
+          auto_rotate_interval?: number | null
+          created_at?: string
+          id?: string
+          last_fetch?: string | null
+          max_reviews?: number | null
+          min_rating?: number | null
+          place_id: string
+          updated_at?: string
+        }
+        Update: {
+          auto_rotate_interval?: number | null
+          created_at?: string
+          id?: string
+          last_fetch?: string | null
+          max_reviews?: number | null
+          min_rating?: number | null
+          place_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       loyalty_points: {
         Row: {
           id: string
