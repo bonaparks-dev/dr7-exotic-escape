@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      booking_line_items: {
+        Row: {
+          booking_id: string
+          created_at: string
+          currency: string
+          description: string
+          id: string
+          item_type: string
+          metadata: Json | null
+          quantity: number | null
+          total_price: number
+          unit_price: number
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          currency?: string
+          description: string
+          id?: string
+          item_type: string
+          metadata?: Json | null
+          quantity?: number | null
+          total_price: number
+          unit_price: number
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          currency?: string
+          description?: string
+          id?: string
+          item_type?: string
+          metadata?: Json | null
+          quantity?: number | null
+          total_price?: number
+          unit_price?: number
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           booking_details: Json | null
@@ -25,6 +64,7 @@ export type Database = {
           id: string
           invoice_url: string | null
           nexi_transaction_id: string | null
+          payment_breakdown: Json | null
           payment_completed_at: string | null
           payment_error_message: string | null
           payment_method: string | null
@@ -32,6 +72,10 @@ export type Database = {
           pickup_date: string
           pickup_location: string
           price_total: number
+          refund_amount: number | null
+          refund_status: string | null
+          security_deposit_amount: number | null
+          security_deposit_status: string | null
           status: string
           updated_at: string
           user_id: string
@@ -49,6 +93,7 @@ export type Database = {
           id?: string
           invoice_url?: string | null
           nexi_transaction_id?: string | null
+          payment_breakdown?: Json | null
           payment_completed_at?: string | null
           payment_error_message?: string | null
           payment_method?: string | null
@@ -56,6 +101,10 @@ export type Database = {
           pickup_date: string
           pickup_location: string
           price_total: number
+          refund_amount?: number | null
+          refund_status?: string | null
+          security_deposit_amount?: number | null
+          security_deposit_status?: string | null
           status?: string
           updated_at?: string
           user_id: string
@@ -73,6 +122,7 @@ export type Database = {
           id?: string
           invoice_url?: string | null
           nexi_transaction_id?: string | null
+          payment_breakdown?: Json | null
           payment_completed_at?: string | null
           payment_error_message?: string | null
           payment_method?: string | null
@@ -80,6 +130,10 @@ export type Database = {
           pickup_date?: string
           pickup_location?: string
           price_total?: number
+          refund_amount?: number | null
+          refund_status?: string | null
+          security_deposit_amount?: number | null
+          security_deposit_status?: string | null
           status?: string
           updated_at?: string
           user_id?: string
@@ -193,6 +247,75 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_audit_logs: {
+        Row: {
+          action: string
+          admin_user_id: string | null
+          amount: number | null
+          booking_id: string
+          created_at: string
+          currency: string | null
+          gateway_response: Json | null
+          id: string
+          ip_address: unknown | null
+          payment_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          admin_user_id?: string | null
+          amount?: number | null
+          booking_id: string
+          created_at?: string
+          currency?: string | null
+          gateway_response?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          payment_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          admin_user_id?: string | null
+          amount?: number | null
+          booking_id?: string
+          created_at?: string
+          currency?: string | null
+          gateway_response?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          payment_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      payment_configurations: {
+        Row: {
+          created_at: string
+          enable_full_charge: boolean
+          enable_security_deposit_preauth: boolean
+          id: string
+          security_deposit_amount: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          enable_full_charge?: boolean
+          enable_security_deposit_preauth?: boolean
+          id?: string
+          security_deposit_amount?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          enable_full_charge?: boolean
+          enable_security_deposit_preauth?: boolean
+          id?: string
+          security_deposit_amount?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payment_methods: {
         Row: {
           card_brand: string | null
@@ -233,15 +356,20 @@ export type Database = {
         Row: {
           amount: number
           booking_id: string | null
+          captured_amount: number | null
           completed_at: string | null
           created_at: string
           currency: string
           error_message: string | null
+          gateway_fees: number | null
           id: string
+          line_items: Json | null
           mac_verification_status: string | null
           nexi_auth_code: string | null
           nexi_response_code: string | null
           nexi_transaction_id: string | null
+          payer_email: string | null
+          payer_name: string | null
           payment_method: string
           payment_status: string
           user_id: string
@@ -249,15 +377,20 @@ export type Database = {
         Insert: {
           amount: number
           booking_id?: string | null
+          captured_amount?: number | null
           completed_at?: string | null
           created_at?: string
           currency?: string
           error_message?: string | null
+          gateway_fees?: number | null
           id?: string
+          line_items?: Json | null
           mac_verification_status?: string | null
           nexi_auth_code?: string | null
           nexi_response_code?: string | null
           nexi_transaction_id?: string | null
+          payer_email?: string | null
+          payer_name?: string | null
           payment_method?: string
           payment_status?: string
           user_id: string
@@ -265,15 +398,20 @@ export type Database = {
         Update: {
           amount?: number
           booking_id?: string | null
+          captured_amount?: number | null
           completed_at?: string | null
           created_at?: string
           currency?: string
           error_message?: string | null
+          gateway_fees?: number | null
           id?: string
+          line_items?: Json | null
           mac_verification_status?: string | null
           nexi_auth_code?: string | null
           nexi_response_code?: string | null
           nexi_transaction_id?: string | null
+          payer_email?: string | null
+          payer_name?: string | null
           payment_method?: string
           payment_status?: string
           user_id?: string
@@ -368,6 +506,51 @@ export type Database = {
           referred_user_id?: string | null
           referrer_id?: string
           reward_earned?: number | null
+          status?: string
+        }
+        Relationships: []
+      }
+      refunds: {
+        Row: {
+          admin_notes: string | null
+          amount: number
+          booking_id: string
+          created_at: string
+          currency: string
+          error_message: string | null
+          id: string
+          nexi_refund_id: string | null
+          payment_id: string | null
+          processed_at: string | null
+          reason: string | null
+          status: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount: number
+          booking_id: string
+          created_at?: string
+          currency?: string
+          error_message?: string | null
+          id?: string
+          nexi_refund_id?: string | null
+          payment_id?: string | null
+          processed_at?: string | null
+          reason?: string | null
+          status?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount?: number
+          booking_id?: string
+          created_at?: string
+          currency?: string
+          error_message?: string | null
+          id?: string
+          nexi_refund_id?: string | null
+          payment_id?: string | null
+          processed_at?: string | null
+          reason?: string | null
           status?: string
         }
         Relationships: []
