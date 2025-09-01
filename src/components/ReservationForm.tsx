@@ -55,6 +55,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   // Eligibility states
   const [dateOfBirth, setDateOfBirth] = useState<Date>();
   const [licenseIssueDate, setLicenseIssueDate] = useState<Date>();
+  const [dobDay, setDobDay] = useState<string>('');
+  const [dobMonth, setDobMonth] = useState<string>('');
+  const [dobYear, setDobYear] = useState<string>('');
+  const [licenseDay, setLicenseDay] = useState<string>('');
+  const [licenseMonth, setLicenseMonth] = useState<string>('');
+  const [licenseYear, setLicenseYear] = useState<string>('');
   const [eligibility, setEligibility] = useState<EligibilityData>({
     dateOfBirth: '',
     licenseIssueDate: '',
@@ -273,6 +279,30 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
     return total;
   };
+
+  // Helper functions for dropdown date handling
+  const updateDateOfBirth = () => {
+    if (dobDay && dobMonth && dobYear) {
+      const date = new Date(parseInt(dobYear), parseInt(dobMonth) - 1, parseInt(dobDay));
+      setDateOfBirth(date);
+      setEligibility(prev => ({ ...prev, dateOfBirth: date.toISOString().split('T')[0] }));
+    }
+  };
+
+  const updateLicenseDate = () => {
+    if (licenseDay && licenseMonth && licenseYear) {
+      const date = new Date(parseInt(licenseYear), parseInt(licenseMonth) - 1, parseInt(licenseDay));
+      setLicenseIssueDate(date);
+      setEligibility(prev => ({ ...prev, licenseIssueDate: date.toISOString().split('T')[0] }));
+    }
+  };
+
+  // Generate arrays for dropdowns
+  const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
+  const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
+  const currentYear = new Date().getFullYear();
+  const dobYears = Array.from({ length: 80 }, (_, i) => (currentYear - 18 - i).toString()); // 18-98 years old
+  const licenseYears = Array.from({ length: 50 }, (_, i) => (currentYear - i).toString()); // Current year to 50 years ago
 
   const handleNextStep = () => {
     if (step === 1) {
@@ -701,63 +731,91 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label>{t.dateOfBirth} *</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !dateOfBirth && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {dateOfBirth ? format(dateOfBirth, "PPP") : <span>Pick a date</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={dateOfBirth}
-                          onSelect={(date) => {
-                            setDateOfBirth(date);
-                            setEligibility(prev => ({ ...prev, dateOfBirth: date?.toISOString().split('T')[0] || '' }));
-                          }}
-                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                          initialFocus
-                          className="pointer-events-auto"
-                        />
-                      </PopoverContent>
-                    </Popover>
+                    <div className="grid grid-cols-3 gap-2">
+                      <Select value={dobDay} onValueChange={(value) => {
+                        setDobDay(value);
+                        setTimeout(updateDateOfBirth, 0);
+                      }}>
+                        <SelectTrigger className="bg-background z-50">
+                          <SelectValue placeholder="Giorno" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border shadow-lg z-50">
+                          {days.map(day => (
+                            <SelectItem key={day} value={day}>{day}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Select value={dobMonth} onValueChange={(value) => {
+                        setDobMonth(value);
+                        setTimeout(updateDateOfBirth, 0);
+                      }}>
+                        <SelectTrigger className="bg-background z-50">
+                          <SelectValue placeholder="Mese" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border shadow-lg z-50">
+                          {months.map(month => (
+                            <SelectItem key={month} value={month}>{month}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Select value={dobYear} onValueChange={(value) => {
+                        setDobYear(value);
+                        setTimeout(updateDateOfBirth, 0);
+                      }}>
+                        <SelectTrigger className="bg-background z-50">
+                          <SelectValue placeholder="Anno" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border shadow-lg z-50">
+                          {dobYears.map(year => (
+                            <SelectItem key={year} value={year}>{year}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   <div>
                     <Label>{t.licenseIssueDate} *</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !licenseIssueDate && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {licenseIssueDate ? format(licenseIssueDate, "PPP") : <span>Pick a date</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={licenseIssueDate}
-                          onSelect={(date) => {
-                            setLicenseIssueDate(date);
-                            setEligibility(prev => ({ ...prev, licenseIssueDate: date?.toISOString().split('T')[0] || '' }));
-                          }}
-                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                          initialFocus
-                          className="pointer-events-auto"
-                        />
-                      </PopoverContent>
-                    </Popover>
+                    <div className="grid grid-cols-3 gap-2">
+                      <Select value={licenseDay} onValueChange={(value) => {
+                        setLicenseDay(value);
+                        setTimeout(updateLicenseDate, 0);
+                      }}>
+                        <SelectTrigger className="bg-background z-50">
+                          <SelectValue placeholder="Giorno" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border shadow-lg z-50">
+                          {days.map(day => (
+                            <SelectItem key={day} value={day}>{day}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Select value={licenseMonth} onValueChange={(value) => {
+                        setLicenseMonth(value);
+                        setTimeout(updateLicenseDate, 0);
+                      }}>
+                        <SelectTrigger className="bg-background z-50">
+                          <SelectValue placeholder="Mese" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border shadow-lg z-50">
+                          {months.map(month => (
+                            <SelectItem key={month} value={month}>{month}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Select value={licenseYear} onValueChange={(value) => {
+                        setLicenseYear(value);
+                        setTimeout(updateLicenseDate, 0);
+                      }}>
+                        <SelectTrigger className="bg-background z-50">
+                          <SelectValue placeholder="Anno" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border shadow-lg z-50">
+                          {licenseYears.map(year => (
+                            <SelectItem key={year} value={year}>{year}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
               </CardContent>
