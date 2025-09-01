@@ -92,7 +92,7 @@ const handler = async (req: Request): Promise<Response> => {
     const amountCents = Math.round(totalAmount * 100);
     
     const origin = req.headers.get("origin") || "https://d9a6e588-965c-400c-b618-673fe52d03c9.sandbox.lovable.dev";
-    const urlBack = `${origin}/payment-result`;
+    const urlBack = `${origin}/verify-payment?transactionId=${transactionId}&orderId=${bookingId}`;
     const urlPost = `${origin}/api/payment-callback`;
 
     // Build parameters for MAC calculation (according to Nexi documentation)
