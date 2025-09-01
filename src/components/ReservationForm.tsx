@@ -79,6 +79,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState(1); // 1: Details, 2: Eligibility, 3: Payment
   const [licenseFile, setLicenseFile] = useState<File | null>(null);
+  const [pickupDateOpen, setPickupDateOpen] = useState(false);
+  const [dropoffDateOpen, setDropoffDateOpen] = useState(false);
   
   const { toast } = useToast();
   const { language } = useLanguage();
@@ -887,57 +889,67 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label>{t.pickupDate} *</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !pickupDate && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {pickupDate ? format(pickupDate, "PPP") : <span>Pick a date</span>}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={pickupDate}
-                            onSelect={setPickupDate}
-                            disabled={(date) => date < new Date()}
-                            initialFocus
-                            className="pointer-events-auto"
-                          />
-                        </PopoverContent>
-                      </Popover>
+                       <Popover open={pickupDateOpen} onOpenChange={setPickupDateOpen}>
+                         <PopoverTrigger asChild>
+                           <Button
+                             variant={"outline"}
+                             className={cn(
+                               "w-full justify-start text-left font-normal",
+                               !pickupDate && "text-muted-foreground"
+                             )}
+                           >
+                             <CalendarIcon className="mr-2 h-4 w-4" />
+                             {pickupDate ? format(pickupDate, "PPP") : <span>Pick a date</span>}
+                           </Button>
+                         </PopoverTrigger>
+                         <PopoverContent className="w-auto p-0" align="start">
+                           <Calendar
+                             mode="single"
+                             selected={pickupDate}
+                             onSelect={(date) => {
+                               setPickupDate(date);
+                               setPickupDateOpen(false);
+                               // Automatically open return date if pickup date is selected
+                               if (date) {
+                                 setTimeout(() => setDropoffDateOpen(true), 100);
+                               }
+                             }}
+                             disabled={(date) => date < new Date()}
+                             initialFocus
+                             className="pointer-events-auto"
+                           />
+                         </PopoverContent>
+                       </Popover>
                     </div>
                     <div>
                       <Label>{t.dropoffDate} *</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !dropoffDate && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {dropoffDate ? format(dropoffDate, "PPP") : <span>Pick a date</span>}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={dropoffDate}
-                            onSelect={setDropoffDate}
-                            disabled={(date) => date < (pickupDate || new Date())}
-                            initialFocus
-                            className="pointer-events-auto"
-                          />
-                        </PopoverContent>
-                      </Popover>
+                       <Popover open={dropoffDateOpen} onOpenChange={setDropoffDateOpen}>
+                         <PopoverTrigger asChild>
+                           <Button
+                             variant={"outline"}
+                             className={cn(
+                               "w-full justify-start text-left font-normal",
+                               !dropoffDate && "text-muted-foreground"
+                             )}
+                           >
+                             <CalendarIcon className="mr-2 h-4 w-4" />
+                             {dropoffDate ? format(dropoffDate, "PPP") : <span>Pick a date</span>}
+                           </Button>
+                         </PopoverTrigger>
+                         <PopoverContent className="w-auto p-0" align="start">
+                           <Calendar
+                             mode="single"
+                             selected={dropoffDate}
+                             onSelect={(date) => {
+                               setDropoffDate(date);
+                               setDropoffDateOpen(false);
+                             }}
+                             disabled={(date) => date < (pickupDate || new Date())}
+                             initialFocus
+                             className="pointer-events-auto"
+                           />
+                         </PopoverContent>
+                       </Popover>
                     </div>
                   </div>
                 
