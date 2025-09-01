@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { CreditCard, Shield, Lock } from 'lucide-react';
@@ -38,11 +40,23 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
   const [isInitializing, setIsInitializing] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSession, setPaymentSession] = useState<any>(null);
+  
+  // Card form state
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [cardholderName, setCardholderName] = useState(bookingData.payerName);
+  const [billingEmail, setBillingEmail] = useState(bookingData.payerEmail);
 
   const translations = {
     en: {
       paymentDetails: 'Payment Details',
       securePayment: 'Secure Payment with Nexi',
+      cardNumber: 'Card Number',
+      expiryDate: 'Expiry Date (MM/YY)',
+      cvv: 'CVV',
+      cardholderName: 'Cardholder Name',
+      billingEmail: 'Email Address',
       payNow: 'Pay Now',
       processing: 'Processing Payment...',
       orderSummary: 'Order Summary',
@@ -52,11 +66,19 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
       pci: 'PCI DSS Compliant',
       secure3d: '3D Secure Authentication',
       paymentFailed: 'Payment failed. Please try again.',
-      initializingPayment: 'Initializing secure payment...'
+      initializingPayment: 'Initializing secure payment...',
+      invalidCard: 'Please enter valid card details',
+      testCards: 'Test Cards',
+      testCardNote: 'Use test card: 4242 4242 4242 4242, Expiry: 12/34, CVV: 123'
     },
     it: {
       paymentDetails: 'Dettagli Pagamento',
       securePayment: 'Pagamento Sicuro con Nexi',
+      cardNumber: 'Numero Carta',
+      expiryDate: 'Scadenza (MM/AA)',
+      cvv: 'CVV',
+      cardholderName: 'Nome Titolare',
+      billingEmail: 'Indirizzo Email',
       payNow: 'Paga Ora',
       processing: 'Elaborazione Pagamento...',
       orderSummary: 'Riepilogo Ordine',
@@ -66,7 +88,10 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
       pci: 'Conforme PCI DSS',
       secure3d: 'Autenticazione 3D Secure',
       paymentFailed: 'Pagamento fallito. Riprova.',
-      initializingPayment: 'Inizializzazione pagamento sicuro...'
+      initializingPayment: 'Inizializzazione pagamento sicuro...',
+      invalidCard: 'Inserisci i dati della carta validi',
+      testCards: 'Carte di Test',
+      testCardNote: 'Usa carta di test: 4242 4242 4242 4242, Scadenza: 12/34, CVV: 123'
     }
   };
 
@@ -99,14 +124,63 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
     }
   };
 
-  const handleTestPayment = async () => {
+  // Format card number with spaces
+  const formatCardNumber = (value: string) => {
+    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    const matches = v.match(/\d{4,16}/g);
+    const match = matches && matches[0] || '';
+    const parts = [];
+    for (let i = 0; i < match.length; i += 4) {
+      parts.push(match.substring(i, i + 4));
+    }
+    if (parts.length) {
+      return parts.join(' ');
+    } else {
+      return v;
+    }
+  };
+
+  // Format expiry date MM/YY
+  const formatExpiryDate = (value: string) => {
+    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    if (v.length >= 2) {
+      return `${v.substring(0, 2)}/${v.substring(2, 4)}`;
+    }
+    return v;
+  };
+
+  // Validate card form
+  const isCardFormValid = () => {
+    const cleanCardNumber = cardNumber.replace(/\s/g, '');
+    return (
+      cleanCardNumber.length >= 13 &&
+      expiryDate.length === 5 &&
+      cvv.length >= 3 &&
+      cardholderName.trim().length > 0 &&
+      billingEmail.includes('@')
+    );
+  };
+
+  const handleCardPayment = async () => {
+    if (!isCardFormValid()) {
+      toast.error(tr.invalidCard);
+      return;
+    }
+
     setIsProcessing(true);
     try {
       const { data, error } = await supabase.functions.invoke('nexi-payment-process', {
         body: {
           bookingId: bookingData.bookingId,
           totalAmount: bookingData.totalAmount,
-          currency: bookingData.currency
+          currency: bookingData.currency,
+          cardDetails: {
+            number: cardNumber.replace(/\s/g, ''),
+            expiryDate,
+            cvv,
+            cardholderName,
+            billingEmail
+          }
         }
       });
 
@@ -118,7 +192,7 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
       onPaymentSuccess(data);
 
     } catch (error: any) {
-      console.error('Test payment error:', error);
+      console.error('Card payment error:', error);
       toast.error(error.message || tr.paymentFailed);
       onPaymentError(error.message || 'Payment failed');
     } finally {
@@ -195,6 +269,72 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
         </CardHeader>
         
         <CardContent className="space-y-6">
+          {/* Card Input Fields */}
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="card-number">{tr.cardNumber}</Label>
+              <Input
+                id="card-number"
+                placeholder="4242 4242 4242 4242"
+                value={cardNumber}
+                onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
+                maxLength={19}
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="expiry-date">{tr.expiryDate}</Label>
+                <Input
+                  id="expiry-date"
+                  placeholder="12/34"
+                  value={expiryDate}
+                  onChange={(e) => setExpiryDate(formatExpiryDate(e.target.value))}
+                  maxLength={5}
+                />
+              </div>
+              <div>
+                <Label htmlFor="cvv">{tr.cvv}</Label>
+                <Input
+                  id="cvv"
+                  placeholder="123"
+                  value={cvv}
+                  onChange={(e) => setCvv(e.target.value.replace(/[^0-9]/g, '').substring(0, 4))}
+                  maxLength={4}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="cardholder-name">{tr.cardholderName}</Label>
+              <Input
+                id="cardholder-name"
+                value={cardholderName}
+                onChange={(e) => setCardholderName(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="billing-email">{tr.billingEmail}</Label>
+              <Input
+                id="billing-email"
+                type="email"
+                value={billingEmail}
+                onChange={(e) => setBillingEmail(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Test Card Info */}
+          <div className="bg-muted/50 p-3 rounded-lg">
+            <p className="text-sm font-medium text-muted-foreground mb-1">{tr.testCards}</p>
+            <p className="text-xs text-muted-foreground">{tr.testCardNote}</p>
+          </div>
+
+          <Separator />
+
           {/* Security Features */}
           <div className="space-y-3">
             <h4 className="font-medium text-sm">{tr.securityFeatures}</h4>
@@ -219,8 +359,8 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
           {/* Pay Buttons */}
           <div className="space-y-3">
             <Button
-              onClick={handleTestPayment}
-              disabled={isProcessing}
+              onClick={handleCardPayment}
+              disabled={!isCardFormValid() || isProcessing}
               className="w-full"
               size="lg"
             >
@@ -244,9 +384,6 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
             >
               {language === 'it' ? 'Apri pagina Nexi' : 'Open Nexi secure page'}
             </Button>
-            <p className="text-xs text-muted-foreground text-center">
-              {language === 'it' ? 'Usa il pulsante in alto per testare il pagamento o quello sotto per la pagina sicura Nexi.' : 'Use the button above to test payment or below for Nexi secure page.'}
-            </p>
           </div>
         </CardContent>
       </Card>
