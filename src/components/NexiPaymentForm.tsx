@@ -5,6 +5,7 @@ import { Loader2, CreditCard, Shield, Lock } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface NexiPaymentFormProps {
   bookingData: {
@@ -32,6 +33,7 @@ export const NexiPaymentForm: React.FC<NexiPaymentFormProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const { language, t } = useLanguage();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handlePayment = async () => {
     try {
@@ -53,31 +55,15 @@ export const NexiPaymentForm: React.FC<NexiPaymentFormProps> = ({
       if (error) throw error;
 
       if (data.success) {
-        // Create a form and submit it to Nexi
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = data.paymentUrl;
-        form.target = '_blank';
-
-        // Add all payment parameters as hidden inputs
-        Object.entries(data.paymentParams).forEach(([key, value]) => {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = value as string;
-          form.appendChild(input);
+        // Redirect to payment verification page with transaction details
+        const params = new URLSearchParams({
+          transactionId: data.transactionId,
+          orderId: data.orderId
         });
-
-        document.body.appendChild(form);
-        form.submit();
-        document.body.removeChild(form);
-
+        
+        navigate(`/verify-payment?${params.toString()}`);
+        
         onPaymentInitiated?.();
-
-        toast({
-          title: t('paymentInitiated'),
-          description: t('redirectedToNexi'),
-        });
       }
     } catch (error: any) {
       console.error('Payment error:', error);
