@@ -508,7 +508,7 @@ export type Database = {
           refund_status: string | null
           risk_flags: Json | null
           three_ds_status: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           amount: number
@@ -533,7 +533,7 @@ export type Database = {
           refund_status?: string | null
           risk_flags?: Json | null
           three_ds_status?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           amount?: number
@@ -558,7 +558,7 @@ export type Database = {
           refund_status?: string | null
           risk_flags?: Json | null
           three_ds_status?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
