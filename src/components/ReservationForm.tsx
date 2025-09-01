@@ -1,526 +1,180 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { CalendarIcon, X, Check, Upload, Camera } from "lucide-react";
-import { format, differenceInDays } from "date-fns";
-import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { NexiPaymentForm } from "./NexiPaymentForm";
-import { InlineEligibilitySelectors } from "./InlineEligibilitySelectors";
+import React, { useState } from 'react';
+import { Calendar, MapPin, User, Phone, Mail, CreditCard, Shield, Car, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface ReservationFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-  carName: string;
-  dailyPrice: number;
+  vehicleType: string;
+  vehicleName: string;
+  vehicleImageUrl?: string;
+  basePrice: number;
 }
 
-export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: ReservationFormProps) => {
-  const { language } = useLanguage();
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [depositOption, setDepositOption] = useState("with-deposit");
-  const [insurance, setInsurance] = useState("kasko");
-  const [fullCleaning, setFullCleaning] = useState(true);
-  const [secondDriver, setSecondDriver] = useState(false);
-  const [under25, setUnder25] = useState(false);
-  const [licenseUnder3, setLicenseUnder3] = useState(false);
-  const [outOfHours, setOutOfHours] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [startDateOpen, setStartDateOpen] = useState(false);
-  const [endDateOpen, setEndDateOpen] = useState(false);
-  const [dobDay, setDobDay] = useState("");
-  const [dobMonth, setDobMonth] = useState("");
-  const [dobYear, setDobYear] = useState("");
-  const [licenseDay, setLicenseDay] = useState("");
-  const [licenseMonth, setLicenseMonth] = useState("");
-  const [licenseYear, setLicenseYear] = useState("");
-  const [dob, setDob] = useState("");
-  const [licenseDate, setLicenseDate] = useState("");
+const ReservationForm: React.FC<ReservationFormProps> = ({
+  vehicleType,
+  vehicleName,
+  vehicleImageUrl,
+  basePrice
+}) => {
+  const [pickupDate, setPickupDate] = useState('');
+  const [dropoffDate, setDropoffDate] = useState('');
+  const [pickupLocation, setPickupLocation] = useState('');
+  const [dropoffLocation, setDropoffLocation] = useState('');
+  const [licenseNumber, setLicenseNumber] = useState('');
+  const [licenseCountry, setLicenseCountry] = useState('');
+  const [licenseIssueDate, setLicenseIssueDate] = useState('');
   const [licenseFile, setLicenseFile] = useState<File | null>(null);
-  const [licenseFileUrl, setLicenseFileUrl] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [bookingCreated, setBookingCreated] = useState(false);
-  const [paymentBookingData, setPaymentBookingData] = useState<any>(null);
-  
-  // Eligibility selector states
-  const [ageBucket, setAgeBucket] = useState('');
-  const [countryIso2, setCountryIso2] = useState('IT');
-  const [eligibilityValid, setEligibilityValid] = useState(false);
+  const [selectedInsurance, setSelectedInsurance] = useState('');
+  const [extras, setExtras] = useState({
+    fullCleaning: false,
+    secondDriver: false,
+    under25: false,
+    licenseUnder3: false,
+    outOfHours: false
+  });
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { user } = useAuth();
   const { toast } = useToast();
+  const { language } = useLanguage();
+  const navigate = useNavigate();
 
   const calculateTotal = () => {
-    if (!startDate || !endDate) return 0;
-    
-    const days = differenceInDays(endDate, startDate);
+    if (!pickupDate || !dropoffDate) return 0;
+    const days = Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24));
     if (days <= 0) return 0;
 
-    let total = 0;
-    
-    // Base car rental price
-    total += days * dailyPrice;
-    
-    // Insurance
-    const insurancePrices = {
-      "kasko": 100,
-      "kasko-black": 150,
-      "kasko-signature": 200
-    };
-    total += days * insurancePrices[insurance as keyof typeof insurancePrices];
-    
-    // Additional options
-    total += 30; // Full cleaning (required)
-    if (secondDriver) total += days * 10;
-    if (under25) total += days * 10;
-    if (licenseUnder3) total += days * 20;
-    if (outOfHours) total += 50;
-    
-    return total;
-  };
+    let total = basePrice * days;
 
-  // Helper functions for dropdowns
-  const generateDays = () => {
-    const days = [];
-    for (let i = 1; i <= 31; i++) {
-      days.push(i.toString().padStart(2, '0'));
-    }
-    return days;
-  };
-
-  const generateMonths = () => {
-    const months = [];
-    for (let i = 1; i <= 12; i++) {
-      months.push(i.toString().padStart(2, '0'));
-    }
-    return months;
-  };
-
-  const generateYears = () => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
-    for (let i = currentYear; i >= 1910; i--) {
-      years.push(i.toString());
-    }
-    return years;
-  };
-
-  const generateLicenseYears = () => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
-    for (let i = currentYear; i >= 1950; i--) {
-      years.push(i.toString());
-    }
-    return years;
-  };
-
-  // File upload functions
-  const handleFileSelect = async (file: File) => {
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-    if (!allowedTypes.includes(file.type)) {
-      toast({
-        title: language === 'it' ? 'Tipo di file non valido' : 'Invalid file type',
-        description: language === 'it' 
-          ? 'Sono consentiti solo file JPEG, PNG o PDF'
-          : 'Only JPEG, PNG, or PDF files are allowed',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    // Validate file size (10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      toast({
-        title: language === 'it' ? 'File troppo grande' : 'File too large',
-        description: language === 'it' 
-          ? 'Il file deve essere inferiore a 10MB'
-          : 'File must be less than 10MB',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setLicenseFile(file);
-    setLicenseFileUrl(URL.createObjectURL(file));
-  };
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      handleFileSelect(file);
-    }
-  };
-
-  const handleCameraCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      handleFileSelect(file);
-    }
-  };
-
-  const removeLicenseFile = () => {
-    setLicenseFile(null);
-    if (licenseFileUrl) {
-      URL.revokeObjectURL(licenseFileUrl);
-      setLicenseFileUrl(null);
-    }
-  };
-
-  const uploadLicenseToStorage = async (file: File, userId: string): Promise<string> => {
-    setIsUploading(true);
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${userId}/${Date.now()}-license.${fileExt}`;
-      
-      const { data, error } = await supabase.storage
-        .from('driver-licenses')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (error) throw error;
-      return fileName;
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  // Update dob when dropdown values change
-  useEffect(() => {
-    if (dobDay && dobMonth && dobYear) {
-      setDob(`${dobYear}-${dobMonth}-${dobDay}`);
-    } else {
-      setDob("");
-    }
-  }, [dobDay, dobMonth, dobYear]);
-
-  // Update license date when dropdown values change
-  useEffect(() => {
-    if (licenseDay && licenseMonth && licenseYear) {
-      setLicenseDate(`${licenseYear}-${licenseMonth}-${licenseDay}`);
-    } else {
-      setLicenseDate("");
-    }
-  }, [licenseDay, licenseMonth, licenseYear]);
-
-  useEffect(() => {
-    setTotalPrice(calculateTotal());
-  }, [startDate, endDate, dailyPrice, insurance, secondDriver, under25, licenseUnder3, outOfHours]);
-
-  useEffect(() => {
-    if (startDate && !endDate) {
-      setTimeout(() => {
-        setEndDateOpen(true);
-      }, 300);
-    }
-  }, [startDate, endDate]);
-
-  const parseDate = (input: string): Date | null => {
-    const parts = input.split("-");
-    if (parts.length !== 3) return null;
-    return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-  };
-
-  const getAge = (birthDate: Date | null): number => {
-    if (!birthDate) return 0;
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  };
-
-  const getLicenseYears = (licenseStartDate: Date | null): number => {
-    if (!licenseStartDate) return 0;
-    const today = new Date();
-    let years = today.getFullYear() - licenseStartDate.getFullYear();
-    const m = today.getMonth() - licenseStartDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < licenseStartDate.getDate())) {
-      years--;
-    }
-    return years;
-  };
-
-  const getInsuranceEligibility = () => {
-    const birthDate = parseDate(dob);
-    const licenseStart = parseDate(licenseDate);
-    const age = getAge(birthDate);
-    const licenseYears = getLicenseYears(licenseStart);
-
-    return {
-      kasko: {
-        eligible: licenseYears >= 2,
-        reason: licenseYears < 2 ? (language === "it" ? "Richiede almeno 2 anni di patente" : "Requires at least 2 years license") : null
-      },
-      kaskoBlack: {
-        eligible: age >= 25 && licenseYears >= 5,
-        reason: age < 25 || licenseYears < 5 ? (
-          language === "it" 
-            ? `Richiede almeno 25 anni ${age < 25 ? `(hai ${age} anni)` : ''} e 5 anni di patente ${licenseYears < 5 ? `(hai ${licenseYears} anni di patente)` : ''}`
-            : `Requires at least 25 years old ${age < 25 ? `(you are ${age})` : ''} and 5 years license ${licenseYears < 5 ? `(you have ${licenseYears} years)` : ''}`
-        ) : null
-      },
-      kaskoSignature: {
-        eligible: age >= 30 && licenseYears >= 10,
-        reason: age < 30 || licenseYears < 10 ? (
-          language === "it" 
-            ? `Richiede almeno 30 anni ${age < 30 ? `(hai ${age} anni)` : ''} e 10 anni di patente ${licenseYears < 10 ? `(hai ${licenseYears} anni di patente)` : ''}`
-            : `Requires at least 30 years old ${age < 30 ? `(you are ${age})` : ''} and 10 years license ${licenseYears < 10 ? `(you have ${licenseYears} years)` : ''}`
-        ) : null
-      }
-    };
-  };
-
-  const isInsuranceEligible = (): { valid: boolean; message: string | null } => {
-    const eligibility = getInsuranceEligibility();
-    
-    switch (insurance) {
-      case "kasko":
-        return {
-          valid: eligibility.kasko.eligible,
-          message: eligibility.kasko.reason
-        };
-      case "kasko-black":
-        return {
-          valid: eligibility.kaskoBlack.eligible,
-          message: eligibility.kaskoBlack.reason
-        };
-      case "kasko-signature":
-        return {
-          valid: eligibility.kaskoSignature.eligible,
-          message: eligibility.kaskoSignature.reason
-        };
-    }
-
-    return { valid: true, message: null };
-  };
-
-  const isLicenseDateValid = (): { valid: boolean; message: string | null } => {
-    if (!licenseDate) {
-      return {
-        valid: false,
-        message: language === 'it' 
-          ? 'Seleziona la data di rilascio della patente.'
-          : 'Please select the license issue date.'
-      };
-    }
-
-    if (dob && licenseDate) {
-      const dobParsed = parseDate(dob);
-      const licenseParsed = parseDate(licenseDate);
-      
-      if (dobParsed && licenseParsed && licenseParsed <= dobParsed) {
-        return {
-          valid: false,
-          message: language === 'it'
-            ? 'La data di rilascio della patente deve essere successiva alla data di nascita.'
-            : 'The license issue date must be after your date of birth.'
-        };
-      }
-    }
-
-    return { valid: true, message: null };
-  };
-
-  // Auto-select valid insurance when current selection becomes invalid
-  useEffect(() => {
-    const eligibility = getInsuranceEligibility();
-    
-    if (!isInsuranceEligible().valid) {
-      // Find the best available insurance option
-      if (eligibility.kaskoSignature.eligible) {
-        setInsurance("kasko-signature");
-      } else if (eligibility.kaskoBlack.eligible) {
-        setInsurance("kasko-black");
-      } else if (eligibility.kasko.eligible) {
-        setInsurance("kasko");
-      }
-    }
-  }, [dob, licenseDate, language]);
-
-  const generateLineItems = () => {
-    const items = [];
-    const days = Math.ceil((endDate!.getTime() - startDate!.getTime()) / (1000 * 60 * 60 * 24));
-
-    // Base rate
-    items.push({
-      type: 'base_rate',
-      description: `${carName} - ${days} ${days === 1 ? 'day' : 'days'}`,
-      quantity: days,
-      unitPrice: dailyPrice,
-      totalPrice: dailyPrice * days
-    });
-
-    // Insurance
     const insurancePrices: { [key: string]: number } = {
       'kasko': 15,
       'kasko-black': 25,
       'kasko-signature': 35
     };
-    
-    if (insurancePrices[insurance]) {
-      items.push({
-        type: 'insurance',
-        description: `Insurance: ${insurance.replace('-', ' ').toUpperCase()}`,
-        quantity: days,
-        unitPrice: insurancePrices[insurance],
-        totalPrice: insurancePrices[insurance] * days
-      });
+
+    if (selectedInsurance && insurancePrices[selectedInsurance]) {
+      total += insurancePrices[selectedInsurance] * days;
     }
 
-    // Extras
-    if (fullCleaning) {
-      items.push({
-        type: 'extra',
-        description: language === 'it' ? 'Pulizia completa' : 'Full Cleaning',
-        quantity: 1,
-        unitPrice: 30,
-        totalPrice: 30
-      });
-    }
+    if (extras.fullCleaning) total += 30;
+    if (extras.secondDriver) total += 10 * days;
+    if (extras.under25) total += 10 * days;
+    if (extras.licenseUnder3) total += 20 * days;
+    if (extras.outOfHours) total += 50;
 
-    if (secondDriver) {
-      items.push({
-        type: 'extra',
-        description: language === 'it' ? 'Secondo conducente' : 'Second Driver',
-        quantity: days,
-        unitPrice: 10,
-        totalPrice: 10 * days
-      });
-    }
+    return total;
+  };
 
-    if (under25) {
-      items.push({
-        type: 'extra',
-        description: language === 'it' ? 'Conducente sotto 25 anni' : 'Driver under 25',
-        quantity: days,
-        unitPrice: 10,
-        totalPrice: 10 * days
-      });
+  const handleDateChange = (type: 'pickup' | 'dropoff', value: string) => {
+    if (type === 'pickup') {
+      setPickupDate(value);
+      if (dropoffDate && new Date(value) > new Date(dropoffDate)) {
+        setDropoffDate(value);
+      }
+    } else {
+      setDropoffDate(value);
     }
+  };
 
-    if (licenseUnder3) {
-      items.push({
-        type: 'extra',
-        description: language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years',
-        quantity: days,
-        unitPrice: 20,
-        totalPrice: 20 * days
-      });
-    }
-
-    if (outOfHours) {
-      items.push({
-        type: 'extra',
-        description: language === 'it' ? 'Consegna/ritiro fuori orario' : 'Out-of-hours delivery/pickup',
-        quantity: 1,
-        unitPrice: 50,
-        totalPrice: 50
-      });
-    }
-
-    return items;
+  const getInsurancePrice = (insurance: string) => {
+    const prices: { [key: string]: number } = {
+      'kasko': 15,
+      'kasko-black': 25,
+      'kasko-signature': 35
+    };
+    return prices[insurance] || 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate license file upload
-    if (!licenseFile) {
-      toast({
-        title: language === 'it' ? 'Documento mancante' : 'Missing document',
-        description: language === 'it' 
-          ? 'È necessario caricare una foto della patente per continuare.'
-          : 'Please upload a driver\'s license photo to continue.',
-        variant: 'destructive',
-      });
-      return;
-    }
-    
-    if (!startDate || !endDate || !dobDay || !dobMonth || !dobYear || !licenseDay || !licenseMonth || !licenseYear || !isInsuranceEligible().valid || !isLicenseDateValid().valid || !eligibilityValid) return;
-
     setIsSubmitting(true);
 
     try {
-      // Require login before booking and payment
-      if (!user) {
-        toast({
-          title: language === 'it' ? 'Accedi richiesto' : 'Login required',
-          description: language === 'it'
-            ? 'Per prenotare e pagare devi accedere o registrarti.'
-            : 'Please sign in or create an account to book and pay.',
-          variant: 'destructive',
-        });
-        setIsSubmitting(false);
-        navigate('/auth');
-        return;
-      }
-      const userId = user.id;
+      // Support both authenticated users and guests
+      const userId = user?.id || null; // Use null for guests instead of generating a string
       
       let licenseFilePath = null;
       
+      // Only upload license if file is provided
       if (licenseFile) {
-        // Upload license file to storage
-        licenseFilePath = await uploadLicenseToStorage(licenseFile, userId);
+        const fileExt = licenseFile.name.split('.').pop();
+        const fileName = `${userId || 'guest'}_${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('driver-licenses')
+          .upload(fileName, licenseFile);
+
+        if (uploadError) {
+          console.error('License upload error:', uploadError);
+          toast({
+            title: language === 'it' ? 'Errore caricamento' : 'Upload error',
+            description: language === 'it' 
+              ? 'Errore nel caricamento della patente'
+              : 'Failed to upload driver license',
+            variant: 'destructive',
+          });
+          setIsSubmitting(false);
+          return;
+        }
+
+        licenseFilePath = fileName;
       }
 
-      // Create booking record first
+      // Create booking record
       const bookingData = {
-        user_id: userId,
-        vehicle_name: carName,
-        vehicle_type: 'car',
-        pickup_date: startDate.toISOString(),
-        dropoff_date: endDate.toISOString(),
-        pickup_location: 'Main Office', // This should come from form
-        dropoff_location: 'Main Office', // This should come from form
-        price_total: Math.round(totalPrice * 100), // Store in cents
+        user_id: userId, // This will be null for guests
+        vehicle_type: vehicleType,
+        vehicle_name: vehicleName,
+        vehicle_image_url: vehicleImageUrl,
+        pickup_date: pickupDate,
+        dropoff_date: dropoffDate,
+        pickup_location: pickupLocation,
+        dropoff_location: dropoffLocation || pickupLocation,
+        price_total: Math.round(calculateTotal() * 100), // Store in cents
         currency: 'EUR',
         status: 'pending',
         payment_status: 'pending',
-        age_bucket: ageBucket,
-        country_iso2: countryIso2,
-        license_issue_date: licenseDate,
+        license_issue_date: licenseIssueDate,
         booking_details: {
-          firstName,
-          lastName,
-          email,
-          phone,
-          dob,
-          licenseDate,
-          licensePhotoPath: licenseFilePath,
-          insurance,
-          ageBucket,
-          countryIso2,
+          basePrice: basePrice,
+          insurance: selectedInsurance,
           extras: {
-            fullCleaning,
-            secondDriver,
-            under25,
-            licenseUnder3,
-            outOfHours
+            fullCleaning: extras.fullCleaning,
+            secondDriver: extras.secondDriver,
+            under25: extras.under25,
+            licenseUnder3: extras.licenseUnder3,
+            outOfHours: extras.outOfHours
           },
-          basePrice: dailyPrice
+          guestInfo: !userId ? {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            phone: phone,
+            licenseNumber: licenseNumber,
+            licenseCountry: licenseCountry,
+            licenseFilePath: licenseFilePath
+          } : null,
+          pickupDate: pickupDate,
+          dropoffDate: dropoffDate,
+          pickupLocation: pickupLocation,
+          dropoffLocation: dropoffLocation || pickupLocation,
+          vehicleName: vehicleName,
+          vehicleType: vehicleType,
+          vehicleImageUrl: vehicleImageUrl
         }
       };
 
@@ -530,46 +184,159 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
         .select()
         .single();
 
-      if (bookingError) throw bookingError;
+      if (bookingError) {
+        console.error('Booking creation error:', bookingError);
+        toast({
+          title: language === 'it' ? 'Errore prenotazione' : 'Booking error',
+          description: bookingError.message,
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        return;
+      }
 
-      // Prepare payment data
-      const lineItems = generateLineItems();
-      const paymentData = {
-        bookingId: booking.id,
-        bookingDetails: {
-          vehicleName: carName,
-          pickupDate: format(startDate, 'yyyy-MM-dd'),
-          dropoffDate: format(endDate, 'yyyy-MM-dd'),
-          pickupLocation: 'Main Office',
-          dropoffLocation: 'Main Office',
-          insurance,
-          extras: {
-            fullCleaning,
-            secondDriver,
-            under25,
-            licenseUnder3,
-            outOfHours
-          },
-          basePrice: dailyPrice
-        },
-        lineItems,
-        totalAmount: totalPrice,
-        currency: 'EUR',
-        payerEmail: email,
-        payerName: `${firstName} ${lastName}`
+      // Calculate line items for payment
+      const days = Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24));
+      const lineItems = [];
+
+      // Base rental cost
+      lineItems.push({
+        type: 'rental',
+        description: `${vehicleName} - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+        quantity: days,
+        unitPrice: basePrice,
+        totalPrice: basePrice * days
+      });
+
+      // Insurance
+      const insurancePrices = {
+        'kasko': 15,
+        'kasko-black': 25,
+        'kasko-signature': 35
       };
 
-      // Show payment modal/form instead of success message
-      setBookingCreated(true);
-      setPaymentBookingData(paymentData);
+      if (insurancePrices[selectedInsurance as keyof typeof insurancePrices]) {
+        const dailyInsurance = insurancePrices[selectedInsurance as keyof typeof insurancePrices];
+        lineItems.push({
+          type: 'insurance',
+          description: `${selectedInsurance.charAt(0).toUpperCase() + selectedInsurance.slice(1)} Insurance - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+          quantity: days,
+          unitPrice: dailyInsurance,
+          totalPrice: dailyInsurance * days
+        });
+      }
 
-    } catch (error) {
-      console.error('Error creating booking:', error);
+      // Extras
+      if (extras.fullCleaning) {
+        lineItems.push({
+          type: 'extra',
+          description: language === 'it' ? 'Pulizia completa' : 'Full cleaning',
+          quantity: 1,
+          unitPrice: 30,
+          totalPrice: 30
+        });
+      }
+
+      if (extras.secondDriver) {
+        lineItems.push({
+          type: 'extra',
+          description: `${language === 'it' ? 'Secondo guidatore' : 'Second driver'} - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+          quantity: days,
+          unitPrice: 10,
+          totalPrice: 10 * days
+        });
+      }
+
+      if (extras.under25) {
+        lineItems.push({
+          type: 'extra',
+          description: `${language === 'it' ? 'Supplemento under 25' : 'Under 25 surcharge'} - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+          quantity: days,
+          unitPrice: 10,
+          totalPrice: 10 * days
+        });
+      }
+
+      if (extras.licenseUnder3) {
+        lineItems.push({
+          type: 'extra',
+          description: `${language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years'} - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+          quantity: days,
+          unitPrice: 20,
+          totalPrice: 20 * days
+        });
+      }
+
+      if (extras.outOfHours) {
+        lineItems.push({
+          type: 'extra',
+          description: language === 'it' ? 'Consegna fuori orario' : 'Out of hours delivery',
+          quantity: 1,
+          unitPrice: 50,
+          totalPrice: 50
+        });
+      }
+
+      // Initiate payment via Nexi
+      const { data: paymentData, error: paymentError } = await supabase.functions.invoke('nexi-payment', {
+        body: {
+          bookingId: booking.id,
+          bookingDetails: {
+            vehicleName: vehicleName,
+            pickupDate: pickupDate,
+            dropoffDate: dropoffDate,
+            pickupLocation: pickupLocation,
+            dropoffLocation: dropoffLocation || pickupLocation,
+            insurance: selectedInsurance,
+            extras: extras,
+            basePrice: basePrice
+          },
+          lineItems: lineItems,
+          totalAmount: calculateTotal(),
+          currency: 'EUR',
+          language: language,
+          payerEmail: user?.email || email,
+          payerName: user ? `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`.trim() || user.email : `${firstName} ${lastName}`
+        }
+      });
+
+      if (paymentError) {
+        console.error('Payment initiation error:', paymentError);
+        toast({
+          title: language === 'it' ? 'Errore pagamento' : 'Payment error',
+          description: paymentError.message,
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (paymentData?.success && paymentData?.paymentUrl) {
+        // Create a form and submit it to Nexi
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = paymentData.paymentUrl;
+
+        // Add all payment parameters as hidden inputs
+        Object.entries(paymentData.paymentParams).forEach(([key, value]) => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value as string;
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+      } else {
+        throw new Error('Failed to get payment URL from server');
+      }
+
+    } catch (error: any) {
+      console.error('Submission error:', error);
       toast({
         title: language === 'it' ? 'Errore' : 'Error',
-        description: language === 'it' 
-          ? 'Si è verificato un errore nella creazione della prenotazione.'
-          : 'An error occurred while creating the booking.',
+        description: error.message || (language === 'it' ? 'Si è verificato un errore durante la prenotazione' : 'An error occurred during booking'),
         variant: 'destructive',
       });
     } finally {
@@ -577,628 +344,486 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     }
   };
 
-  if (showSuccess) {
-    return (
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-md bg-luxury-black border border-luxury-white/20">
-          <div className="flex flex-col items-center justify-center py-8 text-center">
-            <Check className="h-16 w-16 text-luxury-white mb-4" />
-            <h3 className="text-2xl font-bold text-luxury-white mb-2">
-              {language === 'it' ? 'Pagamento Completato!' : 'Payment Completed!'}
-            </h3>
-            <p className="text-luxury-white/80">
-              {language === 'it' 
-                ? 'La tua prenotazione è stata confermata. Riceverai una conferma via email.'
-                : 'Your booking has been confirmed. You will receive an email confirmation.'}
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  if (bookingCreated && paymentBookingData) {
-    return (
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-lg bg-luxury-black border border-luxury-white/20">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-luxury-white">
-              {language === 'it' ? 'Completa il Pagamento' : 'Complete Payment'}
-            </DialogTitle>
-          </DialogHeader>
-          <NexiPaymentForm 
-            bookingData={paymentBookingData}
-            onPaymentInitiated={() => {
-              setShowSuccess(true);
-              setBookingCreated(false);
-              setTimeout(() => {
-                setShowSuccess(false);
-                onClose();
-              }, 3000);
-            }}
-          />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto bg-luxury-black border border-luxury-white/20">
-        <DialogHeader className="border-b border-luxury-white/20 pb-4">
-          <DialogTitle className="text-2xl font-bold text-luxury-white">
-            {language === 'it' ? 'Prenota' : 'Reserve'} {carName}
-          </DialogTitle>
-        </DialogHeader>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            {language === 'it' ? 'Completa la tua prenotazione' : 'Complete Your Reservation'}
+          </h1>
+          <p className="text-gray-600">
+            {language === 'it' 
+              ? 'Inserisci i tuoi dati per finalizzare la prenotazione' 
+              : 'Enter your details to finalize your booking'
+            }
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 p-6">
-          {/* Date Selection */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="text-luxury-white font-medium">
-                {language === 'it' ? 'Data di inizio' : 'Start Date'}
-              </Label>
-              <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full bg-white border-luxury-white/20 text-black hover:border-luxury-white hover:bg-luxury-white/5"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, "PPP") : "Select date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-luxury-black border border-luxury-white/20">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={(date) => {
-                      setStartDate(date);
-                      setStartDateOpen(false);
-                    }}
-                    disabled={(date) => date < new Date()}
-                    initialFocus
-                    className="pointer-events-auto bg-luxury-black text-luxury-white"
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-luxury-white font-medium">
-                {language === 'it' ? 'Data di fine' : 'End Date'}
-              </Label>
-              <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full bg-white border-luxury-white/20 text-black hover:border-luxury-white hover:bg-luxury-white/5"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? format(endDate, "PPP") : "Select date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-luxury-black border border-luxury-white/20">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={(date) => {
-                      setEndDate(date);
-                      setEndDateOpen(false);
-                    }}
-                    disabled={(date) => !startDate || date <= startDate}
-                    initialFocus
-                    className="pointer-events-auto bg-luxury-black text-luxury-white"
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
-
-          {/* Personal Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName" className="text-luxury-white font-medium">
-                {language === 'it' ? 'Nome' : 'First Name'}
-              </Label>
-              <Input
-                id="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="lastName" className="text-luxury-white font-medium">
-                {language === 'it' ? 'Cognome' : 'Last Name'}
-              </Label>
-              <Input
-                id="lastName"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-luxury-white font-medium">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="phone" className="text-luxury-white font-medium">
-                {language === 'it' ? 'Telefono' : 'Phone'}
-              </Label>
-              <Input
-                id="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="bg-white border-luxury-white/20 text-black placeholder:text-gray-500 focus:border-luxury-white hover:border-luxury-white/40"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Date of birth and License date */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="text-luxury-white font-medium">
-                {language === "it" ? "Data di nascita" : "Date of Birth"}
-              </Label>
-              <div className="grid grid-cols-3 gap-2">
-                {/* Day Dropdown */}
-                <Select value={dobDay} onValueChange={setDobDay}>
-                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
-                    <SelectValue placeholder={language === "it" ? "GG" : "DD"} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
-                    {generateDays().map((day) => (
-                      <SelectItem key={day} value={day} className="text-black hover:bg-gray-100">
-                        {day}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Month Dropdown */}
-                <Select value={dobMonth} onValueChange={setDobMonth}>
-                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
-                    <SelectValue placeholder={language === "it" ? "MM" : "MM"} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
-                    {generateMonths().map((month) => (
-                      <SelectItem key={month} value={month} className="text-black hover:bg-gray-100">
-                        {month}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Year Dropdown */}
-                <Select value={dobYear} onValueChange={setDobYear}>
-                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
-                    <SelectValue placeholder={language === "it" ? "AAAA" : "YYYY"} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
-                    {generateYears().map((year) => (
-                      <SelectItem key={year} value={year} className="text-black hover:bg-gray-100">
-                        {year}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-luxury-white font-medium">
-                {language === "it" ? "Data di rilascio della patente" : "Driver's License Issue Date"}
-              </Label>
-              <div className="grid grid-cols-3 gap-2">
-                {/* Day Dropdown */}
-                <Select value={licenseDay} onValueChange={setLicenseDay}>
-                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
-                    <SelectValue placeholder={language === "it" ? "GG" : "DD"} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
-                    {generateDays().map((day) => (
-                      <SelectItem key={day} value={day} className="text-black hover:bg-gray-100">
-                        {day}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Month Dropdown */}
-                <Select value={licenseMonth} onValueChange={setLicenseMonth}>
-                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
-                    <SelectValue placeholder={language === "it" ? "MM" : "MM"} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
-                    {generateMonths().map((month) => (
-                      <SelectItem key={month} value={month} className="text-black hover:bg-gray-100">
-                        {month}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Year Dropdown */}
-                <Select value={licenseYear} onValueChange={setLicenseYear}>
-                  <SelectTrigger className="bg-white border-luxury-white/20 text-black hover:border-luxury-white/40 focus:border-luxury-white">
-                    <SelectValue placeholder={language === "it" ? "AAAA" : "YYYY"} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-luxury-white/20 max-h-60">
-                    {generateLicenseYears().map((year) => (
-                      <SelectItem key={year} value={year} className="text-black hover:bg-gray-100">
-                        {year}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              {/* Validation message */}
-              {!isLicenseDateValid().valid && licenseDate && (
-                <p className="text-red-400 text-xs flex items-center gap-1">
-                  ⚠️ {isLicenseDateValid().message}
-                </p>
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Left Column - Forms */}
+          <div className="lg:col-span-2 space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Show personal info form only for guests */}
+              {!user && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <User className="h-5 w-5" />
+                      {language === 'it' ? 'Informazioni personali' : 'Personal Information'}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="firstName">{language === 'it' ? 'Nome' : 'First Name'} *</Label>
+                        <Input
+                          id="firstName"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="lastName">{language === 'it' ? 'Cognome' : 'Last Name'} *</Label>
+                        <Input
+                          id="lastName"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="email">{language === 'it' ? 'Email' : 'Email'} *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone">{language === 'it' ? 'Telefono' : 'Phone'} *</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
               )}
-              
-              {/* License years warning */}
-              {licenseDate && getLicenseYears(parseDate(licenseDate)) < 2 && (
-                <p className="text-amber-400 text-xs flex items-center gap-1">
-                  ⚠️ {language === "it" ? `Solo ${getLicenseYears(parseDate(licenseDate))} anni di patente - Opzioni assicurative limitate` : `Only ${getLicenseYears(parseDate(licenseDate))} years license - Limited insurance options`}
-                </p>
-              )}
-            </div>
-          </div>
 
-          {/* Driver's License Photo Upload */}
-          <div className="space-y-2">
-            <Label className="text-luxury-white font-medium">
-              {language === "it" ? "Foto della patente (Obbligatorio)" : "Driver's License Photo (Required)"}
-            </Label>
-            <div className="space-y-3">
-              {!licenseFile ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {/* Upload File Button */}
-                  <div className="relative">
-                    <input
-                      type="file"
-                      accept="image/jpeg,image/png,application/pdf"
-                      onChange={handleFileUpload}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      id="license-upload"
+              {/* Booking Details Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5" />
+                    {language === 'it' ? 'Dettagli prenotazione' : 'Booking Details'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="pickupDate">{language === 'it' ? 'Data ritiro' : 'Pickup Date'} *</Label>
+                      <Input
+                        id="pickupDate"
+                        type="date"
+                        value={pickupDate}
+                        onChange={(e) => handleDateChange('pickup', e.target.value)}
+                        min={new Date().toISOString().split('T')[0]}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="dropoffDate">{language === 'it' ? 'Data consegna' : 'Drop-off Date'} *</Label>
+                      <Input
+                        id="dropoffDate"
+                        type="date"
+                        value={dropoffDate}
+                        onChange={(e) => handleDateChange('dropoff', e.target.value)}
+                        min={pickupDate || new Date().toISOString().split('T')[0]}
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="pickupLocation">{language === 'it' ? 'Luogo di ritiro' : 'Pickup Location'} *</Label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="pickupLocation"
+                        value={pickupLocation}
+                        onChange={(e) => setPickupLocation(e.target.value)}
+                        className="pl-10"
+                        placeholder={language === 'it' ? 'Inserisci indirizzo di ritiro' : 'Enter pickup address'}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="dropoffLocation">{language === 'it' ? 'Luogo di consegna' : 'Drop-off Location'}</Label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="dropoffLocation"
+                        value={dropoffLocation}
+                        onChange={(e) => setDropoffLocation(e.target.value)}
+                        className="pl-10"
+                        placeholder={language === 'it' ? 'Stesso del ritiro se vuoto' : 'Same as pickup if empty'}
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Driver License Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CreditCard className="h-5 w-5" />
+                    {language === 'it' ? 'Patente di guida' : 'Driver License'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="licenseNumber">{language === 'it' ? 'Numero patente' : 'License Number'} *</Label>
+                      <Input
+                        id="licenseNumber"
+                        value={licenseNumber}
+                        onChange={(e) => setLicenseNumber(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="licenseCountry">{language === 'it' ? 'Paese di rilascio' : 'Country of Issue'} *</Label>
+                      <Select value={licenseCountry} onValueChange={setLicenseCountry} required>
+                        <SelectTrigger>
+                          <SelectValue placeholder={language === 'it' ? 'Seleziona paese' : 'Select country'} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="IT">Italia</SelectItem>
+                          <SelectItem value="FR">France</SelectItem>
+                          <SelectItem value="DE">Deutschland</SelectItem>
+                          <SelectItem value="ES">España</SelectItem>
+                          <SelectItem value="UK">United Kingdom</SelectItem>
+                          <SelectItem value="US">United States</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="licenseIssueDate">{language === 'it' ? 'Data di rilascio' : 'Issue Date'} *</Label>
+                    <Input
+                      id="licenseIssueDate"
+                      type="date"
+                      value={licenseIssueDate}
+                      onChange={(e) => setLicenseIssueDate(e.target.value)}
+                      max={new Date().toISOString().split('T')[0]}
+                      required
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full bg-white border-luxury-white/20 text-black hover:border-luxury-white hover:bg-luxury-white/5"
-                    >
-                      <Upload className="mr-2 h-4 w-4" />
-                      {language === "it" ? "Carica file" : "Upload File"}
-                    </Button>
                   </div>
 
-                  {/* Take Photo Button */}
-                  <div className="relative">
-                    <input
+                  <div>
+                    <Label htmlFor="licenseFile">{language === 'it' ? 'Carica patente (fronte/retro)' : 'Upload License (front/back)'}</Label>
+                    <Input
+                      id="licenseFile"
                       type="file"
-                      accept="image/*"
-                      capture="environment"
-                      onChange={handleCameraCapture}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      id="license-camera"
+                      accept="image/*,.pdf"
+                      onChange={(e) => setLicenseFile(e.target.files?.[0] || null)}
+                      className="cursor-pointer"
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full bg-white border-luxury-white/20 text-black hover:border-luxury-white hover:bg-luxury-white/5"
-                    >
-                      <Camera className="mr-2 h-4 w-4" />
-                      {language === "it" ? "Scatta foto" : "Take Photo"}
-                    </Button>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {language === 'it' 
+                        ? 'Formati supportati: JPG, PNG, PDF (max 5MB)'
+                        : 'Supported formats: JPG, PNG, PDF (max 5MB)'
+                      }
+                    </p>
                   </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20 bg-luxury-white/5">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-luxury-white/20 rounded-lg flex items-center justify-center">
-                      {licenseFile.type.includes('pdf') ? (
-                        <span className="text-xs font-bold text-luxury-white">PDF</span>
-                      ) : (
-                        <Camera className="h-5 w-5 text-luxury-white" />
-                      )}
+                </CardContent>
+              </Card>
+
+              {/* Insurance Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5" />
+                    {language === 'it' ? 'Assicurazione' : 'Insurance'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="kasko"
+                        name="insurance"
+                        value="kasko"
+                        checked={selectedInsurance === 'kasko'}
+                        onChange={(e) => setSelectedInsurance(e.target.value)}
+                        className="w-4 h-4"
+                      />
+                      <Label htmlFor="kasko" className="flex-1 cursor-pointer">
+                        <div className="flex justify-between">
+                          <span>Kasko - {language === 'it' ? 'Protezione base' : 'Basic protection'}</span>
+                          <span className="font-semibold">€15/{language === 'it' ? 'giorno' : 'day'}</span>
+                        </div>
+                        <p className="text-sm text-gray-500">
+                          {language === 'it' ? 'Copertura per danni e furto' : 'Coverage for damage and theft'}
+                        </p>
+                      </Label>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-luxury-white font-medium truncate max-w-48">
-                        {licenseFile.name}
-                      </p>
-                      <p className="text-luxury-white/70 text-xs">
-                        {(licenseFile.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
+
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="kasko-black"
+                        name="insurance"
+                        value="kasko-black"
+                        checked={selectedInsurance === 'kasko-black'}
+                        onChange={(e) => setSelectedInsurance(e.target.value)}
+                        className="w-4 h-4"
+                      />
+                      <Label htmlFor="kasko-black" className="flex-1 cursor-pointer">
+                        <div className="flex justify-between">
+                          <span>Kasko Black - {language === 'it' ? 'Protezione avanzata' : 'Advanced protection'}</span>
+                          <span className="font-semibold">€25/{language === 'it' ? 'giorno' : 'day'}</span>
+                        </div>
+                        <p className="text-sm text-gray-500">
+                          {language === 'it' ? 'Include danni agli pneumatici e cerchi' : 'Includes tire and rim damage'}
+                        </p>
+                      </Label>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="kasko-signature"
+                        name="insurance"
+                        value="kasko-signature"
+                        checked={selectedInsurance === 'kasko-signature'}
+                        onChange={(e) => setSelectedInsurance(e.target.value)}
+                        className="w-4 h-4"
+                      />
+                      <Label htmlFor="kasko-signature" className="flex-1 cursor-pointer">
+                        <div className="flex justify-between">
+                          <span>Kasko Signature - {language === 'it' ? 'Protezione completa' : 'Complete protection'}</span>
+                          <span className="font-semibold">€35/{language === 'it' ? 'giorno' : 'day'}</span>
+                        </div>
+                        <p className="text-sm text-gray-500">
+                          {language === 'it' ? 'Copertura totale senza franchigia' : 'Full coverage with no deductible'}
+                        </p>
+                      </Label>
                     </div>
                   </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={removeLicenseFile}
-                    className="text-luxury-white hover:text-red-400 hover:bg-red-500/10"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              )}
-              
-              <p className="text-luxury-white/70 text-xs">
-                {language === "it" 
-                  ? "Formati supportati: JPEG, PNG, PDF. Dimensione massima: 10MB"
-                  : "Supported formats: JPEG, PNG, PDF. Maximum size: 10MB"}
-              </p>
-            </div>
+                </CardContent>
+              </Card>
+
+              {/* Extras Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Car className="h-5 w-5" />
+                    {language === 'it' ? 'Servizi aggiuntivi' : 'Additional Services'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="fullCleaning"
+                          checked={extras.fullCleaning}
+                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, fullCleaning: !!checked }))}
+                        />
+                        <Label htmlFor="fullCleaning">
+                          {language === 'it' ? 'Pulizia completa' : 'Full cleaning'}
+                        </Label>
+                      </div>
+                      <span className="font-semibold">€30</span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="secondDriver"
+                          checked={extras.secondDriver}
+                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, secondDriver: !!checked }))}
+                        />
+                        <Label htmlFor="secondDriver">
+                          {language === 'it' ? 'Secondo guidatore' : 'Second driver'}
+                        </Label>
+                      </div>
+                      <span className="font-semibold">€10/{language === 'it' ? 'giorno' : 'day'}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="under25"
+                          checked={extras.under25}
+                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, under25: !!checked }))}
+                        />
+                        <Label htmlFor="under25">
+                          {language === 'it' ? 'Supplemento under 25' : 'Under 25 surcharge'}
+                        </Label>
+                      </div>
+                      <span className="font-semibold">€10/{language === 'it' ? 'giorno' : 'day'}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="licenseUnder3"
+                          checked={extras.licenseUnder3}
+                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, licenseUnder3: !!checked }))}
+                        />
+                        <Label htmlFor="licenseUnder3">
+                          {language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years'}
+                        </Label>
+                      </div>
+                      <span className="font-semibold">€20/{language === 'it' ? 'giorno' : 'day'}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="outOfHours"
+                          checked={extras.outOfHours}
+                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, outOfHours: !!checked }))}
+                        />
+                        <Label htmlFor="outOfHours">
+                          {language === 'it' ? 'Consegna fuori orario' : 'Out of hours delivery'}
+                        </Label>
+                      </div>
+                      <span className="font-semibold">€50</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Submit Button */}
+              <Button 
+                type="submit" 
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold"
+                disabled={isSubmitting || !pickupDate || !dropoffDate || !pickupLocation || !licenseNumber || !licenseCountry || !licenseIssueDate || (!user && (!firstName || !lastName || !email || !phone))}
+              >
+                {isSubmitting 
+                  ? (language === 'it' ? 'Elaborazione...' : 'Processing...') 
+                  : (language === 'it' ? 'Procedi al pagamento' : 'Proceed to Payment')
+                }
+              </Button>
+            </form>
           </div>
 
-          {/* Inline Eligibility Selectors */}
-          <div className="space-y-2">
-            <Label className="text-luxury-white font-medium">
-              {language === 'it' ? 'Conferma Idoneità' : 'Confirm Eligibility'}
-            </Label>
-            <InlineEligibilitySelectors
-              initialAgeBucket={ageBucket}
-              initialCountryIso2={countryIso2}
-              dob={dob}
-              onAgeBucketChange={setAgeBucket}
-              onCountryChange={setCountryIso2}
-              onValidationChange={setEligibilityValid}
-            />
-          </div>
-
-          {/* Insurance Selection */}
-          <div className="space-y-4">
-            <Label className="text-luxury-white font-medium text-lg">
-              {language === 'it' ? 'Assicurazione' : 'Insurance'}
-            </Label>
-            <RadioGroup value={insurance} onValueChange={setInsurance} className="space-y-3">
-              {/* KASKO */}
-              <div className={cn(
-                "flex items-center space-x-2 p-3 rounded-lg border transition-all duration-200",
-                getInsuranceEligibility().kasko.eligible 
-                  ? "border-luxury-white/20 hover:border-luxury-white/40 cursor-pointer" 
-                  : "border-red-500/50 bg-red-500/10 cursor-not-allowed opacity-60"
-              )}>
-                <RadioGroupItem 
-                  value="kasko" 
-                  id="kasko" 
-                  disabled={!getInsuranceEligibility().kasko.eligible}
-                />
-                <Label htmlFor="kasko" className={cn(
-                  "flex-1",
-                  getInsuranceEligibility().kasko.eligible ? "text-luxury-white cursor-pointer" : "text-red-400 cursor-not-allowed"
-                )}>
-                  <div className="font-medium">KASKO - €100/day</div>
-                  <div className="text-sm text-luxury-white/70">
-                    {language === 'it' ? 'Minimo 2 anni di patente' : 'Minimum 2 years license'}
-                  </div>
-                  {getInsuranceEligibility().kasko.reason && (
-                    <div className="text-xs text-red-400 mt-1">
-                      {getInsuranceEligibility().kasko.reason}
-                    </div>
-                  )}
-                </Label>
-              </div>
-
-              {/* KASKO BLACK */}
-              <div className={cn(
-                "flex items-center space-x-2 p-3 rounded-lg border transition-all duration-200",
-                getInsuranceEligibility().kaskoBlack.eligible 
-                  ? "border-luxury-white/20 hover:border-luxury-white/40 cursor-pointer" 
-                  : "border-red-500/50 bg-red-500/10 cursor-not-allowed opacity-60"
-              )}>
-                <RadioGroupItem 
-                  value="kasko-black" 
-                  id="kasko-black" 
-                  disabled={!getInsuranceEligibility().kaskoBlack.eligible}
-                />
-                <Label htmlFor="kasko-black" className={cn(
-                  "flex-1",
-                  getInsuranceEligibility().kaskoBlack.eligible ? "text-luxury-white cursor-pointer" : "text-red-400 cursor-not-allowed"
-                )}>
-                  <div className="font-medium">KASKO BLACK - €150/day</div>
-                  <div className="text-sm text-luxury-white/70">
-                    {language === 'it' ? 'Minimo 25 anni e 5 anni di patente' : 'Minimum 25 years old and 5 years license'}
-                  </div>
-                  {getInsuranceEligibility().kaskoBlack.reason && (
-                    <div className="text-xs text-red-400 mt-1">
-                      {getInsuranceEligibility().kaskoBlack.reason}
-                    </div>
-                  )}
-                </Label>
-              </div>
-
-              {/* KASKO SIGNATURE */}
-              <div className={cn(
-                "flex items-center space-x-2 p-3 rounded-lg border transition-all duration-200",
-                getInsuranceEligibility().kaskoSignature.eligible 
-                  ? "border-luxury-white/20 hover:border-luxury-white/40 cursor-pointer" 
-                  : "border-red-500/50 bg-red-500/10 cursor-not-allowed opacity-60"
-              )}>
-                <RadioGroupItem 
-                  value="kasko-signature" 
-                  id="kasko-signature" 
-                  disabled={!getInsuranceEligibility().kaskoSignature.eligible}
-                />
-                <Label htmlFor="kasko-signature" className={cn(
-                  "flex-1",
-                  getInsuranceEligibility().kaskoSignature.eligible ? "text-luxury-white cursor-pointer" : "text-red-400 cursor-not-allowed"
-                )}>
-                  <div className="font-medium">KASKO SIGNATURE - €200/day</div>
-                  <div className="text-sm text-luxury-white/70">
-                    {language === 'it' ? 'Minimo 30 anni e 10 anni di patente' : 'Minimum 30 years old and 10 years license'}
-                  </div>
-                  {getInsuranceEligibility().kaskoSignature.reason && (
-                    <div className="text-xs text-red-400 mt-1">
-                      {getInsuranceEligibility().kaskoSignature.reason}
-                    </div>
-                  )}
-                </Label>
-              </div>
-            </RadioGroup>
-          </div>
-
-          {/* Additional Options */}
-          <div className="space-y-4">
-            <Label className="text-luxury-white font-medium text-lg">
-              {language === 'it' ? 'Opzioni aggiuntive' : 'Additional Options'}
-            </Label>
-            
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
-                <div className="flex items-center space-x-3">
-                  <Checkbox
-                    id="fullCleaning"
-                    checked={fullCleaning}
-                    onCheckedChange={(checked) => setFullCleaning(checked === true)}
-                    disabled
+          {/* Right Column - Summary */}
+          <div className="lg:col-span-1">
+            <Card className="sticky top-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Car className="h-5 w-5" />
+                  {language === 'it' ? 'Riepilogo prenotazione' : 'Booking Summary'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {vehicleImageUrl && (
+                  <img 
+                    src={vehicleImageUrl} 
+                    alt={vehicleName}
+                    className="w-full h-32 object-cover rounded-lg"
                   />
-                  <Label htmlFor="fullCleaning" className="text-luxury-white cursor-pointer">
-                    {language === 'it' ? 'Pulizia completa (Obbligatorio)' : 'Full Cleaning (Required)'}
-                  </Label>
-                </div>
-                <span className="text-luxury-white font-medium">€30</span>
-              </div>
-
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
-                <div className="flex items-center space-x-3">
-                  <Checkbox
-                    id="secondDriver"
-                    checked={secondDriver}
-                    onCheckedChange={(checked) => setSecondDriver(checked === true)}
-                  />
-                  <Label htmlFor="secondDriver" className="text-luxury-white cursor-pointer">
-                    {language === 'it' ? 'Secondo conducente' : 'Second Driver'}
-                  </Label>
-                </div>
-                <span className="text-luxury-white font-medium">€10/day</span>
-              </div>
-
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
-                <div className="flex items-center space-x-3">
-                  <Checkbox
-                    id="under25"
-                    checked={under25}
-                    onCheckedChange={(checked) => setUnder25(checked === true)}
-                  />
-                  <Label htmlFor="under25" className="text-luxury-white cursor-pointer">
-                    {language === 'it' ? 'Conducente sotto 25 anni' : 'Driver under 25'}
-                  </Label>
-                </div>
-                <span className="text-luxury-white font-medium">€10/day</span>
-              </div>
-
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
-                <div className="flex items-center space-x-3">
-                  <Checkbox
-                    id="licenseUnder3"
-                    checked={licenseUnder3}
-                    onCheckedChange={(checked) => setLicenseUnder3(checked === true)}
-                  />
-                  <Label htmlFor="licenseUnder3" className="text-luxury-white cursor-pointer">
-                    {language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years'}
-                  </Label>
-                </div>
-                <span className="text-luxury-white font-medium">€20/day</span>
-              </div>
-
-              <div className="flex items-center justify-between p-3 rounded-lg border border-luxury-white/20">
-                <div className="flex items-center space-x-3">
-                  <Checkbox
-                    id="outOfHours"
-                    checked={outOfHours}
-                    onCheckedChange={(checked) => setOutOfHours(checked === true)}
-                  />
-                  <Label htmlFor="outOfHours" className="text-luxury-white cursor-pointer">
-                    {language === 'it' ? 'Consegna/ritiro fuori orario' : 'Out-of-hours delivery/pickup'}
-                  </Label>
-                </div>
-                <span className="text-luxury-white font-medium">€50</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Total Price */}
-          <div className="bg-luxury-white/10 p-4 rounded-lg border border-luxury-white/20">
-            <div className="flex justify-between items-center">
-              <span className="text-luxury-white font-semibold text-lg">
-                {language === 'it' ? 'Totale:' : 'Total:'}
-              </span>
-              <span className="text-luxury-white font-bold text-2xl">€{totalPrice}</span>
-            </div>
-          </div>
-
-          {/* Insurance eligibility message */}
-          {!isInsuranceEligible().valid && (
-            <div className="text-red-500 text-sm pt-2">
-              {isInsuranceEligible().message}
-            </div>
-          )}
-
-          {/* Submit Button */}
-          <div className="pt-4">
-            <Button
-              type="submit"
-              disabled={isSubmitting || !isInsuranceEligible().valid || !isLicenseDateValid().valid || !eligibilityValid}
-              className={cn(
-                "w-full py-3 text-lg font-semibold transition-all duration-300",
-                (isInsuranceEligible().valid && isLicenseDateValid().valid && eligibilityValid)
-                  ? "bg-luxury-white hover:bg-luxury-white/90 text-luxury-black"
-                  : "bg-gray-500 text-white cursor-not-allowed"
-              )}
-            >
-              {isSubmitting
-                ? (language === 'it' ? 'Invio in corso...' : 'Submitting...')
-                : `${language === 'it' ? 'Prenota ora' : 'Reserve Now'} - €${totalPrice}`}
-            </Button>
-
-            {(!isInsuranceEligible().valid || !isLicenseDateValid().valid || !eligibilityValid) && (
-              <div className="mt-2 space-y-1">
-                {!isInsuranceEligible().valid && (
-                  <p className="text-sm text-red-500 text-center">
-                    {isInsuranceEligible().message}
-                  </p>
                 )}
-                {!isLicenseDateValid().valid && (
-                  <p className="text-sm text-red-500 text-center">
-                    {isLicenseDateValid().message}
-                  </p>
+                
+                <div>
+                  <h3 className="font-semibold text-lg">{vehicleName}</h3>
+                  <p className="text-gray-600">{vehicleType}</p>
+                </div>
+
+                {pickupDate && dropoffDate && (
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>{language === 'it' ? 'Periodo:' : 'Period:'}</span>
+                      <span className="font-medium">
+                        {Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))} {language === 'it' ? 'giorni' : 'days'}
+                      </span>
+                    </div>
+                    
+                    <div className="flex justify-between">
+                      <span>{language === 'it' ? 'Tariffa base:' : 'Base rate:'}</span>
+                      <span>€{basePrice}/{language === 'it' ? 'giorno' : 'day'}</span>
+                    </div>
+
+                    {selectedInsurance && (
+                      <div className="flex justify-between">
+                        <span>{language === 'it' ? 'Assicurazione:' : 'Insurance:'}</span>
+                        <span>€{getInsurancePrice(selectedInsurance)}/{language === 'it' ? 'giorno' : 'day'}</span>
+                      </div>
+                    )}
+
+                    {Object.entries(extras).some(([key, value]) => value) && (
+                      <div className="space-y-1">
+                        <p className="font-medium">{language === 'it' ? 'Servizi aggiuntivi:' : 'Extras:'}</p>
+                        {extras.fullCleaning && (
+                          <div className="flex justify-between text-xs">
+                            <span>{language === 'it' ? 'Pulizia completa' : 'Full cleaning'}</span>
+                            <span>€30</span>
+                          </div>
+                        )}
+                        {extras.secondDriver && (
+                          <div className="flex justify-between text-xs">
+                            <span>{language === 'it' ? 'Secondo guidatore' : 'Second driver'}</span>
+                            <span>€{10 * Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))}</span>
+                          </div>
+                        )}
+                        {extras.under25 && (
+                          <div className="flex justify-between text-xs">
+                            <span>{language === 'it' ? 'Under 25' : 'Under 25'}</span>
+                            <span>€{10 * Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))}</span>
+                          </div>
+                        )}
+                        {extras.licenseUnder3 && (
+                          <div className="flex justify-between text-xs">
+                            <span>{language === 'it' ? 'Patente < 3 anni' : 'License < 3 years'}</span>
+                            <span>€{20 * Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))}</span>
+                          </div>
+                        )}
+                        {extras.outOfHours && (
+                          <div className="flex justify-between text-xs">
+                            <span>{language === 'it' ? 'Fuori orario' : 'Out of hours'}</span>
+                            <span>€50</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <hr className="my-2" />
+                    
+                    <div className="flex justify-between font-bold text-lg">
+                      <span>{language === 'it' ? 'Totale:' : 'Total:'}</span>
+                      <span>€{calculateTotal()}</span>
+                    </div>
+                  </div>
                 )}
-                {!eligibilityValid && (
-                  <p className="text-sm text-red-500 text-center">
-                    {language === 'it' 
-                      ? 'Conferma la tua età e paese di residenza per continuare'
-                      : 'Please confirm your age and country of residence to continue'}
-                  </p>
-                )}
-              </div>
-            )}
+
+                <div className="text-xs text-gray-500 space-y-1">
+                  <p>• {language === 'it' ? 'Tutti i prezzi includono IVA' : 'All prices include VAT'}</p>
+                  <p>• {language === 'it' ? 'Pagamento sicuro con Nexi' : 'Secure payment with Nexi'}</p>
+                  <p>• {language === 'it' ? 'Cancellazione gratuita fino a 24h prima' : 'Free cancellation up to 24h before'}</p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </div>
+    </div>
   );
 };
+
+export default ReservationForm;
