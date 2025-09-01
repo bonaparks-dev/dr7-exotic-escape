@@ -1003,8 +1003,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                  <div className="space-y-3">
                    {getAvailableInsuranceOptions().map((option) => (
                      <div key={option.id} className={`flex items-center space-x-2 p-4 rounded-lg border-2 ${
-                       insurance === option.id ? 'border-green-500 bg-green-50' : 'border-gray-200'
-                     } ${option.disabled ? 'opacity-50 bg-gray-50' : ''}`}>
+                       insurance === option.id ? 'border-green-400 bg-black text-white' : 'border-gray-600 bg-gray-800 text-white'
+                     } ${option.disabled ? 'opacity-50' : ''}`}>
                        <input
                          type="radio"
                          id={option.id}
@@ -1013,19 +1013,19 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                          checked={insurance === option.id}
                          onChange={(e) => !option.disabled && setInsurance(e.target.value)}
                          disabled={option.disabled}
-                         className="w-4 h-4 text-green-600"
+                         className="w-4 h-4 text-green-400 bg-gray-700 border-gray-600"
                        />
-                       <Label htmlFor={option.id} className={`flex-1 ${option.disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+                       <Label htmlFor={option.id} className={`flex-1 ${option.disabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-white`}>
                          <div className="flex justify-between items-center">
                            <div>
-                             <span className="font-medium">{option.name}</span>
+                             <span className="font-medium text-white">{option.name}</span>
                              {insurance === option.id && !option.disabled && (
-                               <div className="text-sm text-green-600 font-medium mt-1">
+                               <div className="text-sm text-green-400 font-medium mt-1">
                                  ✓ Selezionato automaticamente in base alla tua età ed esperienza
                                </div>
                              )}
                            </div>
-                           <span className="font-bold text-lg">€{option.price}/{t.day}</span>
+                           <span className="font-bold text-lg text-white">€{option.price}/{t.day}</span>
                          </div>
                        </Label>
                      </div>
