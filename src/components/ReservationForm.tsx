@@ -392,7 +392,16 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       }
 
       // Validate DOB and license date in step 1
-      if (!dateOfBirth) {
+      // Check if DOB is set OR if all dropdown values are provided
+      let validDateOfBirth = dateOfBirth;
+      if (!validDateOfBirth && dobDay && dobMonth && dobYear) {
+        // Create date from dropdown values for validation
+        validDateOfBirth = new Date(parseInt(dobYear), parseInt(dobMonth) - 1, parseInt(dobDay));
+        setDateOfBirth(validDateOfBirth);
+        setEligibility(prev => ({ ...prev, dateOfBirth: validDateOfBirth!.toISOString().split('T')[0] }));
+      }
+      
+      if (!validDateOfBirth) {
         toast({
           title: 'Error',
           description: t.dateOfBirthRequired,
@@ -401,7 +410,16 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         return;
       }
 
-      if (!licenseIssueDate) {
+      // Check if license date is set OR if all dropdown values are provided  
+      let validLicenseDate = licenseIssueDate;
+      if (!validLicenseDate && licenseDay && licenseMonth && licenseYear) {
+        // Create date from dropdown values for validation
+        validLicenseDate = new Date(parseInt(licenseYear), parseInt(licenseMonth) - 1, parseInt(licenseDay));
+        setLicenseIssueDate(validLicenseDate);
+        setEligibility(prev => ({ ...prev, licenseIssueDate: validLicenseDate!.toISOString().split('T')[0] }));
+      }
+      
+      if (!validLicenseDate) {
         toast({
           title: 'Error',
           description: t.licenseIssueDateRequired,
@@ -410,8 +428,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         return;
       }
 
-      // Validate age limits
-      const age = calculateAge(dateOfBirth);
+      // Validate age limits using the validated date
+      const age = calculateAge(validDateOfBirth);
       if (age < 21) {
         toast({
           title: 'Error',
@@ -428,8 +446,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         return;
       }
 
-      // Validate license age
-      const licenseAge = calculateLicenseAge(licenseIssueDate);
+      // Validate license age using the validated date
+      const licenseAge = calculateLicenseAge(validLicenseDate);
       if (licenseAge < 1) {
         toast({
           title: 'Error',
@@ -438,6 +456,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         });
         return;
       }
+
+      // Update insurance selection based on the validated dates
+      updateInsuranceSelection(validDateOfBirth, validLicenseDate);
 
       // Set age bucket based on calculated age - this enables insurance selection logic
       let ageBucket = '';
@@ -463,13 +484,13 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       }
 
       // Set age bucket based on calculated age
-      const age = calculateAge(dateOfBirth!);
+      const ageForBucket = calculateAge(dateOfBirth!);
       let ageBucket = '';
-      if (age >= 21 && age <= 24) ageBucket = '21-24';
-      else if (age >= 25 && age <= 30) ageBucket = '25-30';
-      else if (age >= 31 && age <= 45) ageBucket = '31-45';
-      else if (age >= 46 && age <= 65) ageBucket = '46-65';
-      else if (age >= 66 && age <= 75) ageBucket = '66-75';
+      if (ageForBucket >= 21 && ageForBucket <= 24) ageBucket = '21-24';
+      else if (ageForBucket >= 25 && ageForBucket <= 30) ageBucket = '25-30';
+      else if (ageForBucket >= 31 && ageForBucket <= 45) ageBucket = '31-45';
+      else if (ageForBucket >= 46 && ageForBucket <= 65) ageBucket = '46-65';
+      else if (ageForBucket >= 66 && ageForBucket <= 75) ageBucket = '66-75';
 
       setEligibility(prev => ({ ...prev, ageBucket }));
 
