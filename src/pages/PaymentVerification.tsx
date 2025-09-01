@@ -133,7 +133,7 @@ export default function PaymentVerification() {
             )
           `)
           .eq('nexi_transaction_id', transactionId)
-          .single();
+          .maybeSingle();
 
         if (paymentError) throw paymentError;
 

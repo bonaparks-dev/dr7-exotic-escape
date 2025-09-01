@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { Resend } from "npm:resend@2.0.0";
+import { Resend } from "npm:resend@4.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -11,7 +11,7 @@ const corsHeaders = {
 
 interface BookingConfirmationRequest {
   bookingId: string;
-  paymentId: string;
+  language?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -25,143 +25,208 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const { bookingId, paymentId }: BookingConfirmationRequest = await req.json();
+    const { bookingId, language = "en" }: BookingConfirmationRequest = await req.json();
 
-    // Get booking details with payment information
-    const { data: booking, error: bookingError } = await supabaseService
+    // Fetch booking details with payment info
+    const { data: booking, error } = await supabaseService
       .from("bookings")
       .select(`
         *,
-        booking_line_items (*)
+        payments (
+          nexi_transaction_id,
+          amount,
+          currency,
+          payment_status,
+          completed_at
+        ),
+        profiles (
+          first_name,
+          last_name
+        )
       `)
       .eq("id", bookingId)
       .single();
 
-    if (bookingError || !booking) {
+    if (error || !booking) {
       throw new Error("Booking not found");
     }
 
-    const { data: payment, error: paymentError } = await supabaseService
-      .from("payments")
-      .select("*")
-      .eq("id", paymentId)
-      .single();
-
-    if (paymentError || !payment) {
-      throw new Error("Payment not found");
+    const payment = booking.payments?.[0];
+    if (!payment || payment.payment_status !== "completed") {
+      throw new Error("Payment not completed");
     }
 
-    const bookingDetails = booking.booking_details;
-    const customerName = `${bookingDetails.firstName} ${bookingDetails.lastName}`;
-    const customerEmail = bookingDetails.email;
+    // Get customer email from booking details
+    const customerEmail = booking.booking_details?.customerInfo?.email;
+    const customerName = booking.profiles?.first_name && booking.profiles?.last_name 
+      ? `${booking.profiles.first_name} ${booking.profiles.last_name}`
+      : booking.booking_details?.customerInfo?.name || "Valued Customer";
 
-    // Format line items for email
-    const lineItemsHtml = booking.booking_line_items
-      .map((item: any) => `
-        <tr>
-          <td style="padding: 8px; border-bottom: 1px solid #eee;">${item.description}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">€${(item.unit_price / 100).toFixed(2)}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">€${(item.total_price / 100).toFixed(2)}</td>
-        </tr>
-      `)
-      .join('');
+    if (!customerEmail) {
+      throw new Error("Customer email not found");
+    }
 
-    const emailContent = `
-      <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;">
-        <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: white; padding: 30px; text-align: center;">
-          <h1 style="margin: 0; font-size: 28px;">Booking Confirmation</h1>
-          <p style="margin: 10px 0 0 0; opacity: 0.9;">Thank you for choosing DR7 Luxury Car Rental</p>
-        </div>
-        
-        <div style="padding: 30px; background: white;">
-          <h2 style="color: #1a1a1a; border-bottom: 2px solid #1a1a1a; padding-bottom: 10px;">Booking Details</h2>
+    // Format dates
+    const pickupDate = new Date(booking.pickup_date).toLocaleDateString(
+      language === "it" ? "it-IT" : "en-US",
+      { year: "numeric", month: "long", day: "numeric" }
+    );
+    const dropoffDate = new Date(booking.dropoff_date).toLocaleDateString(
+      language === "it" ? "it-IT" : "en-US", 
+      { year: "numeric", month: "long", day: "numeric" }
+    );
+
+    // Format amount
+    const amount = new Intl.NumberFormat(language === "it" ? "it-IT" : "en-US", {
+      style: "currency",
+      currency: payment.currency || "EUR"
+    }).format(payment.amount / 100);
+
+    const isItalian = language === "it";
+
+    const subject = isItalian 
+      ? `Conferma Prenotazione DR7 - ${booking.vehicle_name}`
+      : `DR7 Booking Confirmation - ${booking.vehicle_name}`;
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${subject}</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+          .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
+          .booking-details { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #d4af37; }
+          .detail-row { display: flex; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #eee; }
+          .label { font-weight: bold; color: #666; }
+          .value { color: #333; }
+          .total { background: #1a1a2e; color: white; padding: 15px; border-radius: 8px; text-align: center; margin: 20px 0; }
+          .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
+          .button { display: inline-block; background: #d4af37; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 10px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>DR7 LUXURY EMPIRE</h1>
+            <h2>${isItalian ? "Conferma di Prenotazione" : "Booking Confirmation"}</h2>
+          </div>
           
-          <div style="margin: 20px 0;">
-            <p><strong>Booking ID:</strong> ${booking.id}</p>
-            <p><strong>Vehicle:</strong> ${booking.vehicle_name}</p>
-            <p><strong>Pickup Date:</strong> ${new Date(booking.pickup_date).toLocaleDateString()}</p>
-            <p><strong>Dropoff Date:</strong> ${new Date(booking.dropoff_date).toLocaleDateString()}</p>
-            <p><strong>Pickup Location:</strong> ${booking.pickup_location}</p>
-            <p><strong>Dropoff Location:</strong> ${booking.dropoff_location || booking.pickup_location}</p>
-          </div>
-
-          <h3 style="color: #1a1a1a; margin-top: 30px;">Customer Information</h3>
-          <div style="margin: 20px 0;">
-            <p><strong>Name:</strong> ${customerName}</p>
-            <p><strong>Email:</strong> ${customerEmail}</p>
-            <p><strong>Phone:</strong> ${bookingDetails.phone}</p>
-          </div>
-
-          <h3 style="color: #1a1a1a; margin-top: 30px;">Billing Details</h3>
-          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-            <thead>
-              <tr style="background: #f5f5f5;">
-                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Description</th>
-                <th style="padding: 12px; text-align: center; border-bottom: 2px solid #ddd;">Qty</th>
-                <th style="padding: 12px; text-align: right; border-bottom: 2px solid #ddd;">Unit Price</th>
-                <th style="padding: 12px; text-align: right; border-bottom: 2px solid #ddd;">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${lineItemsHtml}
-            </tbody>
-            <tfoot>
-              <tr style="background: #1a1a1a; color: white;">
-                <td colspan="3" style="padding: 12px; text-align: right; font-weight: bold;">TOTAL PAID:</td>
-                <td style="padding: 12px; text-align: right; font-weight: bold;">€${(payment.captured_amount / 100).toFixed(2)}</td>
-              </tr>
-            </tfoot>
-          </table>
-
-          <h3 style="color: #1a1a1a; margin-top: 30px;">Payment Information</h3>
-          <div style="margin: 20px 0;">
-            <p><strong>Payment Method:</strong> ${payment.payment_method.toUpperCase()}</p>
-            <p><strong>Transaction ID:</strong> ${payment.nexi_transaction_id}</p>
-            <p><strong>Payment Status:</strong> ${payment.payment_status.toUpperCase()}</p>
-            <p><strong>Payment Date:</strong> ${new Date(payment.completed_at).toLocaleDateString()}</p>
-          </div>
-
-          <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 30px 0;">
-            <h4 style="color: #1a1a1a; margin-top: 0;">Important Information</h4>
-            <ul style="margin: 10px 0; padding-left: 20px;">
-              <li>Please bring a valid driver's license and credit card for verification</li>
-              <li>Arrive 15 minutes before your pickup time</li>
-              <li>Contact us at +39 123 456 7890 for any changes or questions</li>
-              <li>Cancellation policy applies as per terms and conditions</li>
+          <div class="content">
+            <p>${isItalian ? `Caro/a ${customerName},` : `Dear ${customerName},`}</p>
+            
+            <p>${isItalian 
+              ? "Grazie per aver scelto DR7 Luxury Empire! La tua prenotazione è stata confermata con successo."
+              : "Thank you for choosing DR7 Luxury Empire! Your booking has been successfully confirmed."
+            }</p>
+            
+            <div class="booking-details">
+              <h3>${isItalian ? "Dettagli della Prenotazione" : "Booking Details"}</h3>
+              
+              <div class="detail-row">
+                <span class="label">${isItalian ? "ID Prenotazione:" : "Booking ID:"}</span>
+                <span class="value">${booking.id}</span>
+              </div>
+              
+              <div class="detail-row">
+                <span class="label">${isItalian ? "Veicolo:" : "Vehicle:"}</span>
+                <span class="value">${booking.vehicle_name}</span>
+              </div>
+              
+              <div class="detail-row">
+                <span class="label">${isItalian ? "Data di Ritiro:" : "Pickup Date:"}</span>
+                <span class="value">${pickupDate}</span>
+              </div>
+              
+              <div class="detail-row">
+                <span class="label">${isItalian ? "Data di Riconsegna:" : "Dropoff Date:"}</span>
+                <span class="value">${dropoffDate}</span>
+              </div>
+              
+              <div class="detail-row">
+                <span class="label">${isItalian ? "Luogo di Ritiro:" : "Pickup Location:"}</span>
+                <span class="value">${booking.pickup_location}</span>
+              </div>
+              
+              ${booking.dropoff_location ? `
+              <div class="detail-row">
+                <span class="label">${isItalian ? "Luogo di Riconsegna:" : "Dropoff Location:"}</span>
+                <span class="value">${booking.dropoff_location}</span>
+              </div>
+              ` : ''}
+              
+              <div class="detail-row">
+                <span class="label">${isItalian ? "ID Transazione:" : "Transaction ID:"}</span>
+                <span class="value">${payment.nexi_transaction_id}</span>
+              </div>
+            </div>
+            
+            <div class="total">
+              <h3>${isItalian ? "Importo Pagato:" : "Amount Paid:"} ${amount}</h3>
+            </div>
+            
+            <h3>${isItalian ? "Prossimi Passi:" : "Next Steps:"}</h3>
+            <ul>
+              <li>${isItalian 
+                ? "Ti invieremo il contratto di noleggio entro 24 ore"
+                : "We will send you the rental contract within 24 hours"
+              }</li>
+              <li>${isItalian 
+                ? "Assicurati di avere la patente di guida valida e i documenti richiesti"
+                : "Make sure you have a valid driver's license and required documents"
+              }</li>
+              <li>${isItalian 
+                ? "Arriva 15 minuti prima dell'orario di ritiro programmato"
+                : "Arrive 15 minutes before your scheduled pickup time"
+              }</li>
             </ul>
+            
+            <p>${isItalian 
+              ? "Se hai domande o hai bisogno di assistenza, non esitare a contattarci:"
+              : "If you have any questions or need assistance, don't hesitate to contact us:"
+            }</p>
+            
+            <p>
+              <strong>Email:</strong> support@dr7luxuryempire.com<br>
+              <strong>${isItalian ? "Telefono:" : "Phone"}:</strong> +39 XXX XXX XXXX
+            </p>
           </div>
-
-          <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
-            <p style="color: #666; margin: 0;">DR7 Luxury Car Rental</p>
-            <p style="color: #666; margin: 5px 0;">Email: info@dr7luxury.com | Phone: +39 123 456 7890</p>
+          
+          <div class="footer">
+            <p>${isItalian 
+              ? "Grazie per aver scelto DR7 Luxury Empire"
+              : "Thank you for choosing DR7 Luxury Empire"
+            }</p>
+            <p>&copy; 2025 DR7 Luxury Empire. ${isItalian ? "Tutti i diritti riservati." : "All rights reserved."}</p>
           </div>
         </div>
-      </div>
+      </body>
+      </html>
     `;
 
-    // Send confirmation email
     const emailResponse = await resend.emails.send({
-      from: "DR7 Luxury <bookings@dr7luxury.com>",
+      from: "DR7 Luxury Empire <booking@dr7luxuryempire.com>",
       to: [customerEmail],
-      subject: `Booking Confirmation - ${booking.vehicle_name} (${booking.id})`,
-      html: emailContent,
+      subject: subject,
+      html: html,
     });
 
     console.log("Confirmation email sent:", emailResponse);
 
-    return new Response(JSON.stringify({
-      success: true,
-      emailSent: true,
-      bookingId,
-      paymentId
+    return new Response(JSON.stringify({ 
+      success: true, 
+      emailId: emailResponse.data?.id 
     }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
 
   } catch (error: any) {
-    console.error("Error sending booking confirmation:", error);
+    console.error("Error sending confirmation email:", error);
     return new Response(JSON.stringify({ 
       success: false, 
       error: error.message 

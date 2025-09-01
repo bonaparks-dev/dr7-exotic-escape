@@ -55,13 +55,23 @@ export const NexiPaymentForm: React.FC<NexiPaymentFormProps> = ({
       if (error) throw error;
 
       if (data.success) {
-        // Redirect to payment verification page with transaction details
-        const params = new URLSearchParams({
-          transactionId: data.transactionId,
-          orderId: data.orderId
+        // Create and submit hidden form to Nexi
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = data.paymentUrl;
+        form.style.display = 'none';
+
+        // Add all payment parameters as hidden inputs
+        Object.entries(data.paymentParams).forEach(([key, value]) => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value as string;
+          form.appendChild(input);
         });
-        
-        navigate(`/verify-payment?${params.toString()}`);
+
+        document.body.appendChild(form);
+        form.submit();
         
         onPaymentInitiated?.();
       }
