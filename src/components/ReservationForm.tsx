@@ -286,6 +286,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       const date = new Date(parseInt(dobYear), parseInt(dobMonth) - 1, parseInt(dobDay));
       setDateOfBirth(date);
       setEligibility(prev => ({ ...prev, dateOfBirth: date.toISOString().split('T')[0] }));
+      updateInsuranceSelection(date, licenseIssueDate);
     }
   };
 
@@ -294,7 +295,60 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       const date = new Date(parseInt(licenseYear), parseInt(licenseMonth) - 1, parseInt(licenseDay));
       setLicenseIssueDate(date);
       setEligibility(prev => ({ ...prev, licenseIssueDate: date.toISOString().split('T')[0] }));
+      updateInsuranceSelection(dateOfBirth, date);
     }
+  };
+
+  // Automatic insurance selection based on age and license experience
+  const updateInsuranceSelection = (dob: Date | undefined, licenseDate: Date | undefined) => {
+    if (!dob || !licenseDate) return;
+    
+    const age = calculateAge(dob);
+    const licenseAge = calculateLicenseAge(licenseDate);
+    
+    // Insurance selection logic based on risk assessment
+    if (age < 25 || licenseAge < 2) {
+      // High risk: young driver or new license - require premium insurance
+      setInsurance('kasko-signature');
+    } else if (age < 30 || licenseAge < 5) {
+      // Medium risk: moderate experience - advanced insurance
+      setInsurance('kasko-black');
+    } else {
+      // Low risk: experienced driver - basic insurance allowed
+      setInsurance('kasko');
+    }
+  };
+
+  // Get available insurance options based on conditions
+  const getAvailableInsuranceOptions = () => {
+    if (!dateOfBirth || !licenseIssueDate) {
+      return [
+        { id: 'kasko', name: 'Kasko - Basic protection', price: 15, disabled: true },
+        { id: 'kasko-black', name: 'Kasko Black - Advanced protection', price: 25, disabled: true },
+        { id: 'kasko-signature', name: 'Kasko Signature - Complete protection', price: 35, disabled: true }
+      ];
+    }
+
+    const age = calculateAge(dateOfBirth);
+    const licenseAge = calculateLicenseAge(licenseIssueDate);
+    
+    const options = [
+      { id: 'kasko', name: 'Kasko - Basic protection', price: 15, disabled: false },
+      { id: 'kasko-black', name: 'Kasko Black - Advanced protection', price: 25, disabled: false },
+      { id: 'kasko-signature', name: 'Kasko Signature - Complete protection', price: 35, disabled: false }
+    ];
+
+    // Disable options based on risk assessment
+    if (age < 25 || licenseAge < 2) {
+      // High risk: only signature allowed
+      options[0].disabled = true;
+      options[1].disabled = true;
+    } else if (age < 30 || licenseAge < 5) {
+      // Medium risk: basic not allowed
+      options[0].disabled = true;
+    }
+
+    return options;
   };
 
   // Generate arrays for dropdowns
@@ -927,12 +981,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  {[
-                    { id: 'kasko', name: 'Kasko - Basic protection', price: 15 },
-                    { id: 'kasko-black', name: 'Kasko Black - Advanced protection', price: 25 },
-                    { id: 'kasko-signature', name: 'Kasko Signature - Complete protection', price: 35 }
-                  ].map((option) => (
-                    <div key={option.id} className="flex items-center space-x-2">
+                  {getAvailableInsuranceOptions().map((option) => (
+                    <div key={option.id} className={`flex items-center space-x-2 ${option.disabled ? 'opacity-50' : ''}`}>
                       <input
                         type="radio"
                         id={option.id}
@@ -940,11 +990,15 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                         value={option.id}
                         checked={insurance === option.id}
                         onChange={(e) => setInsurance(e.target.value)}
+                        disabled={option.disabled}
                         className="w-4 h-4"
                       />
-                      <Label htmlFor={option.id} className="flex-1 cursor-pointer">
+                      <Label htmlFor={option.id} className={`flex-1 ${option.disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
                         <div className="flex justify-between">
-                          <span>{option.name}</span>
+                          <span>
+                            {option.name}
+                            {option.disabled && <span className="text-sm text-red-500 ml-2">(Non disponibile per la tua età/esperienza)</span>}
+                          </span>
                           <span className="font-semibold">€{option.price}/{t.day}</span>
                         </div>
                       </Label>
