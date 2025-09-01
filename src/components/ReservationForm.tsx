@@ -41,8 +41,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   // Form states
   const [pickupDate, setPickupDate] = useState<Date>();
   const [dropoffDate, setDropoffDate] = useState<Date>();
-  const [pickupLocation, setPickupLocation] = useState('Piazza del Colosseo, 1, Roma');
-  const [dropoffLocation, setDropoffLocation] = useState('');
+  const [pickupLocation, setPickupLocation] = useState('cagliari-airport');
   const [insurance, setInsurance] = useState('kasko');
   const [extras, setExtras] = useState({
     fullCleaning: true, // Made mandatory
@@ -101,7 +100,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       pickupDate: 'Pickup Date',
       dropoffDate: 'Drop-off Date',
       pickupLocation: 'Pickup Location',
-      dropoffLocation: 'Drop-off Location',
       dateOfBirth: 'Date of Birth',
       licenseIssueDate: 'License Issue Date',
       country: 'Country',
@@ -153,7 +151,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       pickupDate: 'Data ritiro',
       dropoffDate: 'Data consegna',
       pickupLocation: 'Luogo di ritiro',
-      dropoffLocation: 'Luogo di consegna',
       dateOfBirth: 'Data di nascita',
       licenseIssueDate: 'Data rilascio patente',
       country: 'Paese',
@@ -520,7 +517,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         pickup_date: pickupDate?.toISOString().split('T')[0],
         dropoff_date: dropoffDate?.toISOString().split('T')[0],
         pickup_location: pickupLocation,
-        dropoff_location: dropoffLocation || pickupLocation,
+        dropoff_location: pickupLocation,
         price_total: Math.round(calculateTotal() * 100), // Store in cents
         currency: 'EUR',
         status: 'pending',
@@ -539,7 +536,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           pickupDate: pickupDate?.toISOString().split('T')[0],
           dropoffDate: dropoffDate?.toISOString().split('T')[0],
           pickupLocation: pickupLocation,
-          dropoffLocation: dropoffLocation || pickupLocation,
+          dropoffLocation: pickupLocation,
           vehicleName: vehicleName,
           vehicleType: vehicleType,
           vehicleImageUrl: vehicleImageUrl,
@@ -661,7 +658,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             pickupDate: pickupDate,
             dropoffDate: dropoffDate,
             pickupLocation: pickupLocation,
-            dropoffLocation: dropoffLocation || pickupLocation,
+            dropoffLocation: pickupLocation,
             insurance: insurance,
             extras: extras,
             basePrice: basePrice
@@ -948,30 +945,28 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                 
                 <div>
                   <Label htmlFor="pickupLocation">{t.pickupLocation} *</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="pickupLocation"
-                      value={pickupLocation}
-                      onChange={(e) => setPickupLocation(e.target.value)}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="dropoffLocation">{t.dropoffLocation}</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="dropoffLocation"
-                      value={dropoffLocation}
-                      onChange={(e) => setDropoffLocation(e.target.value)}
-                      className="pl-10"
-                      placeholder="Same as pickup if empty"
-                    />
-                  </div>
+                  <Select value={pickupLocation} onValueChange={setPickupLocation}>
+                    <SelectTrigger className="bg-background">
+                      <div className="flex items-center">
+                        <MapPin className="mr-2 h-4 w-4 text-gray-400" />
+                        <SelectValue placeholder="Seleziona luogo di ritiro" />
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg z-50">
+                      <SelectItem value="cagliari-airport">
+                        <div>
+                          <div className="font-medium">Aeroporto di Cagliari</div>
+                          <div className="text-sm text-gray-500">Via dei Trasvolatori, 09030 Elmas CA</div>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="dr7-office">
+                        <div>
+                          <div className="font-medium">DR7 Office</div>
+                          <div className="text-sm text-gray-500">Via Roma 123, 09124 Cagliari CA</div>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </CardContent>
             </Card>
