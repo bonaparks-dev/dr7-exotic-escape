@@ -797,7 +797,16 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           firstName: user?.user_metadata?.first_name || guestInfo.firstName,
           lastName: user?.user_metadata?.last_name || guestInfo.lastName,
           email: user?.email || guestInfo.email,
-          phone: guestInfo.phone
+          phone: guestInfo.phone,
+          // Add guestInfo for constraint compliance when user is not logged in
+          ...(user ? {} : { 
+            guestInfo: {
+              firstName: guestInfo.firstName,
+              lastName: guestInfo.lastName,
+              email: guestInfo.email,
+              phone: guestInfo.phone
+            }
+          })
         },
         date_of_birth: dateOfBirth,
         license_issue_date: licenseIssueDate,
