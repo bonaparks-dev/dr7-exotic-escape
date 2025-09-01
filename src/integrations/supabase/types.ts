@@ -89,6 +89,7 @@ export type Database = {
           vehicle_image_url: string | null
           vehicle_name: string
           vehicle_type: string
+          years_licensed_bucket: string | null
         }
         Insert: {
           age_bucket?: string | null
@@ -125,6 +126,7 @@ export type Database = {
           vehicle_image_url?: string | null
           vehicle_name: string
           vehicle_type: string
+          years_licensed_bucket?: string | null
         }
         Update: {
           age_bucket?: string | null
@@ -161,6 +163,7 @@ export type Database = {
           vehicle_image_url?: string | null
           vehicle_name?: string
           vehicle_type?: string
+          years_licensed_bucket?: string | null
         }
         Relationships: []
       }

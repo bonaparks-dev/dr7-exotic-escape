@@ -25,9 +25,8 @@ interface ReservationFormProps {
 }
 
 interface EligibilityData {
-  dateOfBirth: string;
-  licenseIssueDate: string;
   ageBucket: string;
+  yearsLicensedBucket: string;
   countryIso2: string;
   licenseFileUrl?: string;
   termsAccepted: boolean;
@@ -52,19 +51,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     outOfHours: false,
   });
 
-  // Eligibility states
-  const [dateOfBirth, setDateOfBirth] = useState<Date>();
-  const [licenseIssueDate, setLicenseIssueDate] = useState<Date>();
-  const [dobDay, setDobDay] = useState<string>('');
-  const [dobMonth, setDobMonth] = useState<string>('');
-  const [dobYear, setDobYear] = useState<string>('');
-  const [licenseDay, setLicenseDay] = useState<string>('');
-  const [licenseMonth, setLicenseMonth] = useState<string>('');
-  const [licenseYear, setLicenseYear] = useState<string>('');
+  // New eligibility states
+  const [ageBucket, setAgeBucket] = useState<string>('');
+  const [yearsLicensedBucket, setYearsLicensedBucket] = useState<string>('');
   const [eligibility, setEligibility] = useState<EligibilityData>({
-    dateOfBirth: '',
-    licenseIssueDate: '',
     ageBucket: '',
+    yearsLicensedBucket: '',
     countryIso2: '',
     termsAccepted: false,
   });
@@ -104,8 +96,11 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       pickupDate: 'Pickup Date',
       dropoffDate: 'Drop-off Date',
       pickupLocation: 'Pickup Location',
-      dateOfBirth: 'Date of Birth',
-      licenseIssueDate: 'License Issue Date',
+      ageSelector: 'I am',
+      yearsLicensedSelector: "I've held my license for",
+      ageRequired: 'Please confirm your age.',
+      yearsLicensedRequired: 'Please confirm how many years you\'ve held your license.',
+      insuranceEligibilityError: 'You don\'t meet the eligibility requirements for this insurance.',
       country: 'Country',
       licensePhoto: 'Upload License Photo',
       termsAndConditions: 'I accept the Terms and Conditions',
@@ -117,12 +112,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       nextStep: 'Next Step',
       previousStep: 'Previous Step',
       validateEligibility: 'Validate Eligibility',
-      dateOfBirthRequired: 'Date of birth is required',
-      minimumAgeError: 'Minimum age is 21 years',
-      maximumAgeError: 'Maximum age is 75 years',
-      licenseIssueDateRequired: 'License issue date is required',
-      minimumLicenseAgeError: 'License must be at least 1 year old',
-      countryRequired: 'Country is required',
       licensePhotoRequired: 'License photo is required',
       termsAcceptanceRequired: 'You must accept the terms and conditions',
       eligibilityValidated: 'Eligibility validated successfully',
@@ -154,8 +143,11 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       pickupDate: 'Data ritiro',
       dropoffDate: 'Data consegna',
       pickupLocation: 'Luogo di ritiro',
-      dateOfBirth: 'Data di nascita',
-      licenseIssueDate: 'Data rilascio patente',
+      ageSelector: 'Ho',
+      yearsLicensedSelector: 'Possiedo la patente da',
+      ageRequired: 'Conferma la tua età.',
+      yearsLicensedRequired: 'Conferma da quanti anni possiedi la patente.',
+      insuranceEligibilityError: 'Non soddisfi i requisiti di idoneità per questa assicurazione.',
       country: 'Paese',
       licensePhoto: 'Carica foto patente',
       termsAndConditions: 'Accetto i Termini e Condizioni',
@@ -167,12 +159,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       nextStep: 'Prossimo step',
       previousStep: 'Step precedente',
       validateEligibility: 'Valida idoneità',
-      dateOfBirthRequired: 'La data di nascita è obbligatoria',
-      minimumAgeError: 'Età minima 21 anni',
-      maximumAgeError: 'Età massima 75 anni',
-      licenseIssueDateRequired: 'La data di rilascio patente è obbligatoria',
-      minimumLicenseAgeError: 'La patente deve essere vecchia almeno 1 anno',
-      countryRequired: 'Il paese è obbligatorio',
       licensePhotoRequired: 'La foto della patente è obbligatoria',
       termsAcceptanceRequired: 'Devi accettare i termini e condizioni',
       eligibilityValidated: 'Idoneità validata con successo',
@@ -194,32 +180,58 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
   const t = translations[language];
 
+  // Age options
+  const ageOptions = ['18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28+'];
+  // Years licensed options
+  const yearsLicensedOptions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10+'];
+
+  // Business rules for KASKO eligibility
+  const getEligibleInsuranceOptions = () => {
+    if (!ageBucket || !yearsLicensedBucket) return [];
+
+    const age = ageBucket === '28+' ? 28 : parseInt(ageBucket);
+    const yearsLicensed = yearsLicensedBucket === '10+' ? 10 : parseInt(yearsLicensedBucket);
+
+    const options = [];
+
+    // KASKO BASE: years_licensed >= 2
+    if (yearsLicensed >= 2) {
+      options.push({ id: 'kasko', name: 'Kasko - Basic protection', price: 15 });
+    }
+
+    // KASKO BLACK: age >= 25 AND years_licensed >= 5
+    if (age >= 25 && yearsLicensed >= 5) {
+      options.push({ id: 'kasko-black', name: 'Kasko Black - Advanced protection', price: 25 });
+    }
+
+    // KASKO SIGNATURE: age >= 30 AND years_licensed >= 10
+    if (age >= 30 && yearsLicensed >= 10) {
+      options.push({ id: 'kasko-signature', name: 'Kasko Signature - Complete protection', price: 35 });
+    }
+
+    return options;
+  };
+
+  // Validate insurance eligibility
+  const validateInsuranceEligibility = () => {
+    const eligibleOptions = getEligibleInsuranceOptions();
+    return eligibleOptions.some(option => option.id === insurance);
+  };
+
   // Validation functions
   const validateEligibility = (): string[] => {
     const errors: string[] = [];
     
-    if (!dateOfBirth) {
-      errors.push(t.dateOfBirthRequired);
-    } else {
-      const age = calculateAge(dateOfBirth);
-      if (age < 21) {
-        errors.push(t.minimumAgeError);
-      } else if (age > 75) {
-        errors.push(t.maximumAgeError);
-      }
+    if (!ageBucket) {
+      errors.push(t.ageRequired);
     }
     
-    if (!licenseIssueDate) {
-      errors.push(t.licenseIssueDateRequired);
-    } else {
-      const licenseAge = calculateLicenseAge(licenseIssueDate);
-      if (licenseAge < 1) {
-        errors.push(t.minimumLicenseAgeError);
-      }
+    if (!yearsLicensedBucket) {
+      errors.push(t.yearsLicensedRequired);
     }
     
     if (!eligibility.countryIso2) {
-      errors.push(t.countryRequired);
+      errors.push('Country is required');
     }
     
     if (!licenseFile) {
@@ -229,10 +241,14 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     if (!eligibility.termsAccepted) {
       errors.push(t.termsAcceptanceRequired);
     }
+
+    // Check insurance eligibility
+    if (ageBucket && yearsLicensedBucket && !validateInsuranceEligibility()) {
+      errors.push(t.insuranceEligibilityError);
+    }
     
     return errors;
   };
-
 
   const calculateTotal = () => {
     if (!pickupDate || !dropoffDate) return 0;
@@ -262,116 +278,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     return total;
   };
 
-  // Helper functions for dropdown date handling
-  const updateDateOfBirth = () => {
-    if (dobDay && dobMonth && dobYear) {
-      const date = new Date(parseInt(dobYear), parseInt(dobMonth) - 1, parseInt(dobDay));
-      setDateOfBirth(date);
-      setEligibility(prev => ({ ...prev, dateOfBirth: date.toISOString().split('T')[0] }));
-      // Trigger insurance update after setting the date
-      setTimeout(() => updateInsuranceSelection(date, licenseIssueDate), 0);
-    }
-  };
-
-  const updateLicenseDate = () => {
-    if (licenseDay && licenseMonth && licenseYear) {
-      const date = new Date(parseInt(licenseYear), parseInt(licenseMonth) - 1, parseInt(licenseDay));
-      setLicenseIssueDate(date);
-      setEligibility(prev => ({ ...prev, licenseIssueDate: date.toISOString().split('T')[0] }));
-      // Trigger insurance update after setting the date
-      setTimeout(() => updateInsuranceSelection(dateOfBirth, date), 0);
-    }
-  };
-
-  // Helper functions for age calculations
-  const calculateAge = (birthDate: Date): number => {
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    
-    return age;
-  };
-
-  const calculateLicenseAge = (licenseDate: Date): number => {
-    const today = new Date();
-    const diffTime = Math.abs(today.getTime() - licenseDate.getTime());
-    const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25);
-    return diffYears;
-  };
-
-  // Automatic insurance selection based on age and license experience
-  const updateInsuranceSelection = (dob: Date | undefined, licenseDate: Date | undefined) => {
-    console.log('updateInsuranceSelection called', { dob, licenseDate });
-    if (!dob || !licenseDate) {
-      console.log('Missing dates, skipping insurance update');
-      return;
-    }
-    
-    const age = calculateAge(dob);
-    const licenseAge = calculateLicenseAge(licenseDate);
-    console.log('Age calculations:', { age, licenseAge });
-    
-    // Insurance selection logic based on risk assessment
-    let selectedInsurance = 'kasko';
-    if (age < 25 || licenseAge < 2) {
-      // High risk: young driver or new license - require premium insurance
-      selectedInsurance = 'kasko-signature';
-      console.log('High risk detected, selecting kasko-signature');
-    } else if (age < 30 || licenseAge < 5) {
-      // Medium risk: moderate experience - advanced insurance
-      selectedInsurance = 'kasko-black';
-      console.log('Medium risk detected, selecting kasko-black');
-    } else {
-      // Low risk: experienced driver - basic insurance allowed
-      selectedInsurance = 'kasko';
-      console.log('Low risk detected, selecting basic kasko');
-    }
-    
-    setInsurance(selectedInsurance);
-    console.log('Insurance set to:', selectedInsurance);
-  };
-
-  // Get available insurance options based on conditions
-  const getAvailableInsuranceOptions = () => {
-    if (!dateOfBirth || !licenseIssueDate) {
-      return [
-        { id: 'kasko', name: 'Kasko - Basic protection', price: 15, disabled: true }
-      ];
-    }
-
-    const age = calculateAge(dateOfBirth);
-    const licenseAge = calculateLicenseAge(licenseIssueDate);
-    
-    // Only show the appropriate insurance option based on risk assessment
-    if (age < 25 || licenseAge < 2) {
-      // High risk: only show signature
-      return [
-        { id: 'kasko-signature', name: 'Kasko Signature - Complete protection', price: 35, disabled: false }
-      ];
-    } else if (age < 30 || licenseAge < 5) {
-      // Medium risk: only show black
-      return [
-        { id: 'kasko-black', name: 'Kasko Black - Advanced protection', price: 25, disabled: false }
-      ];
-    } else {
-      // Low risk: only show basic
-      return [
-        { id: 'kasko', name: 'Kasko - Basic protection', price: 15, disabled: false }
-      ];
-    }
-  };
-
-  // Generate arrays for dropdowns
-  const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
-  const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
-  const currentYear = new Date().getFullYear();
-  const dobYears = Array.from({ length: 80 }, (_, i) => (currentYear - 18 - i).toString()); // 18-98 years old
-  const licenseYears = Array.from({ length: 50 }, (_, i) => (currentYear - i).toString()); // Current year to 50 years ago
-
   const handleNextStep = async () => {
     if (step === 1) {
       // Validate step 1 fields
@@ -393,84 +299,37 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         return;
       }
 
-      // Validate DOB and license date in step 1
-      // Check if DOB is set OR if all dropdown values are provided
-      let validDateOfBirth = dateOfBirth;
-      if (!validDateOfBirth && dobDay && dobMonth && dobYear) {
-        // Create date from dropdown values for validation
-        validDateOfBirth = new Date(parseInt(dobYear), parseInt(dobMonth) - 1, parseInt(dobDay));
-        setDateOfBirth(validDateOfBirth);
-        setEligibility(prev => ({ ...prev, dateOfBirth: validDateOfBirth!.toISOString().split('T')[0] }));
-      }
-      
-      if (!validDateOfBirth) {
+      // Validate age and years licensed selectors
+      if (!ageBucket) {
         toast({
           title: 'Error',
-          description: t.dateOfBirthRequired,
+          description: t.ageRequired,
           variant: 'destructive',
         });
         return;
       }
 
-      // Check if license date is set OR if all dropdown values are provided  
-      let validLicenseDate = licenseIssueDate;
-      if (!validLicenseDate && licenseDay && licenseMonth && licenseYear) {
-        // Create date from dropdown values for validation
-        validLicenseDate = new Date(parseInt(licenseYear), parseInt(licenseMonth) - 1, parseInt(licenseDay));
-        setLicenseIssueDate(validLicenseDate);
-        setEligibility(prev => ({ ...prev, licenseIssueDate: validLicenseDate!.toISOString().split('T')[0] }));
-      }
-      
-      if (!validLicenseDate) {
+      if (!yearsLicensedBucket) {
         toast({
           title: 'Error',
-          description: t.licenseIssueDateRequired,
+          description: t.yearsLicensedRequired,
           variant: 'destructive',
         });
         return;
       }
 
-      // Validate age limits using the validated date
-      const age = calculateAge(validDateOfBirth);
-      if (age < 21) {
-        toast({
-          title: 'Error',
-          description: t.minimumAgeError,
-          variant: 'destructive',
-        });
-        return;
-      } else if (age > 75) {
-        toast({
-          title: 'Error',
-          description: t.maximumAgeError,
-          variant: 'destructive',
-        });
-        return;
+      // Update eligibility data
+      setEligibility(prev => ({ 
+        ...prev, 
+        ageBucket,
+        yearsLicensedBucket
+      }));
+
+      // Auto-select the best available insurance
+      const eligibleOptions = getEligibleInsuranceOptions();
+      if (eligibleOptions.length > 0) {
+        setInsurance(eligibleOptions[0].id);
       }
-
-      // Validate license age using the validated date
-      const licenseAge = calculateLicenseAge(validLicenseDate);
-      if (licenseAge < 1) {
-        toast({
-          title: 'Error',
-          description: t.minimumLicenseAgeError,
-          variant: 'destructive',
-        });
-        return;
-      }
-
-      // Update insurance selection based on the validated dates
-      updateInsuranceSelection(validDateOfBirth, validLicenseDate);
-
-      // Set age bucket based on calculated age - this enables insurance selection logic
-      let ageBucket = '';
-      if (age >= 21 && age <= 24) ageBucket = '21-24';
-      else if (age >= 25 && age <= 30) ageBucket = '25-30';
-      else if (age >= 31 && age <= 45) ageBucket = '31-45';
-      else if (age >= 46 && age <= 65) ageBucket = '46-65';
-      else if (age >= 66 && age <= 75) ageBucket = '66-75';
-
-      setEligibility(prev => ({ ...prev, ageBucket }));
       
       setStep(2);
     } else if (step === 2) {
@@ -484,693 +343,385 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         });
         return;
       }
-
-      // Set age bucket based on calculated age
-      const ageForBucket = calculateAge(dateOfBirth!);
-      let ageBucket = '';
-      if (ageForBucket >= 21 && ageForBucket <= 24) ageBucket = '21-24';
-      else if (ageForBucket >= 25 && ageForBucket <= 30) ageBucket = '25-30';
-      else if (ageForBucket >= 31 && ageForBucket <= 45) ageBucket = '31-45';
-      else if (ageForBucket >= 46 && ageForBucket <= 65) ageBucket = '46-65';
-      else if (ageForBucket >= 66 && ageForBucket <= 75) ageBucket = '66-75';
-
-      setEligibility(prev => ({ ...prev, ageBucket }));
-
-      toast({
-        title: 'Success',
-        description: t.eligibilityValidated,
-      });
-      
-      try {
-        setIsSubmitting(true);
-        await createBookingForPayment();
-        setStep(3);
-      } catch (err: any) {
-        toast({
-          title: 'Error',
-          description: err.message || 'Failed to create booking',
-          variant: 'destructive',
-        });
-      } finally {
-        setIsSubmitting(false);
-      }
+      setStep(3);
     }
   };
 
   const handlePreviousStep = () => {
-    setStep(prev => Math.max(1, prev - 1));
+    if (step > 1) {
+      setStep(step - 1);
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const userId = user?.id || null;
-      
-      let licenseFilePath = null;
-      
-      // Upload license file
-      if (licenseFile) {
-        const fileExt = licenseFile.name.split('.').pop();
-        const fileName = `${userId || 'guest'}_${Date.now()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('driver-licenses')
-          .upload(fileName, licenseFile);
-
-        if (uploadError) {
-          console.error('License upload error:', uploadError);
-          toast({
-            title: 'Upload Error',
-            description: 'Failed to upload driver license',
-            variant: 'destructive',
-          });
-          setIsSubmitting(false);
-          return;
-        }
-
-        licenseFilePath = fileName;
-      }
-
-      // Create booking record with all required eligibility fields
-      const bookingData = {
-        user_id: userId,
-        vehicle_type: vehicleType,
-        vehicle_name: vehicleName,
-        vehicle_image_url: vehicleImageUrl,
-        pickup_date: pickupDate?.toISOString().split('T')[0],
-        dropoff_date: dropoffDate?.toISOString().split('T')[0],
-        pickup_location: pickupLocation,
-        dropoff_location: pickupLocation,
-        price_total: Math.round(calculateTotal() * 100), // Store in cents
-        currency: 'EUR',
-        status: 'pending',
-        payment_status: 'pending',
-        license_issue_date: licenseIssueDate?.toISOString().split('T')[0],
-        license_file_url: licenseFilePath,
-        date_of_birth: dateOfBirth?.toISOString().split('T')[0],
-        age_bucket: eligibility.ageBucket,
-        country_iso2: eligibility.countryIso2,
-        terms_accepted: eligibility.termsAccepted,
-        booking_details: {
-          basePrice: basePrice,
-          insurance: insurance,
-          extras: extras,
-          guestInfo: !userId ? guestInfo : null,
-          pickupDate: pickupDate?.toISOString().split('T')[0],
-          dropoffDate: dropoffDate?.toISOString().split('T')[0],
-          pickupLocation: pickupLocation,
-          dropoffLocation: pickupLocation,
-          vehicleName: vehicleName,
-          vehicleType: vehicleType,
-          vehicleImageUrl: vehicleImageUrl,
-            eligibility: {
-              dateOfBirth: dateOfBirth?.toISOString().split('T')[0],
-              licenseIssueDate: licenseIssueDate?.toISOString().split('T')[0],
-            ageBucket: eligibility.ageBucket,
-            countryIso2: eligibility.countryIso2,
-            termsAccepted: eligibility.termsAccepted
-          }
-        } as any
-      };
-
-      const { data: booking, error: bookingError } = await supabase
-        .from('bookings')
-        .insert(bookingData)
-        .select()
-        .single();
-
-      if (bookingError) {
-        console.error('Booking creation error:', bookingError);
-        toast({
-          title: 'Booking Error',
-          description: bookingError.message,
-          variant: 'destructive',
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Calculate line items for payment
-      const days = Math.ceil((dropoffDate!.getTime() - pickupDate!.getTime()) / (1000 * 60 * 60 * 24));
-      const lineItems = [];
-
-      // Base rental cost
-      lineItems.push({
-        type: 'rental',
-        description: `${vehicleName} - ${days} ${days === 1 ? t.day : t.days}`,
-        quantity: days,
-        unitPrice: basePrice,
-        totalPrice: basePrice * days
-      });
-
-      // Insurance
-      const insurancePrices = {
-        'kasko': 15,
-        'kasko-black': 25,
-        'kasko-signature': 35
-      };
-
-      if (insurancePrices[insurance as keyof typeof insurancePrices]) {
-        const dailyInsurance = insurancePrices[insurance as keyof typeof insurancePrices];
-        lineItems.push({
-          type: 'insurance',
-          description: `${insurance.charAt(0).toUpperCase() + insurance.slice(1)} Insurance - ${days} ${days === 1 ? t.day : t.days}`,
-          quantity: days,
-          unitPrice: dailyInsurance,
-          totalPrice: dailyInsurance * days
-        });
-      }
-
-      // Add extras to line items
-      if (extras.fullCleaning) {
-        lineItems.push({
-          type: 'extra',
-          description: t.fullCleaning,
-          quantity: 1,
-          unitPrice: 30,
-          totalPrice: 30
-        });
-      }
-
-      if (extras.secondDriver) {
-        lineItems.push({
-          type: 'extra',
-          description: `${t.secondDriver} - ${days} ${days === 1 ? t.day : t.days}`,
-          quantity: days,
-          unitPrice: 10,
-          totalPrice: 10 * days
-        });
-      }
-
-      if (extras.under25) {
-        lineItems.push({
-          type: 'extra',
-          description: `${t.under25Surcharge} - ${days} ${days === 1 ? t.day : t.days}`,
-          quantity: days,
-          unitPrice: 10,
-          totalPrice: 10 * days
-        });
-      }
-
-      if (extras.licenseUnder3) {
-        lineItems.push({
-          type: 'extra',
-          description: `${t.licenseUnder3} - ${days} ${days === 1 ? t.day : t.days}`,
-          quantity: days,
-          unitPrice: 20,
-          totalPrice: 20 * days
-        });
-      }
-
-      if (extras.outOfHours) {
-        lineItems.push({
-          type: 'extra',
-          description: t.outOfHours,
-          quantity: 1,
-          unitPrice: 50,
-          totalPrice: 50
-        });
-      }
-
-      // Initiate payment via Nexi
-      const { data: paymentData, error: paymentError } = await supabase.functions.invoke('nexi-payment', {
-        body: {
-          bookingId: booking.id,
-          bookingDetails: {
-            vehicleName: vehicleName,
-            pickupDate: pickupDate,
-            dropoffDate: dropoffDate,
-            pickupLocation: pickupLocation,
-            dropoffLocation: pickupLocation,
-            insurance: insurance,
-            extras: extras,
-            basePrice: basePrice
-          },
-          lineItems: lineItems,
-          totalAmount: calculateTotal(),
-          currency: 'EUR',
-          language: language,
-          payerEmail: user?.email || guestInfo.email,
-          payerName: user ? `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`.trim() || user.email : `${guestInfo.firstName} ${guestInfo.lastName}`
-        }
-      });
-
-      if (paymentError) {
-        console.error('Payment initiation error:', paymentError);
-        toast({
-          title: 'Payment Error',
-          description: paymentError.message,
-          variant: 'destructive',
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (paymentData?.success && paymentData?.paymentUrl) {
-        // Create a form and submit it to Nexi
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = paymentData.paymentUrl;
-
-        // Add all payment parameters as hidden inputs
-        Object.entries(paymentData.paymentParams).forEach(([key, value]) => {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = value as string;
-          form.appendChild(input);
-        });
-
-        document.body.appendChild(form);
-        form.submit();
-      } else {
-        throw new Error('Failed to get payment URL from server');
-      }
-
-    } catch (error: any) {
-      console.error('Submission error:', error);
+  const handleSubmit = async () => {
+    if (!validateInsuranceEligibility()) {
       toast({
         title: 'Error',
-        description: error.message || 'An error occurred during booking',
+        description: t.insuranceEligibilityError,
         variant: 'destructive',
       });
-    } finally {
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      await createBookingForPayment();
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create booking. Please try again.',
+        variant: 'destructive',
+      });
       setIsSubmitting(false);
     }
   };
-  
+
   const createBookingForPayment = async () => {
-    try {
-      let licenseFileUrl: string | null = null;
-      if (licenseFile) {
-        const fileExt = licenseFile.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('driver-licenses')
-          .upload(fileName, licenseFile);
-        if (uploadError) throw uploadError;
-        licenseFileUrl = uploadData?.path || null;
+    let licenseFileUrl = '';
+    
+    if (licenseFile) {
+      const fileExt = licenseFile.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('driver-licenses')
+        .upload(fileName, licenseFile);
+        
+      if (uploadError) {
+        throw new Error('Failed to upload license file');
       }
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('driver-licenses')
+        .getPublicUrl(fileName);
+        
+      licenseFileUrl = publicUrl;
+    }
+    
+    const bookingData = {
+      user_id: user?.id || null,
+      vehicle_type: vehicleType,
+      vehicle_name: vehicleName,
+      vehicle_image_url: vehicleImageUrl,
+      pickup_date: pickupDate?.toISOString(),
+      dropoff_date: dropoffDate?.toISOString(),
+      pickup_location: pickupLocation,
+      price_total: Math.round(calculateTotal() * 100),
+      booking_details: {
+        insurance,
+        extras,
+        guestInfo: user ? null : guestInfo,
+      },
+      age_bucket: ageBucket,
+      years_licensed_bucket: yearsLicensedBucket,
+      license_file_url: licenseFileUrl,
+      terms_accepted: eligibility.termsAccepted,
+      country_iso2: eligibility.countryIso2,
+      currency: 'eur',
+      status: 'pending',
+      payment_status: 'pending'
+    };
+    
+    const { data, error } = await supabase
+      .from('bookings')
+      .insert([bookingData])
+      .select()
+      .single();
+      
+    if (error) {
+      throw error;
+    }
+    
+    setBookingId(data.id);
+  };
 
-      const bookingPayload: any = {
-        vehicle_type: vehicleType,
-        vehicle_name: vehicleName,
-        vehicle_image_url: vehicleImageUrl,
-        pickup_date: pickupDate?.toISOString(),
-        dropoff_date: dropoffDate?.toISOString(),
-        pickup_location: pickupLocation,
-        dropoff_location: null,
-        price_total: Math.round(calculateTotal() * 100),
-        currency: 'EUR',
-        status: 'pending',
-        payment_status: 'pending',
-        user_id: user?.id || null,
-        booking_details: {
-          vehicleName: vehicleName,
-          vehicleType: vehicleType,
-          vehicleImageUrl,
-          insurance,
-          extras,
-          basePrice,
-          firstName: user?.user_metadata?.first_name || guestInfo.firstName,
-          lastName: user?.user_metadata?.last_name || guestInfo.lastName,
-          email: user?.email || guestInfo.email,
-          phone: guestInfo.phone,
-          // Add guestInfo for constraint compliance when user is not logged in
-          ...(user ? {} : { 
-            guestInfo: {
-              firstName: guestInfo.firstName,
-              lastName: guestInfo.lastName,
-              email: guestInfo.email,
-              phone: guestInfo.phone
-            }
-          })
-        },
-        date_of_birth: dateOfBirth,
-        license_issue_date: licenseIssueDate,
-        license_file_url: licenseFileUrl,
-        terms_accepted: eligibility.termsAccepted,
-        age_bucket: calculateAge(dateOfBirth!) < 25 ? 'under_25' : 'over_25',
-        country_iso2: eligibility.countryIso2 || 'IT'
-      };
-
-      const { data: booking, error: bookingError } = await supabase
-        .from('bookings')
-        .insert(bookingPayload)
-        .select()
-        .single();
-
-      if (bookingError) throw bookingError;
-
-      setBookingId(booking.id);
-      return booking.id as string;
-    } catch (err) {
-      console.error('createBookingForPayment error:', err);
-      throw err;
+  // File upload handler
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setLicenseFile(file);
     }
   };
+
+  // Location options
+  const locationOptions = [
+    { value: 'cagliari-airport', label: 'Cagliari Airport' },
+    { value: 'cagliari-center', label: 'Cagliari Center' },
+    { value: 'olbia-airport', label: 'Olbia Airport' },
+    { value: 'alghero-airport', label: 'Alghero Airport' },
+  ];
+
+  // Countries list
+  const countries = [
+    { code: 'IT', name: 'Italy / Italia' },
+    { code: 'DE', name: 'Germany / Deutschland' },
+    { code: 'FR', name: 'France' },
+    { code: 'ES', name: 'Spain / España' },
+    { code: 'GB', name: 'United Kingdom' },
+    { code: 'US', name: 'United States' },
+  ];
 
   const renderStepContent = () => {
     switch (step) {
       case 1:
         return (
           <div className="space-y-6">
-            {/* Show personal info form only for guests */}
+            {/* Personal Information for guests */}
             {!user && (
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <User className="h-5 w-5" />
+                    <User className="w-5 h-5" />
                     {t.personalInfo}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="firstName">{t.firstName} *</Label>
+                      <Label htmlFor="firstName">{t.firstName}</Label>
                       <Input
                         id="firstName"
                         value={guestInfo.firstName}
-                        onChange={(e) => setGuestInfo(prev => ({ ...prev, firstName: e.target.value }))}
+                        onChange={(e) => setGuestInfo({ ...guestInfo, firstName: e.target.value })}
                         required
                       />
                     </div>
                     <div>
-                      <Label htmlFor="lastName">{t.lastName} *</Label>
+                      <Label htmlFor="lastName">{t.lastName}</Label>
                       <Input
                         id="lastName"
                         value={guestInfo.lastName}
-                        onChange={(e) => setGuestInfo(prev => ({ ...prev, lastName: e.target.value }))}
+                        onChange={(e) => setGuestInfo({ ...guestInfo, lastName: e.target.value })}
                         required
                       />
                     </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="email">{t.email} *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={guestInfo.email}
-                      onChange={(e) => setGuestInfo(prev => ({ ...prev, email: e.target.value }))}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">{t.phone} *</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={guestInfo.phone}
-                      onChange={(e) => setGuestInfo(prev => ({ ...prev, phone: e.target.value }))}
-                      required
-                    />
+                    <div>
+                      <Label htmlFor="email">{t.email}</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={guestInfo.email}
+                        onChange={(e) => setGuestInfo({ ...guestInfo, email: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone">{t.phone}</Label>
+                      <Input
+                        id="phone"
+                        value={guestInfo.phone}
+                        onChange={(e) => setGuestInfo({ ...guestInfo, phone: e.target.value })}
+                        required
+                      />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Date of Birth and License Date Section */}
+            {/* Booking Details */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5" />
-                  Informazioni di idoneità
+                  <Car className="w-5 h-5" />
+                  {t.bookingDetails}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label>{t.dateOfBirth} *</Label>
-                    <div className="grid grid-cols-3 gap-2">
-                      <Select value={dobDay} onValueChange={(value) => {
-                        setDobDay(value);
-                        setTimeout(updateDateOfBirth, 0);
-                      }}>
-                        <SelectTrigger className="bg-background z-50">
-                          <SelectValue placeholder="Giorno" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-background border shadow-lg z-50">
-                          {days.map(day => (
-                            <SelectItem key={day} value={day}>{day}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Select value={dobMonth} onValueChange={(value) => {
-                        setDobMonth(value);
-                        setTimeout(updateDateOfBirth, 0);
-                      }}>
-                        <SelectTrigger className="bg-background z-50">
-                          <SelectValue placeholder="Mese" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-background border shadow-lg z-50">
-                          {months.map(month => (
-                            <SelectItem key={month} value={month}>{month}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Select value={dobYear} onValueChange={(value) => {
-                        setDobYear(value);
-                        setTimeout(updateDateOfBirth, 0);
-                      }}>
-                        <SelectTrigger className="bg-background z-50">
-                          <SelectValue placeholder="Anno" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-background border shadow-lg z-50">
-                          {dobYears.map(year => (
-                            <SelectItem key={year} value={year}>{year}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    <Label>{t.pickupDate}</Label>
+                    <Popover open={pickupDateOpen} onOpenChange={setPickupDateOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !pickupDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {pickupDate ? format(pickupDate, "PPP") : "Select date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={pickupDate}
+                          onSelect={(date) => {
+                            setPickupDate(date);
+                            setPickupDateOpen(false);
+                          }}
+                          disabled={(date) =>
+                            date < new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
+
                   <div>
-                    <Label>{t.licenseIssueDate} *</Label>
-                    <div className="grid grid-cols-3 gap-2">
-                      <Select value={licenseDay} onValueChange={(value) => {
-                        setLicenseDay(value);
-                        setTimeout(updateLicenseDate, 0);
-                      }}>
-                        <SelectTrigger className="bg-background z-50">
-                          <SelectValue placeholder="Giorno" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-background border shadow-lg z-50">
-                          {days.map(day => (
-                            <SelectItem key={day} value={day}>{day}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Select value={licenseMonth} onValueChange={(value) => {
-                        setLicenseMonth(value);
-                        setTimeout(updateLicenseDate, 0);
-                      }}>
-                        <SelectTrigger className="bg-background z-50">
-                          <SelectValue placeholder="Mese" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-background border shadow-lg z-50">
-                          {months.map(month => (
-                            <SelectItem key={month} value={month}>{month}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Select value={licenseYear} onValueChange={(value) => {
-                        setLicenseYear(value);
-                        setTimeout(updateLicenseDate, 0);
-                      }}>
-                        <SelectTrigger className="bg-background z-50">
-                          <SelectValue placeholder="Anno" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-background border shadow-lg z-50">
-                          {licenseYears.map(year => (
-                            <SelectItem key={year} value={year}>{year}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    <Label>{t.dropoffDate}</Label>
+                    <Popover open={dropoffDateOpen} onOpenChange={setDropoffDateOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !dropoffDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {dropoffDate ? format(dropoffDate, "PPP") : "Select date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={dropoffDate}
+                          onSelect={(date) => {
+                            setDropoffDate(date);
+                            setDropoffDateOpen(false);
+                          }}
+                          disabled={(date) =>
+                            date < new Date() || date < new Date("1900-01-01") || (pickupDate && date <= pickupDate)
+                          }
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Booking Details Card */}
-            <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <CalendarIcon className="h-5 w-5" />
-                    {t.bookingDetails}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>{t.pickupDate} *</Label>
-                       <Popover open={pickupDateOpen} onOpenChange={setPickupDateOpen}>
-                         <PopoverTrigger asChild>
-                           <Button
-                             variant={"outline"}
-                             className={cn(
-                               "w-full justify-start text-left font-normal",
-                               !pickupDate && "text-muted-foreground"
-                             )}
-                           >
-                             <CalendarIcon className="mr-2 h-4 w-4" />
-                             {pickupDate ? format(pickupDate, "PPP") : <span>Pick a date</span>}
-                           </Button>
-                         </PopoverTrigger>
-                         <PopoverContent className="w-auto p-0" align="start">
-                           <Calendar
-                             mode="single"
-                             selected={pickupDate}
-                             onSelect={(date) => {
-                               setPickupDate(date);
-                               setPickupDateOpen(false);
-                               // Automatically open return date if pickup date is selected
-                               if (date) {
-                                 setTimeout(() => setDropoffDateOpen(true), 100);
-                               }
-                             }}
-                             disabled={(date) => date < new Date()}
-                             initialFocus
-                             className="pointer-events-auto"
-                           />
-                         </PopoverContent>
-                       </Popover>
-                    </div>
-                    <div>
-                      <Label>{t.dropoffDate} *</Label>
-                       <Popover open={dropoffDateOpen} onOpenChange={setDropoffDateOpen}>
-                         <PopoverTrigger asChild>
-                           <Button
-                             variant={"outline"}
-                             className={cn(
-                               "w-full justify-start text-left font-normal",
-                               !dropoffDate && "text-muted-foreground"
-                             )}
-                           >
-                             <CalendarIcon className="mr-2 h-4 w-4" />
-                             {dropoffDate ? format(dropoffDate, "PPP") : <span>Pick a date</span>}
-                           </Button>
-                         </PopoverTrigger>
-                         <PopoverContent className="w-auto p-0" align="start">
-                           <Calendar
-                             mode="single"
-                             selected={dropoffDate}
-                             onSelect={(date) => {
-                               setDropoffDate(date);
-                               setDropoffDateOpen(false);
-                             }}
-                             disabled={(date) => date < (pickupDate || new Date())}
-                             initialFocus
-                             className="pointer-events-auto"
-                           />
-                         </PopoverContent>
-                       </Popover>
-                    </div>
-                  </div>
-                
                 <div>
-                  <Label htmlFor="pickupLocation">{t.pickupLocation} *</Label>
+                  <Label>{t.pickupLocation}</Label>
                   <Select value={pickupLocation} onValueChange={setPickupLocation}>
-                    <SelectTrigger className="bg-background">
-                      <div className="flex items-center">
-                        <MapPin className="mr-2 h-4 w-4 text-gray-400" />
-                        <SelectValue placeholder="Seleziona luogo di ritiro" />
-                      </div>
+                    <SelectTrigger>
+                      <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg z-50">
-                      <SelectItem value="cagliari-airport">
-                        <div>
-                          <div className="font-medium">Aeroporto di Cagliari</div>
-                          <div className="text-sm text-gray-500">Via dei Trasvolatori, 09030 Elmas CA</div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="dr7-office">
-                        <div>
-                          <div className="font-medium">DR7 Office</div>
-                          <div className="text-sm text-gray-500">Viale Marconi, 229, 09131 Cagliari</div>
-                        </div>
-                      </SelectItem>
+                    <SelectContent>
+                      {locationOptions.map((location) => (
+                        <SelectItem key={location.value} value={location.value}>
+                          {location.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
+
+                {/* Age and Years Licensed Selectors */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="flex items-center gap-2">
+                      {t.ageSelector}
+                      {ageBucket && <Check className="w-4 h-4 text-green-500" />}
+                    </Label>
+                    <Select value={ageBucket} onValueChange={setAgeBucket}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={`${t.ageSelector} ... ▾`} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ageOptions.map((age) => (
+                          <SelectItem key={age} value={age}>
+                            {age}+ years
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label className="flex items-center gap-2">
+                      {t.yearsLicensedSelector}
+                      {yearsLicensedBucket && <Check className="w-4 h-4 text-green-500" />}
+                    </Label>
+                    <Select value={yearsLicensedBucket} onValueChange={setYearsLicensedBucket}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={`${t.yearsLicensedSelector} ... ▾`} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {yearsLicensedOptions.map((years) => (
+                          <SelectItem key={years} value={years}>
+                            {years} {years === '1' ? 'year' : 'years'}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
-            {/* Insurance and Extras */}
+            {/* Insurance Selection */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
+                  <Shield className="w-5 h-5" />
                   {t.insurance}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                 <div className="space-y-3">
-                   {getAvailableInsuranceOptions().map((option) => (
-                     <div key={option.id} className={`flex items-center space-x-2 p-4 rounded-lg border-2 ${
-                       insurance === option.id ? 'border-green-400 bg-black text-white' : 'border-gray-600 bg-gray-800 text-white'
-                     } ${option.disabled ? 'opacity-50' : ''}`}>
-                       <input
-                         type="radio"
-                         id={option.id}
-                         name="insurance"
-                         value={option.id}
-                         checked={insurance === option.id}
-                         onChange={(e) => !option.disabled && setInsurance(e.target.value)}
-                         disabled={option.disabled}
-                         className="w-4 h-4 text-green-400 bg-gray-700 border-gray-600"
-                       />
-                       <Label htmlFor={option.id} className={`flex-1 ${option.disabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-white`}>
-                         <div className="flex justify-between items-center">
-                           <div>
-                             <span className="font-medium text-white">{option.name}</span>
-                             {insurance === option.id && !option.disabled && (
-                               <div className="text-sm text-green-400 font-medium mt-1">
-                                 ✓ Selezionato automaticamente in base alla tua età ed esperienza
-                               </div>
-                             )}
-                           </div>
-                           <span className="font-bold text-lg text-white">€{option.price}/{t.day}</span>
-                         </div>
-                       </Label>
-                     </div>
-                   ))}
-                 </div>
+              <CardContent>
+                <Select value={insurance} onValueChange={setInsurance}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getEligibleInsuranceOptions().map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        {option.name} (+€{option.price}/day)
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {(!ageBucket || !yearsLicensedBucket) && (
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Select your age and license experience to see available insurance options
+                  </p>
+                )}
               </CardContent>
             </Card>
 
+            {/* Additional Services */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Car className="h-5 w-5" />
-                  {t.additionalServices}
-                </CardTitle>
+                <CardTitle>{t.additionalServices}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  {[
-                    { key: 'fullCleaning', label: t.fullCleaning, price: '€30' },
-                    { key: 'secondDriver', label: t.secondDriver, price: `€10/${t.day}` },
-                    { key: 'under25', label: t.under25Surcharge, price: `€10/${t.day}` },
-                    { key: 'licenseUnder3', label: t.licenseUnder3, price: `€20/${t.day}` },
-                    { key: 'outOfHours', label: t.outOfHours, price: '€50' }
-                   ].map((extra) => (
-                     <div key={extra.key} className="flex items-center justify-between">
-                       <div className="flex items-center space-x-2">
-                         <Checkbox
-                           id={extra.key}
-                           checked={extras[extra.key as keyof typeof extras]}
-                           onCheckedChange={(checked) => setExtras(prev => ({ ...prev, [extra.key]: !!checked }))}
-                           disabled={extra.key === 'fullCleaning'} // Make fullCleaning mandatory and disabled
-                         />
-                         <Label htmlFor={extra.key} className={extra.key === 'fullCleaning' ? 'text-muted-foreground' : ''}>
-                           {extra.label} {extra.key === 'fullCleaning' && '(Obbligatorio)'}
-                         </Label>
-                       </div>
-                       <span className="font-semibold">{extra.price}</span>
-                     </div>
-                   ))}
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="fullCleaning"
+                    checked={extras.fullCleaning}
+                    onCheckedChange={(checked) => 
+                      setExtras({ ...extras, fullCleaning: checked as boolean })
+                    }
+                    disabled={true} // Mandatory service
+                  />
+                  <Label htmlFor="fullCleaning">{t.fullCleaning} (+€30)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="secondDriver"
+                    checked={extras.secondDriver}
+                    onCheckedChange={(checked) => 
+                      setExtras({ ...extras, secondDriver: checked as boolean })
+                    }
+                  />
+                  <Label htmlFor="secondDriver">{t.secondDriver} (+€10/day)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="outOfHours"
+                    checked={extras.outOfHours}
+                    onCheckedChange={(checked) => 
+                      setExtras({ ...extras, outOfHours: checked as boolean })
+                    }
+                  />
+                  <Label htmlFor="outOfHours">{t.outOfHours} (+€50)</Label>
                 </div>
               </CardContent>
             </Card>
@@ -1179,134 +730,111 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
       case 2:
         return (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
-                {t.eligibilityCheck}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="country">{t.country} *</Label>
-                <Select value={eligibility.countryIso2} onValueChange={(value) => setEligibility(prev => ({ ...prev, countryIso2: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="IT">Italia</SelectItem>
-                    <SelectItem value="FR">France</SelectItem>
-                    <SelectItem value="DE">Deutschland</SelectItem>
-                    <SelectItem value="ES">España</SelectItem>
-                    <SelectItem value="UK">United Kingdom</SelectItem>
-                    <SelectItem value="US">United States</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="licenseFile">{t.licensePhoto} *</Label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                  <div className="mt-4">
-                    <Input
-                      id="licenseFile"
-                      type="file"
-                      accept="image/*,.pdf"
-                      onChange={(e) => setLicenseFile(e.target.files?.[0] || null)}
-                      className="hidden"
-                    />
-                    <Label htmlFor="licenseFile" className="cursor-pointer">
-                      <Button type="button" variant="outline" asChild>
-                        <span>Choose file</span>
-                      </Button>
-                    </Label>
-                    {licenseFile && (
-                      <p className="mt-2 text-sm text-green-600">
-                        <Check className="inline h-4 w-4 mr-1" />
-                        {licenseFile.name}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="termsAccepted"
-                  checked={eligibility.termsAccepted}
-                  onCheckedChange={(checked) => setEligibility(prev => ({ ...prev, termsAccepted: !!checked }))}
-                />
-                <Label htmlFor="termsAccepted" className="text-sm">
-                  {t.termsAndConditions} *
-                </Label>
-              </div>
-            </CardContent>
-          </Card>
-        );
-
-      case 3:
-        return (
-          !bookingId ? (
+          <div className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="h-5 w-5" />
-                  {t.paymentProcessing}
+                  <FileText className="w-5 h-5" />
+                  {t.eligibilityCheck}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <p className="mb-4">Preparing secure payment...</p>
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label>{t.country}</Label>
+                  <Select 
+                    value={eligibility.countryIso2} 
+                    onValueChange={(value) => setEligibility({ ...eligibility, countryIso2: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((country) => (
+                        <SelectItem key={country.code} value={country.code}>
+                          {country.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="licenseUpload">{t.licensePhoto}</Label>
+                  <Input
+                    id="licenseUpload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="mt-1"
+                  />
+                  {licenseFile && (
+                    <p className="text-sm text-green-600 mt-1 flex items-center gap-1">
+                      <Check className="w-4 h-4" />
+                      {licenseFile.name}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="terms"
+                    checked={eligibility.termsAccepted}
+                    onCheckedChange={(checked) => 
+                      setEligibility({ ...eligibility, termsAccepted: checked as boolean })
+                    }
+                  />
+                  <Label htmlFor="terms">{t.termsAndConditions}</Label>
                 </div>
               </CardContent>
             </Card>
-          ) : (
-            <NexiHostedPayment
-              bookingData={{
-                bookingId: bookingId!,
-                bookingDetails: {
-                  vehicleName,
-                  vehicleType,
-                  vehicleImageUrl,
-                  pickupDate: pickupDate?.toISOString(),
-                  dropoffDate: dropoffDate?.toISOString(),
-                  pickupLocation,
-                  dropoffLocation: null,
-                  insurance,
-                  extras,
-                  basePrice
-                },
-                lineItems: (() => {
-                  const items: Array<{type:string;description:string;quantity:number;unitPrice:number;totalPrice:number;}> = [];
-                  const days = Math.ceil(((dropoffDate as Date).getTime() - (pickupDate as Date).getTime()) / (1000 * 60 * 60 * 24));
-                  items.push({ type: 'rental', description: `${vehicleName} - ${days} ${language === 'it' ? 'giorno' : 'day'}${days > 1 ? (language === 'it' ? 'i' : 's') : ''}`, quantity: 1, unitPrice: basePrice * days, totalPrice: basePrice * days });
-                  if (insurance !== 'none') {
-                    const insuranceCostPerDay = insurance === 'kasko' ? 15 : insurance === 'kasko-black' ? 25 : 35;
-                    items.push({ type: 'insurance', description: `${insurance} - ${days} ${language === 'it' ? 'giorno' : 'day'}${days > 1 ? (language === 'it' ? 'i' : 's') : ''}`, quantity: 1, unitPrice: insuranceCostPerDay, totalPrice: insuranceCostPerDay * days });
-                  }
-                  if (extras.fullCleaning) items.push({ type: 'extra', description: language === 'it' ? 'Pulizia completa' : 'Full cleaning', quantity: 1, unitPrice: 30, totalPrice: 30 });
-                  if (extras.secondDriver) { const cost = 10 * days; items.push({ type: 'extra', description: language === 'it' ? 'Secondo conducente' : 'Second driver', quantity: 1, unitPrice: 10, totalPrice: cost }); }
-                  if (extras.under25) { const cost = 10 * days; items.push({ type: 'extra', description: language === 'it' ? 'Conducente sotto 25 anni' : 'Under 25 driver', quantity: 1, unitPrice: 10, totalPrice: cost }); }
-                  if (extras.licenseUnder3) { const cost = 20 * days; items.push({ type: 'extra', description: language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years', quantity: 1, unitPrice: 20, totalPrice: cost }); }
-                  if (extras.outOfHours) items.push({ type: 'extra', description: language === 'it' ? 'Consegna fuori orario' : 'Out of hours delivery', quantity: 1, unitPrice: 50, totalPrice: 50 });
-                  return items;
-                })(),
-                totalAmount: calculateTotal(),
-                currency: 'EUR',
-                payerEmail: user?.email || guestInfo.email,
-                payerName: `${user?.user_metadata?.first_name || guestInfo.firstName} ${user?.user_metadata?.last_name || guestInfo.lastName}`
-              }}
-              onPaymentSuccess={(res) => {
-                toast({ title: 'Success', description: 'Payment completed successfully' });
-                navigate('/payment-success');
-              }}
-              onPaymentError={(msg) => {
-                toast({ title: 'Payment error', description: msg, variant: 'destructive' });
-              }}
-            />
-          )
+          </div>
+        );
+
+      case 3:
+        return bookingId ? (
+          <NexiHostedPayment 
+            bookingData={{
+              bookingId,
+              lineItems: [
+                {
+                  type: 'rental',
+                  description: `${vehicleName} rental`,
+                  quantity: 1,
+                  unitPrice: Math.round(calculateTotal() * 100),
+                  totalPrice: Math.round(calculateTotal() * 100)
+                }
+              ],
+              totalAmount: Math.round(calculateTotal() * 100),
+              currency: 'EUR',
+              payerEmail: user?.email || guestInfo.email,
+              payerName: user ? `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`.trim() : `${guestInfo.firstName} ${guestInfo.lastName}`,
+              bookingDetails: {
+                insurance,
+                extras,
+                ageBucket,
+                yearsLicensedBucket,
+                pickupDate: pickupDate?.toISOString(),
+                dropoffDate: dropoffDate?.toISOString(),
+                pickupLocation
+              },
+              language
+            }}
+            onPaymentSuccess={() => {
+              navigate('/payment-success');
+            }}
+            onPaymentError={(error) => {
+              console.error('Payment error:', error);
+              toast({
+                title: 'Payment Error',
+                description: 'Payment failed. Please try again.',
+                variant: 'destructive',
+              });
+            }}
+          />
+        ) : (
+          <div className="text-center py-8">
+            <p>Preparing payment...</p>
+          </div>
         );
 
       default:
@@ -1315,159 +843,133 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
-      <div className="container mx-auto px-4 max-w-6xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t.completeReservation}
-          </h1>
-          <p className="text-gray-600">{t.enterDetails}</p>
-        </div>
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">{t.completeReservation}</h1>
+        <p className="text-muted-foreground">{t.enterDetails}</p>
+      </div>
 
-        {/* Progress Indicator */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center space-x-4">
-            {[1, 2, 3].map((stepNumber) => (
-              <div key={stepNumber} className="flex items-center">
-                <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
-                  stepNumber <= step ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
-                }`}>
-                  {stepNumber < step ? <Check className="w-4 h-4" /> : stepNumber}
-                </div>
-                {stepNumber < 3 && (
-                  <div className={`w-16 h-1 ${stepNumber < step ? 'bg-blue-600' : 'bg-gray-300'}`} />
-                )}
-              </div>
-            ))}
+      {/* Progress indicator */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-2">
+          <span className={cn("text-sm", step >= 1 ? "text-primary font-medium" : "text-muted-foreground")}>
+            {t.bookingDetails}
+          </span>
+          <span className={cn("text-sm", step >= 2 ? "text-primary font-medium" : "text-muted-foreground")}>
+            {t.eligibilityCheck}
+          </span>
+          <span className={cn("text-sm", step >= 3 ? "text-primary font-medium" : "text-muted-foreground")}>
+            {t.paymentProcessing}
+          </span>
+        </div>
+        <div className="h-2 bg-muted rounded-full">
+          <div 
+            className="h-full bg-primary rounded-full transition-all duration-300 ease-in-out"
+            style={{ width: `${(step / 3) * 100}%` }}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main form */}
+        <div className="lg:col-span-2">
+          {renderStepContent()}
+          
+          {/* Navigation buttons */}
+          <div className="flex justify-between mt-8">
+            <Button
+              variant="outline"
+              onClick={handlePreviousStep}
+              disabled={step === 1}
+            >
+              {t.previousStep}
+            </Button>
+            
+            {step < 3 ? (
+              <Button 
+                onClick={handleNextStep}
+                disabled={!ageBucket || !yearsLicensedBucket}
+              >
+                {t.nextStep}
+              </Button>
+            ) : (
+              <Button 
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? t.processing : t.proceedToPayment}
+              </Button>
+            )}
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column - Forms */}
-          <div className="lg:col-span-2">
-            <form onSubmit={(e) => e.preventDefault()}>
-              {renderStepContent()}
-
-              {/* Navigation Buttons */}
-              <div className="flex justify-between mt-6">
-                <Button
-                  type="button"
-                  onClick={handlePreviousStep}
-                  disabled={step === 1}
-                  variant="outline"
-                >
-                  {t.previousStep}
-                </Button>
-                
-                {step < 3 ? (
-                  <Button
-                    type="button"
-                    onClick={handleNextStep}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    {t.nextStep}
-                  </Button>
-                ) : null}
+        {/* Booking summary */}
+        <div className="lg:col-span-1">
+          <Card className="sticky top-6">
+            <CardHeader>
+              <CardTitle>{t.bookingSummary}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex justify-between">
+                <span>{vehicleName}</span>
               </div>
-            </form>
-          </div>
+              
+              {pickupDate && dropoffDate && (
+                <>
+                  <div className="flex justify-between">
+                    <span>{t.period}:</span>
+                    <span>
+                      {Math.ceil((dropoffDate.getTime() - pickupDate.getTime()) / (1000 * 60 * 60 * 24))} {t.days}
+                    </span>
+                  </div>
+                  
+                  <div className="flex justify-between">
+                    <span>{t.baseRate}:</span>
+                    <span>€{basePrice * Math.ceil((dropoffDate.getTime() - pickupDate.getTime()) / (1000 * 60 * 60 * 24))}</span>
+                  </div>
 
-          {/* Right Column - Summary */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Car className="h-5 w-5" />
-                  {t.bookingSummary}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {vehicleImageUrl && (
-                  <img 
-                    src={vehicleImageUrl} 
-                    alt={vehicleName}
-                    className="w-full h-32 object-cover rounded-lg"
-                  />
-                )}
-                
-                <div>
-                  <h3 className="font-semibold text-lg">{vehicleName}</h3>
-                  <p className="text-gray-600">{vehicleType}</p>
-                </div>
-
-                {pickupDate && dropoffDate && (
-                  <div className="space-y-2 text-sm">
+                  {insurance && (
                     <div className="flex justify-between">
-                      <span>{t.period}:</span>
-                      <span className="font-medium">
-                        {Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))} {t.days}
-                      </span>
+                      <span>{t.insurance}:</span>
+                      <span>€{getEligibleInsuranceOptions().find(opt => opt.id === insurance)?.price || 0} × {Math.ceil((dropoffDate.getTime() - pickupDate.getTime()) / (1000 * 60 * 60 * 24))} days</span>
                     </div>
-                    
-                    <div className="flex justify-between">
-                      <span>{t.baseRate}:</span>
-                      <span>€{basePrice}/{t.day}</span>
+                  )}
+
+                  {(extras.fullCleaning || extras.secondDriver || extras.outOfHours) && (
+                    <div className="border-t pt-2">
+                      <h4 className="font-medium">{t.extras}:</h4>
+                      {extras.fullCleaning && (
+                        <div className="flex justify-between text-sm">
+                          <span>{t.fullCleaning}</span>
+                          <span>€30</span>
+                        </div>
+                      )}
+                      {extras.secondDriver && (
+                        <div className="flex justify-between text-sm">
+                          <span>{t.secondDriver}</span>
+                          <span>€{10 * Math.ceil((dropoffDate.getTime() - pickupDate.getTime()) / (1000 * 60 * 60 * 24))}</span>
+                        </div>
+                      )}
+                      {extras.outOfHours && (
+                        <div className="flex justify-between text-sm">
+                          <span>{t.outOfHours}</span>
+                          <span>€50</span>
+                        </div>
+                      )}
                     </div>
+                  )}
 
-                    {insurance && (
-                      <div className="flex justify-between">
-                        <span>Insurance:</span>
-                        <span>€{insurance === 'kasko' ? 15 : insurance === 'kasko-black' ? 25 : 35}/{t.day}</span>
-                      </div>
-                    )}
-
-                    {Object.entries(extras).some(([key, value]) => value) && (
-                      <div className="space-y-1">
-                        <p className="font-medium">{t.extras}:</p>
-                        {extras.fullCleaning && (
-                          <div className="flex justify-between text-xs">
-                            <span>{t.fullCleaning}</span>
-                            <span>€30</span>
-                          </div>
-                        )}
-                        {extras.secondDriver && (
-                          <div className="flex justify-between text-xs">
-                            <span>{t.secondDriver}</span>
-                            <span>€{10 * Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))}</span>
-                          </div>
-                        )}
-                        {extras.under25 && (
-                          <div className="flex justify-between text-xs">
-                            <span>Under 25</span>
-                            <span>€{10 * Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))}</span>
-                          </div>
-                        )}
-                        {extras.licenseUnder3 && (
-                          <div className="flex justify-between text-xs">
-                            <span>License &lt; 3 years</span>
-                            <span>€{20 * Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))}</span>
-                          </div>
-                        )}
-                        {extras.outOfHours && (
-                          <div className="flex justify-between text-xs">
-                            <span>{t.outOfHours}</span>
-                            <span>€50</span>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    <hr className="my-2" />
-                    
+                  <div className="border-t pt-2">
                     <div className="flex justify-between font-bold text-lg">
                       <span>{t.total}:</span>
                       <span>€{calculateTotal()}</span>
                     </div>
+                    <p className="text-xs text-muted-foreground mt-1">{t.allPricesIncludeVAT}</p>
                   </div>
-                )}
-
-                <div className="text-xs text-gray-500 space-y-1">
-                  <p>• {t.allPricesIncludeVAT}</p>
-                  <p>• {t.securePayment}</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
