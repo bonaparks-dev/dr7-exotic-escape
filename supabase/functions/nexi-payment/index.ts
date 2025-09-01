@@ -56,12 +56,17 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
     );
 
-    const authHeader = req.headers.get("Authorization")!;
-    const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
-    const user = data.user;
+    // Handle both authenticated users and guests
+    let user = null;
+    const authHeader = req.headers.get("Authorization");
     
-    if (!user) throw new Error("User not authenticated");
+    if (authHeader) {
+      const token = authHeader.replace("Bearer ", "");
+      const { data } = await supabaseClient.auth.getUser(token);
+      user = data.user;
+    }
+    
+    // Note: user can be null for guest bookings
 
     const { 
       bookingId, 
@@ -135,7 +140,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Create payment record with detailed breakdown
     await supabaseService.from("payments").insert({
       booking_id: bookingId,
-      user_id: user.id,
+      user_id: user?.id || null, // Handle null for guest bookings
       amount: amountCents,
       currency,
       nexi_transaction_id: transactionId,
