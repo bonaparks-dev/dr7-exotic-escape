@@ -7,7 +7,31 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.nexi-payment]
-verify_jwt = true
+verify_jwt = false
+
+[functions.nexi-payment-init]
+verify_jwt = false
+
+[functions.nexi-payment-process]
+verify_jwt = false
+
+[functions.nexi-payment-callback]
+verify_jwt = false
 
 [functions.nexi-callback]
+verify_jwt = false
+
+[functions.nexi-verify]
+verify_jwt = false
+
+[functions.nexi-resend-otp]
+verify_jwt = false
+
+[functions.nexi-refund]
+verify_jwt = false
+
+[functions.send-booking-confirmation]
+verify_jwt = false
+
+[functions.google-reviews]
 verify_jwt = false
