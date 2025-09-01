@@ -25,6 +25,7 @@ interface NexiHostedPaymentProps {
     payerEmail: string;
     payerName: string;
     bookingDetails: any;
+    language?: string;
   };
   onPaymentSuccess: (paymentResult: any) => void;
   onPaymentError: (error: string) => void;
@@ -53,6 +54,7 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
   
   const hostedFieldsRef = useRef<any>(null);
   const scriptLoadedRef = useRef(false);
+  const [hostedFailed, setHostedFailed] = useState(false);
 
   const translations = {
     en: {
@@ -182,12 +184,51 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
         await hostedFieldsRef.current.mount();
         setIsInitializing(false);
       } else {
+        setHostedFailed(true);
         throw new Error('Nexi XPayBuild not available');
       }
     } catch (error: any) {
       console.error('Payment initialization error:', error);
+      setHostedFailed(true);
       onPaymentError(error.message || 'Failed to initialize payment');
       setIsInitializing(false);
+    }
+  };
+
+  const openSecurePage = async () => {
+    try {
+      setIsProcessing(true);
+      const { data, error } = await supabase.functions.invoke('nexi-payment', {
+        body: {
+          bookingId: bookingData.bookingId,
+          bookingDetails: bookingData.bookingDetails,
+          lineItems: bookingData.lineItems,
+          totalAmount: bookingData.totalAmount,
+          currency: bookingData.currency,
+          language: bookingData.language || (language === 'it' ? 'it' : 'en'),
+          payerEmail: bookingData.payerEmail,
+          payerName: bookingData.payerName
+        }
+      });
+      if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || 'Failed to start payment');
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = data.paymentUrl;
+      Object.entries(data.paymentParams).forEach(([key, value]: any) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = String(value);
+        form.appendChild(input);
+      });
+      document.body.appendChild(form);
+      form.submit();
+    } catch (e: any) {
+      console.error('Fallback HPP error:', e);
+      onPaymentError(e.message || 'Payment initialization failed');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -257,6 +298,27 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
         </CardHeader>
         <CardContent className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (hostedFailed) {
+    return (
+      <Card className="max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <AlertCircle className="h-5 w-5 text-amber-500" />
+            {language === 'it' ? 'Pagina di pagamento sicura' : 'Secure payment page'}
+          </CardTitle>
+          <CardDescription>
+            {language === 'it' ? 'I campi carta non sono disponibili. Procedi sulla pagina sicura di Nexi.' : 'Card fields are unavailable. Continue on Nexi’s secure payment page.'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button onClick={openSecurePage} disabled={isProcessing} className="w-full" size="lg">
+            {isProcessing ? tr.processing : (language === 'it' ? 'Apri pagina Nexi' : 'Open Nexi page')}
+          </Button>
         </CardContent>
       </Card>
     );
@@ -342,24 +404,37 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
           </div>
 
           {/* Pay Button */}
-          <Button
-            onClick={handlePayment}
-            disabled={!cardValid || isProcessing || !billingName || !billingEmail}
-            className="w-full"
-            size="lg"
-          >
-            {isProcessing ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                {tr.processing}
-              </>
-            ) : (
-              <>
-                <CreditCard className="h-4 w-4 mr-2" />
-                {tr.payNow} - €{bookingData.totalAmount.toFixed(2)}
-              </>
-            )}
-          </Button>
+          <div className="space-y-3">
+            <Button
+              onClick={handlePayment}
+              disabled={!cardValid || isProcessing || !billingName || !billingEmail}
+              className="w-full"
+              size="lg"
+            >
+              {isProcessing ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  {tr.processing}
+                </>
+              ) : (
+                <>
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  {tr.payNow} - €{bookingData.totalAmount.toFixed(2)}
+                </>
+              )}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={openSecurePage}
+              disabled={isProcessing}
+              className="w-full"
+            >
+              {language === 'it' ? 'Oppure paga sulla pagina Nexi' : 'Or pay on Nexi secure page'}
+            </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              {language === 'it' ? 'Se i campi carta non sono interattivi, usa la pagina sicura di Nexi.' : 'If the card fields are not interactive, use the secure Nexi page.'}
+            </p>
+          </div>
         </CardContent>
       </Card>
 
