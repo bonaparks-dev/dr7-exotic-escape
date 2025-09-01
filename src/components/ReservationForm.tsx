@@ -962,7 +962,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                       <SelectItem value="dr7-office">
                         <div>
                           <div className="font-medium">DR7 Office</div>
-                          <div className="text-sm text-gray-500">Via Roma 123, 09124 Cagliari CA</div>
+                          <div className="text-sm text-gray-500">Viale Marconi, 229, 09131 Cagliari</div>
                         </div>
                       </SelectItem>
                     </SelectContent>
