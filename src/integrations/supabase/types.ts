@@ -61,10 +61,13 @@ export type Database = {
           country_iso2: string | null
           created_at: string
           currency: string | null
+          date_of_birth: string | null
           dropoff_date: string
           dropoff_location: string | null
+          google_event_id: string | null
           id: string
           invoice_url: string | null
+          license_file_url: string | null
           license_issue_date: string | null
           nexi_transaction_id: string | null
           payment_breakdown: Json | null
@@ -80,6 +83,7 @@ export type Database = {
           security_deposit_amount: number | null
           security_deposit_status: string | null
           status: string
+          terms_accepted: boolean | null
           updated_at: string
           user_id: string
           vehicle_image_url: string | null
@@ -93,10 +97,13 @@ export type Database = {
           country_iso2?: string | null
           created_at?: string
           currency?: string | null
+          date_of_birth?: string | null
           dropoff_date: string
           dropoff_location?: string | null
+          google_event_id?: string | null
           id?: string
           invoice_url?: string | null
+          license_file_url?: string | null
           license_issue_date?: string | null
           nexi_transaction_id?: string | null
           payment_breakdown?: Json | null
@@ -112,6 +119,7 @@ export type Database = {
           security_deposit_amount?: number | null
           security_deposit_status?: string | null
           status?: string
+          terms_accepted?: boolean | null
           updated_at?: string
           user_id: string
           vehicle_image_url?: string | null
@@ -125,10 +133,13 @@ export type Database = {
           country_iso2?: string | null
           created_at?: string
           currency?: string | null
+          date_of_birth?: string | null
           dropoff_date?: string
           dropoff_location?: string | null
+          google_event_id?: string | null
           id?: string
           invoice_url?: string | null
+          license_file_url?: string | null
           license_issue_date?: string | null
           nexi_transaction_id?: string | null
           payment_breakdown?: Json | null
@@ -144,6 +155,7 @@ export type Database = {
           security_deposit_amount?: number | null
           security_deposit_status?: string | null
           status?: string
+          terms_accepted?: boolean | null
           updated_at?: string
           user_id?: string
           vehicle_image_url?: string | null
@@ -373,6 +385,42 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_config: {
+        Row: {
+          created_at: string | null
+          enable_full_charge: boolean
+          enable_security_deposit_preauth: boolean
+          id: string
+          max_retry_attempts: number | null
+          nexi_environment: string | null
+          security_deposit_amount: number | null
+          updated_at: string | null
+          verification_timeout_minutes: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          enable_full_charge?: boolean
+          enable_security_deposit_preauth?: boolean
+          id?: string
+          max_retry_attempts?: number | null
+          nexi_environment?: string | null
+          security_deposit_amount?: number | null
+          updated_at?: string | null
+          verification_timeout_minutes?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          enable_full_charge?: boolean
+          enable_security_deposit_preauth?: boolean
+          id?: string
+          max_retry_attempts?: number | null
+          nexi_environment?: string | null
+          security_deposit_amount?: number | null
+          updated_at?: string | null
+          verification_timeout_minutes?: number | null
+        }
+        Relationships: []
+      }
       payment_configurations: {
         Row: {
           created_at: string
@@ -446,6 +494,7 @@ export type Database = {
           currency: string
           error_message: string | null
           gateway_fees: number | null
+          gateway_transaction_time: string | null
           id: string
           line_items: Json | null
           mac_verification_status: string | null
@@ -456,6 +505,9 @@ export type Database = {
           payer_name: string | null
           payment_method: string
           payment_status: string
+          refund_status: string | null
+          risk_flags: Json | null
+          three_ds_status: string | null
           user_id: string
         }
         Insert: {
@@ -467,6 +519,7 @@ export type Database = {
           currency?: string
           error_message?: string | null
           gateway_fees?: number | null
+          gateway_transaction_time?: string | null
           id?: string
           line_items?: Json | null
           mac_verification_status?: string | null
@@ -477,6 +530,9 @@ export type Database = {
           payer_name?: string | null
           payment_method?: string
           payment_status?: string
+          refund_status?: string | null
+          risk_flags?: Json | null
+          three_ds_status?: string | null
           user_id: string
         }
         Update: {
@@ -488,6 +544,7 @@ export type Database = {
           currency?: string
           error_message?: string | null
           gateway_fees?: number | null
+          gateway_transaction_time?: string | null
           id?: string
           line_items?: Json | null
           mac_verification_status?: string | null
@@ -498,6 +555,9 @@ export type Database = {
           payer_name?: string | null
           payment_method?: string
           payment_status?: string
+          refund_status?: string | null
+          risk_flags?: Json | null
+          three_ds_status?: string | null
           user_id?: string
         }
         Relationships: [
@@ -593,6 +653,72 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      refund_requests: {
+        Row: {
+          admin_notes: string | null
+          booking_id: string
+          created_at: string | null
+          currency: string
+          id: string
+          nexi_refund_id: string | null
+          nexi_response: Json | null
+          payment_id: string
+          processed_at: string | null
+          processed_by: string | null
+          reason: string
+          requested_amount: number
+          requested_by: string | null
+          status: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          booking_id: string
+          created_at?: string | null
+          currency?: string
+          id?: string
+          nexi_refund_id?: string | null
+          nexi_response?: Json | null
+          payment_id: string
+          processed_at?: string | null
+          processed_by?: string | null
+          reason: string
+          requested_amount: number
+          requested_by?: string | null
+          status?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          booking_id?: string
+          created_at?: string | null
+          currency?: string
+          id?: string
+          nexi_refund_id?: string | null
+          nexi_response?: Json | null
+          payment_id?: string
+          processed_at?: string | null
+          processed_by?: string | null
+          reason?: string
+          requested_amount?: number
+          requested_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "refund_requests_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "refund_requests_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       refunds: {
         Row: {
@@ -733,6 +859,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_booking_total: {
+        Args: {
+          base_price_cents: number
+          days: number
+          extras: Json
+          insurance_type: string
+        }
+        Returns: number
+      }
       generate_referral_code: {
         Args: Record<PropertyKey, never>
         Returns: string
