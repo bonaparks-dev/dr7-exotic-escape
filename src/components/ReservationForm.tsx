@@ -134,8 +134,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       extras: 'Extras',
       total: 'Total',
       allPricesIncludeVAT: 'All prices include VAT',
-      securePayment: 'Secure payment with Nexi',
-      freeCancellation: 'Free cancellation up to 24h before'
+      securePayment: 'Secure payment with Nexi'
     },
     it: {
       completeReservation: 'Completa la tua prenotazione',
@@ -185,8 +184,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       extras: 'Servizi aggiuntivi',
       total: 'Totale',
       allPricesIncludeVAT: 'Tutti i prezzi includono IVA',
-      securePayment: 'Pagamento sicuro con Nexi',
-      freeCancellation: 'Cancellazione gratuita fino a 24h prima'
+      securePayment: 'Pagamento sicuro con Nexi'
     }
   };
 
@@ -1295,7 +1293,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                 <div className="text-xs text-gray-500 space-y-1">
                   <p>• {t.allPricesIncludeVAT}</p>
                   <p>• {t.securePayment}</p>
-                  <p>• {t.freeCancellation}</p>
                 </div>
               </CardContent>
             </Card>
