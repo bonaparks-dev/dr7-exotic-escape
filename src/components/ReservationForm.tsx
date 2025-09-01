@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { NexiPaymentForm } from "./NexiPaymentForm";
 import { InlineEligibilitySelectors } from "./InlineEligibilitySelectors";
@@ -27,6 +28,7 @@ interface ReservationFormProps {
 
 export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: ReservationFormProps) => {
   const { language } = useLanguage();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
@@ -462,9 +464,9 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     setIsSubmitting(true);
 
     try {
-      // Get current user or create a guest user ID
-      const { data: { user } } = await supabase.auth.getUser();
+      // Get current user or create a guest user ID (for non-authenticated users)
       const userId = user?.id || `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
       
       let licenseFilePath = null;
       

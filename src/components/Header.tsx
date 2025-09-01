@@ -1,15 +1,30 @@
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Menu, X, Phone, ChevronDown } from "lucide-react";
+import { MessageCircle, Menu, X, Phone, ChevronDown, User, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { Link } from "react-router-dom";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
 
 export function Header() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+    setIsMenuOpen(false);
+  };
 
   return (
     <>
@@ -30,6 +45,33 @@ export function Header() {
           {/* Other buttons on right */}
           <div className="absolute top-6 right-4 flex items-center space-x-4">
             <LanguageToggle />
+            
+            {/* Auth buttons for desktop */}
+            <div className="hidden sm:flex items-center space-x-2">
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="luxury" size="sm">
+                      <User className="w-4 h-4 mr-2" />
+                      {user.email?.split('@')[0]}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      {language === 'it' ? 'Esci' : 'Sign Out'}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link to="/auth">
+                  <Button variant="luxury" size="sm">
+                    {language === 'it' ? 'Accedi' : 'Sign In'}
+                  </Button>
+                </Link>
+              )}
+            </div>
+            
             <Button
               variant="luxury"
               size="sm"
@@ -138,6 +180,30 @@ export function Header() {
              )}
            </div>
 
+           {/* Auth section for mobile */}
+           <div className="flex flex-col items-center space-y-2">
+             {user ? (
+               <>
+                 <div className="text-sm text-foreground">
+                   {user.email}
+                 </div>
+                 <Button 
+                   variant="luxury" 
+                   size="sm" 
+                   onClick={handleSignOut}
+                 >
+                   <LogOut className="h-4 w-4 mr-2" />
+                   {language === 'it' ? 'Esci' : 'Sign Out'}
+                 </Button>
+               </>
+             ) : (
+               <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                 <Button variant="luxury" size="sm">
+                   {language === 'it' ? 'Accedi' : 'Sign In'}
+                 </Button>
+               </Link>
+             )}
+           </div>
 
            <a
              href="https://wa.me/393457905205?text=Hello%20DR7%20Exotic,%20I%20would%20like%20more%20information%20about%20your%20luxury%20services."
