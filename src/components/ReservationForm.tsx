@@ -294,6 +294,64 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         });
         return;
       }
+
+      // Validate DOB and license date in step 1
+      if (!dateOfBirth) {
+        toast({
+          title: 'Error',
+          description: t.dateOfBirthRequired,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      if (!licenseIssueDate) {
+        toast({
+          title: 'Error',
+          description: t.licenseIssueDateRequired,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Validate age limits
+      const age = calculateAge(dateOfBirth);
+      if (age < 21) {
+        toast({
+          title: 'Error',
+          description: t.minimumAgeError,
+          variant: 'destructive',
+        });
+        return;
+      } else if (age > 75) {
+        toast({
+          title: 'Error',
+          description: t.maximumAgeError,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Validate license age
+      const licenseAge = calculateLicenseAge(licenseIssueDate);
+      if (licenseAge < 1) {
+        toast({
+          title: 'Error',
+          description: t.minimumLicenseAgeError,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Set age bucket based on calculated age - this enables insurance selection logic
+      let ageBucket = '';
+      if (age >= 21 && age <= 24) ageBucket = '21-24';
+      else if (age >= 25 && age <= 30) ageBucket = '25-30';
+      else if (age >= 31 && age <= 45) ageBucket = '31-45';
+      else if (age >= 46 && age <= 65) ageBucket = '46-65';
+      else if (age >= 66 && age <= 75) ageBucket = '66-75';
+
+      setEligibility(prev => ({ ...prev, ageBucket }));
       
       setStep(2);
     } else if (step === 2) {
@@ -631,6 +689,80 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
               </Card>
             )}
 
+            {/* Date of Birth and License Date Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="h-5 w-5" />
+                  Informazioni di idoneità
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label>{t.dateOfBirth} *</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !dateOfBirth && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {dateOfBirth ? format(dateOfBirth, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={dateOfBirth}
+                          onSelect={(date) => {
+                            setDateOfBirth(date);
+                            setEligibility(prev => ({ ...prev, dateOfBirth: date?.toISOString().split('T')[0] || '' }));
+                          }}
+                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div>
+                    <Label>{t.licenseIssueDate} *</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !licenseIssueDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {licenseIssueDate ? format(licenseIssueDate, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={licenseIssueDate}
+                          onSelect={(date) => {
+                            setLicenseIssueDate(date);
+                            setEligibility(prev => ({ ...prev, licenseIssueDate: date?.toISOString().split('T')[0] || '' }));
+                          }}
+                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Booking Details Card */}
             <Card>
                 <CardHeader>
@@ -808,69 +940,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label>{t.dateOfBirth} *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !dateOfBirth && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {dateOfBirth ? format(dateOfBirth, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={dateOfBirth}
-                        onSelect={(date) => {
-                          setDateOfBirth(date);
-                          setEligibility(prev => ({ ...prev, dateOfBirth: date?.toISOString().split('T')[0] || '' }));
-                        }}
-                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                        initialFocus
-                        className="pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div>
-                  <Label>{t.licenseIssueDate} *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !licenseIssueDate && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {licenseIssueDate ? format(licenseIssueDate, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={licenseIssueDate}
-                        onSelect={(date) => {
-                          setLicenseIssueDate(date);
-                          setEligibility(prev => ({ ...prev, licenseIssueDate: date?.toISOString().split('T')[0] || '' }));
-                        }}
-                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                        initialFocus
-                        className="pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
-
               <div>
                 <Label htmlFor="country">{t.country} *</Label>
                 <Select value={eligibility.countryIso2} onValueChange={(value) => setEligibility(prev => ({ ...prev, countryIso2: value }))}>
