@@ -45,7 +45,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   const [dropoffLocation, setDropoffLocation] = useState('');
   const [insurance, setInsurance] = useState('kasko');
   const [extras, setExtras] = useState({
-    fullCleaning: false,
+    fullCleaning: true, // Made mandatory
     secondDriver: false,
     under25: false,
     licenseUnder3: false,
@@ -269,7 +269,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       const date = new Date(parseInt(dobYear), parseInt(dobMonth) - 1, parseInt(dobDay));
       setDateOfBirth(date);
       setEligibility(prev => ({ ...prev, dateOfBirth: date.toISOString().split('T')[0] }));
-      updateInsuranceSelection(date, licenseIssueDate);
+      // Trigger insurance update after setting the date
+      setTimeout(() => updateInsuranceSelection(date, licenseIssueDate), 0);
     }
   };
 
@@ -278,7 +279,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       const date = new Date(parseInt(licenseYear), parseInt(licenseMonth) - 1, parseInt(licenseDay));
       setLicenseIssueDate(date);
       setEligibility(prev => ({ ...prev, licenseIssueDate: date.toISOString().split('T')[0] }));
-      updateInsuranceSelection(dateOfBirth, date);
+      // Trigger insurance update after setting the date
+      setTimeout(() => updateInsuranceSelection(dateOfBirth, date), 0);
     }
   };
 
@@ -1026,19 +1028,22 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                     { key: 'under25', label: t.under25Surcharge, price: `€10/${t.day}` },
                     { key: 'licenseUnder3', label: t.licenseUnder3, price: `€20/${t.day}` },
                     { key: 'outOfHours', label: t.outOfHours, price: '€50' }
-                  ].map((extra) => (
-                    <div key={extra.key} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id={extra.key}
-                          checked={extras[extra.key as keyof typeof extras]}
-                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, [extra.key]: !!checked }))}
-                        />
-                        <Label htmlFor={extra.key}>{extra.label}</Label>
-                      </div>
-                      <span className="font-semibold">{extra.price}</span>
-                    </div>
-                  ))}
+                   ].map((extra) => (
+                     <div key={extra.key} className="flex items-center justify-between">
+                       <div className="flex items-center space-x-2">
+                         <Checkbox
+                           id={extra.key}
+                           checked={extras[extra.key as keyof typeof extras]}
+                           onCheckedChange={(checked) => setExtras(prev => ({ ...prev, [extra.key]: !!checked }))}
+                           disabled={extra.key === 'fullCleaning'} // Make fullCleaning mandatory and disabled
+                         />
+                         <Label htmlFor={extra.key} className={extra.key === 'fullCleaning' ? 'text-muted-foreground' : ''}>
+                           {extra.label} {extra.key === 'fullCleaning' && '(Obbligatorio)'}
+                         </Label>
+                       </div>
+                       <span className="font-semibold">{extra.price}</span>
+                     </div>
+                   ))}
                 </div>
               </CardContent>
             </Card>
