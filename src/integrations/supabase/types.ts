@@ -85,7 +85,7 @@ export type Database = {
           status: string
           terms_accepted: boolean | null
           updated_at: string
-          user_id: string
+          user_id: string | null
           vehicle_image_url: string | null
           vehicle_name: string
           vehicle_type: string
@@ -121,7 +121,7 @@ export type Database = {
           status?: string
           terms_accepted?: boolean | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
           vehicle_image_url?: string | null
           vehicle_name: string
           vehicle_type: string
@@ -157,7 +157,7 @@ export type Database = {
           status?: string
           terms_accepted?: boolean | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
           vehicle_image_url?: string | null
           vehicle_name?: string
           vehicle_type?: string
