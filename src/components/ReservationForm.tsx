@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, User, Phone, Mail, CreditCard, Shield, Car, Clock } from 'lucide-react';
+import { Calendar, MapPin, User, Phone, Mail, CreditCard, Shield, Car, Clock, Upload, FileText, AlertCircle, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
@@ -20,38 +19,226 @@ interface ReservationFormProps {
   basePrice: number;
 }
 
+interface EligibilityData {
+  dateOfBirth: string;
+  licenseIssueDate: string;
+  ageBucket: string;
+  countryIso2: string;
+  licenseFileUrl?: string;
+  termsAccepted: boolean;
+}
+
 const ReservationForm: React.FC<ReservationFormProps> = ({
   vehicleType,
   vehicleName,
   vehicleImageUrl,
   basePrice
 }) => {
+  // Form states
   const [pickupDate, setPickupDate] = useState('');
   const [dropoffDate, setDropoffDate] = useState('');
-  const [pickupLocation, setPickupLocation] = useState('');
+  const [pickupLocation, setPickupLocation] = useState('Piazza del Colosseo, 1, Roma');
   const [dropoffLocation, setDropoffLocation] = useState('');
-  const [licenseNumber, setLicenseNumber] = useState('');
-  const [licenseCountry, setLicenseCountry] = useState('');
-  const [licenseIssueDate, setLicenseIssueDate] = useState('');
-  const [licenseFile, setLicenseFile] = useState<File | null>(null);
-  const [selectedInsurance, setSelectedInsurance] = useState('');
+  const [insurance, setInsurance] = useState('kasko');
   const [extras, setExtras] = useState({
     fullCleaning: false,
     secondDriver: false,
     under25: false,
     licenseUnder3: false,
-    outOfHours: false
+    outOfHours: false,
   });
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { user } = useAuth();
+  // Eligibility states
+  const [eligibility, setEligibility] = useState<EligibilityData>({
+    dateOfBirth: '',
+    licenseIssueDate: '',
+    ageBucket: '',
+    countryIso2: '',
+    termsAccepted: false,
+  });
+
+  // Guest info for non-authenticated users
+  const [guestInfo, setGuestInfo] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [step, setStep] = useState(1); // 1: Details, 2: Eligibility, 3: Payment
+  const [licenseFile, setLicenseFile] = useState<File | null>(null);
+  
   const { toast } = useToast();
   const { language } = useLanguage();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
+  const translations = {
+    en: {
+      completeReservation: 'Complete Your Reservation',
+      enterDetails: 'Enter your details to finalize your booking',
+      personalInfo: 'Personal Information',
+      bookingDetails: 'Booking Details',
+      eligibilityCheck: 'Eligibility Check',
+      paymentProcessing: 'Payment Processing',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      email: 'Email',
+      phone: 'Phone',
+      pickupDate: 'Pickup Date',
+      dropoffDate: 'Drop-off Date',
+      pickupLocation: 'Pickup Location',
+      dropoffLocation: 'Drop-off Location',
+      dateOfBirth: 'Date of Birth',
+      licenseIssueDate: 'License Issue Date',
+      country: 'Country',
+      licensePhoto: 'Upload License Photo',
+      termsAndConditions: 'I accept the Terms and Conditions',
+      insurance: 'Insurance',
+      additionalServices: 'Additional Services',
+      bookingSummary: 'Booking Summary',
+      proceedToPayment: 'Proceed to Payment',
+      processing: 'Processing...',
+      nextStep: 'Next Step',
+      previousStep: 'Previous Step',
+      validateEligibility: 'Validate Eligibility',
+      dateOfBirthRequired: 'Date of birth is required',
+      minimumAgeError: 'Minimum age is 21 years',
+      maximumAgeError: 'Maximum age is 75 years',
+      licenseIssueDateRequired: 'License issue date is required',
+      minimumLicenseAgeError: 'License must be at least 1 year old',
+      countryRequired: 'Country is required',
+      licensePhotoRequired: 'License photo is required',
+      termsAcceptanceRequired: 'You must accept the terms and conditions',
+      eligibilityValidated: 'Eligibility validated successfully',
+      fullCleaning: 'Full cleaning',
+      secondDriver: 'Second driver',
+      under25Surcharge: 'Under 25 surcharge',
+      licenseUnder3: 'License under 3 years',
+      outOfHours: 'Out of hours delivery',
+      baseRate: 'Base rate',
+      period: 'Period',
+      days: 'days',
+      day: 'day',
+      extras: 'Extras',
+      total: 'Total',
+      allPricesIncludeVAT: 'All prices include VAT',
+      securePayment: 'Secure payment with Nexi',
+      freeCancellation: 'Free cancellation up to 24h before'
+    },
+    it: {
+      completeReservation: 'Completa la tua prenotazione',
+      enterDetails: 'Inserisci i tuoi dati per finalizzare la prenotazione',
+      personalInfo: 'Informazioni personali',
+      bookingDetails: 'Dettagli prenotazione',
+      eligibilityCheck: 'Verifica idoneità',
+      paymentProcessing: 'Elaborazione pagamento',
+      firstName: 'Nome',
+      lastName: 'Cognome',
+      email: 'Email',
+      phone: 'Telefono',
+      pickupDate: 'Data ritiro',
+      dropoffDate: 'Data consegna',
+      pickupLocation: 'Luogo di ritiro',
+      dropoffLocation: 'Luogo di consegna',
+      dateOfBirth: 'Data di nascita',
+      licenseIssueDate: 'Data rilascio patente',
+      country: 'Paese',
+      licensePhoto: 'Carica foto patente',
+      termsAndConditions: 'Accetto i Termini e Condizioni',
+      insurance: 'Assicurazione',
+      additionalServices: 'Servizi aggiuntivi',
+      bookingSummary: 'Riepilogo prenotazione',
+      proceedToPayment: 'Procedi al pagamento',
+      processing: 'Elaborazione...',
+      nextStep: 'Prossimo step',
+      previousStep: 'Step precedente',
+      validateEligibility: 'Valida idoneità',
+      dateOfBirthRequired: 'La data di nascita è obbligatoria',
+      minimumAgeError: 'Età minima 21 anni',
+      maximumAgeError: 'Età massima 75 anni',
+      licenseIssueDateRequired: 'La data di rilascio patente è obbligatoria',
+      minimumLicenseAgeError: 'La patente deve essere vecchia almeno 1 anno',
+      countryRequired: 'Il paese è obbligatorio',
+      licensePhotoRequired: 'La foto della patente è obbligatoria',
+      termsAcceptanceRequired: 'Devi accettare i termini e condizioni',
+      eligibilityValidated: 'Idoneità validata con successo',
+      fullCleaning: 'Pulizia completa',
+      secondDriver: 'Secondo guidatore',
+      under25Surcharge: 'Supplemento under 25',
+      licenseUnder3: 'Patente da meno di 3 anni',
+      outOfHours: 'Consegna fuori orario',
+      baseRate: 'Tariffa base',
+      period: 'Periodo',
+      days: 'giorni',
+      day: 'giorno',
+      extras: 'Servizi aggiuntivi',
+      total: 'Totale',
+      allPricesIncludeVAT: 'Tutti i prezzi includono IVA',
+      securePayment: 'Pagamento sicuro con Nexi',
+      freeCancellation: 'Cancellazione gratuita fino a 24h prima'
+    }
+  };
+
+  const t = translations[language];
+
+  // Validation functions
+  const validateEligibility = (): string[] => {
+    const errors: string[] = [];
+    
+    if (!eligibility.dateOfBirth) {
+      errors.push(t.dateOfBirthRequired);
+    } else {
+      const age = calculateAge(new Date(eligibility.dateOfBirth));
+      if (age < 21) {
+        errors.push(t.minimumAgeError);
+      } else if (age > 75) {
+        errors.push(t.maximumAgeError);
+      }
+    }
+    
+    if (!eligibility.licenseIssueDate) {
+      errors.push(t.licenseIssueDateRequired);
+    } else {
+      const licenseAge = calculateLicenseAge(new Date(eligibility.licenseIssueDate));
+      if (licenseAge < 1) {
+        errors.push(t.minimumLicenseAgeError);
+      }
+    }
+    
+    if (!eligibility.countryIso2) {
+      errors.push(t.countryRequired);
+    }
+    
+    if (!licenseFile) {
+      errors.push(t.licensePhotoRequired);
+    }
+    
+    if (!eligibility.termsAccepted) {
+      errors.push(t.termsAcceptanceRequired);
+    }
+    
+    return errors;
+  };
+
+  const calculateAge = (birthDate: Date): number => {
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      return age - 1;
+    }
+    
+    return age;
+  };
+
+  const calculateLicenseAge = (issueDate: Date): number => {
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - issueDate.getTime());
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 365)); // Convert to years
+  };
 
   const calculateTotal = () => {
     if (!pickupDate || !dropoffDate) return 0;
@@ -60,16 +247,18 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
     let total = basePrice * days;
 
+    // Add insurance costs
     const insurancePrices: { [key: string]: number } = {
       'kasko': 15,
       'kasko-black': 25,
       'kasko-signature': 35
     };
 
-    if (selectedInsurance && insurancePrices[selectedInsurance]) {
-      total += insurancePrices[selectedInsurance] * days;
+    if (insurance && insurancePrices[insurance]) {
+      total += insurancePrices[insurance] * days;
     }
 
+    // Add extras
     if (extras.fullCleaning) total += 30;
     if (extras.secondDriver) total += 10 * days;
     if (extras.under25) total += 10 * days;
@@ -79,24 +268,62 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     return total;
   };
 
-  const handleDateChange = (type: 'pickup' | 'dropoff', value: string) => {
-    if (type === 'pickup') {
-      setPickupDate(value);
-      if (dropoffDate && new Date(value) > new Date(dropoffDate)) {
-        setDropoffDate(value);
+  const handleNextStep = () => {
+    if (step === 1) {
+      // Validate step 1 fields
+      if (!pickupDate || !dropoffDate || !pickupLocation) {
+        toast({
+          title: 'Error',
+          description: 'Please fill in all required fields',
+          variant: 'destructive',
+        });
+        return;
       }
-    } else {
-      setDropoffDate(value);
+      
+      if (!user && (!guestInfo.firstName || !guestInfo.lastName || !guestInfo.email || !guestInfo.phone)) {
+        toast({
+          title: 'Error',
+          description: 'Please fill in all personal information',
+          variant: 'destructive',
+        });
+        return;
+      }
+      
+      setStep(2);
+    } else if (step === 2) {
+      // Validate eligibility
+      const errors = validateEligibility();
+      if (errors.length > 0) {
+        toast({
+          title: 'Validation Error',
+          description: errors[0],
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Set age bucket based on calculated age
+      const age = calculateAge(new Date(eligibility.dateOfBirth));
+      let ageBucket = '';
+      if (age >= 21 && age <= 24) ageBucket = '21-24';
+      else if (age >= 25 && age <= 30) ageBucket = '25-30';
+      else if (age >= 31 && age <= 45) ageBucket = '31-45';
+      else if (age >= 46 && age <= 65) ageBucket = '46-65';
+      else if (age >= 66 && age <= 75) ageBucket = '66-75';
+
+      setEligibility(prev => ({ ...prev, ageBucket }));
+
+      toast({
+        title: 'Success',
+        description: t.eligibilityValidated,
+      });
+      
+      setStep(3);
     }
   };
 
-  const getInsurancePrice = (insurance: string) => {
-    const prices: { [key: string]: number } = {
-      'kasko': 15,
-      'kasko-black': 25,
-      'kasko-signature': 35
-    };
-    return prices[insurance] || 0;
+  const handlePreviousStep = () => {
+    setStep(prev => Math.max(1, prev - 1));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -104,12 +331,11 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      // Support both authenticated users and guests
-      const userId = user?.id || null; // Use null for guests instead of generating a string
+      const userId = user?.id || null;
       
       let licenseFilePath = null;
       
-      // Only upload license if file is provided
+      // Upload license file
       if (licenseFile) {
         const fileExt = licenseFile.name.split('.').pop();
         const fileName = `${userId || 'guest'}_${Date.now()}.${fileExt}`;
@@ -121,10 +347,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         if (uploadError) {
           console.error('License upload error:', uploadError);
           toast({
-            title: language === 'it' ? 'Errore caricamento' : 'Upload error',
-            description: language === 'it' 
-              ? 'Errore nel caricamento della patente'
-              : 'Failed to upload driver license',
+            title: 'Upload Error',
+            description: 'Failed to upload driver license',
             variant: 'destructive',
           });
           setIsSubmitting(false);
@@ -134,9 +358,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         licenseFilePath = fileName;
       }
 
-      // Create booking record
+      // Create booking record with all required eligibility fields
       const bookingData = {
-        user_id: userId, // This will be null for guests
+        user_id: userId,
         vehicle_type: vehicleType,
         vehicle_name: vehicleName,
         vehicle_image_url: vehicleImageUrl,
@@ -148,34 +372,32 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         currency: 'EUR',
         status: 'pending',
         payment_status: 'pending',
-        license_issue_date: licenseIssueDate,
+        license_issue_date: eligibility.licenseIssueDate,
+        license_file_url: licenseFilePath,
+        date_of_birth: eligibility.dateOfBirth,
+        age_bucket: eligibility.ageBucket,
+        country_iso2: eligibility.countryIso2,
+        terms_accepted: eligibility.termsAccepted,
         booking_details: {
           basePrice: basePrice,
-          insurance: selectedInsurance,
-          extras: {
-            fullCleaning: extras.fullCleaning,
-            secondDriver: extras.secondDriver,
-            under25: extras.under25,
-            licenseUnder3: extras.licenseUnder3,
-            outOfHours: extras.outOfHours
-          },
-          guestInfo: !userId ? {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            phone: phone,
-            licenseNumber: licenseNumber,
-            licenseCountry: licenseCountry,
-            licenseFilePath: licenseFilePath
-          } : null,
+          insurance: insurance,
+          extras: extras,
+          guestInfo: !userId ? guestInfo : null,
           pickupDate: pickupDate,
           dropoffDate: dropoffDate,
           pickupLocation: pickupLocation,
           dropoffLocation: dropoffLocation || pickupLocation,
           vehicleName: vehicleName,
           vehicleType: vehicleType,
-          vehicleImageUrl: vehicleImageUrl
-        }
+          vehicleImageUrl: vehicleImageUrl,
+          eligibility: {
+            dateOfBirth: eligibility.dateOfBirth,
+            licenseIssueDate: eligibility.licenseIssueDate,
+            ageBucket: eligibility.ageBucket,
+            countryIso2: eligibility.countryIso2,
+            termsAccepted: eligibility.termsAccepted
+          }
+        } as any
       };
 
       const { data: booking, error: bookingError } = await supabase
@@ -187,7 +409,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       if (bookingError) {
         console.error('Booking creation error:', bookingError);
         toast({
-          title: language === 'it' ? 'Errore prenotazione' : 'Booking error',
+          title: 'Booking Error',
           description: bookingError.message,
           variant: 'destructive',
         });
@@ -202,7 +424,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       // Base rental cost
       lineItems.push({
         type: 'rental',
-        description: `${vehicleName} - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+        description: `${vehicleName} - ${days} ${days === 1 ? t.day : t.days}`,
         quantity: days,
         unitPrice: basePrice,
         totalPrice: basePrice * days
@@ -215,22 +437,22 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         'kasko-signature': 35
       };
 
-      if (insurancePrices[selectedInsurance as keyof typeof insurancePrices]) {
-        const dailyInsurance = insurancePrices[selectedInsurance as keyof typeof insurancePrices];
+      if (insurancePrices[insurance as keyof typeof insurancePrices]) {
+        const dailyInsurance = insurancePrices[insurance as keyof typeof insurancePrices];
         lineItems.push({
           type: 'insurance',
-          description: `${selectedInsurance.charAt(0).toUpperCase() + selectedInsurance.slice(1)} Insurance - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+          description: `${insurance.charAt(0).toUpperCase() + insurance.slice(1)} Insurance - ${days} ${days === 1 ? t.day : t.days}`,
           quantity: days,
           unitPrice: dailyInsurance,
           totalPrice: dailyInsurance * days
         });
       }
 
-      // Extras
+      // Add extras to line items
       if (extras.fullCleaning) {
         lineItems.push({
           type: 'extra',
-          description: language === 'it' ? 'Pulizia completa' : 'Full cleaning',
+          description: t.fullCleaning,
           quantity: 1,
           unitPrice: 30,
           totalPrice: 30
@@ -240,7 +462,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       if (extras.secondDriver) {
         lineItems.push({
           type: 'extra',
-          description: `${language === 'it' ? 'Secondo guidatore' : 'Second driver'} - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+          description: `${t.secondDriver} - ${days} ${days === 1 ? t.day : t.days}`,
           quantity: days,
           unitPrice: 10,
           totalPrice: 10 * days
@@ -250,7 +472,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       if (extras.under25) {
         lineItems.push({
           type: 'extra',
-          description: `${language === 'it' ? 'Supplemento under 25' : 'Under 25 surcharge'} - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+          description: `${t.under25Surcharge} - ${days} ${days === 1 ? t.day : t.days}`,
           quantity: days,
           unitPrice: 10,
           totalPrice: 10 * days
@@ -260,7 +482,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       if (extras.licenseUnder3) {
         lineItems.push({
           type: 'extra',
-          description: `${language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years'} - ${days} ${language === 'it' ? (days === 1 ? 'giorno' : 'giorni') : (days === 1 ? 'day' : 'days')}`,
+          description: `${t.licenseUnder3} - ${days} ${days === 1 ? t.day : t.days}`,
           quantity: days,
           unitPrice: 20,
           totalPrice: 20 * days
@@ -270,7 +492,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       if (extras.outOfHours) {
         lineItems.push({
           type: 'extra',
-          description: language === 'it' ? 'Consegna fuori orario' : 'Out of hours delivery',
+          description: t.outOfHours,
           quantity: 1,
           unitPrice: 50,
           totalPrice: 50
@@ -287,7 +509,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             dropoffDate: dropoffDate,
             pickupLocation: pickupLocation,
             dropoffLocation: dropoffLocation || pickupLocation,
-            insurance: selectedInsurance,
+            insurance: insurance,
             extras: extras,
             basePrice: basePrice
           },
@@ -295,15 +517,15 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           totalAmount: calculateTotal(),
           currency: 'EUR',
           language: language,
-          payerEmail: user?.email || email,
-          payerName: user ? `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`.trim() || user.email : `${firstName} ${lastName}`
+          payerEmail: user?.email || guestInfo.email,
+          payerName: user ? `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`.trim() || user.email : `${guestInfo.firstName} ${guestInfo.lastName}`
         }
       });
 
       if (paymentError) {
         console.error('Payment initiation error:', paymentError);
         toast({
-          title: language === 'it' ? 'Errore pagamento' : 'Payment error',
+          title: 'Payment Error',
           description: paymentError.message,
           variant: 'destructive',
         });
@@ -335,8 +557,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     } catch (error: any) {
       console.error('Submission error:', error);
       toast({
-        title: language === 'it' ? 'Errore' : 'Error',
-        description: error.message || (language === 'it' ? 'Si è verificato un errore durante la prenotazione' : 'An error occurred during booking'),
+        title: 'Error',
+        description: error.message || 'An error occurred during booking',
         variant: 'destructive',
       });
     } finally {
@@ -344,382 +566,380 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {language === 'it' ? 'Completa la tua prenotazione' : 'Complete Your Reservation'}
-          </h1>
-          <p className="text-gray-600">
-            {language === 'it' 
-              ? 'Inserisci i tuoi dati per finalizzare la prenotazione' 
-              : 'Enter your details to finalize your booking'
-            }
-          </p>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column - Forms */}
-          <div className="lg:col-span-2 space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Show personal info form only for guests */}
-              {!user && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <User className="h-5 w-5" />
-                      {language === 'it' ? 'Informazioni personali' : 'Personal Information'}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="firstName">{language === 'it' ? 'Nome' : 'First Name'} *</Label>
-                        <Input
-                          id="firstName"
-                          value={firstName}
-                          onChange={(e) => setFirstName(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="lastName">{language === 'it' ? 'Cognome' : 'Last Name'} *</Label>
-                        <Input
-                          id="lastName"
-                          value={lastName}
-                          onChange={(e) => setLastName(e.target.value)}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="email">{language === 'it' ? 'Email' : 'Email'} *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="phone">{language === 'it' ? 'Telefono' : 'Phone'} *</Label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Booking Details Card */}
+  const renderStepContent = () => {
+    switch (step) {
+      case 1:
+        return (
+          <div className="space-y-6">
+            {/* Show personal info form only for guests */}
+            {!user && (
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5" />
-                    {language === 'it' ? 'Dettagli prenotazione' : 'Booking Details'}
+                    <User className="h-5 w-5" />
+                    {t.personalInfo}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="pickupDate">{language === 'it' ? 'Data ritiro' : 'Pickup Date'} *</Label>
+                      <Label htmlFor="firstName">{t.firstName} *</Label>
                       <Input
-                        id="pickupDate"
-                        type="date"
-                        value={pickupDate}
-                        onChange={(e) => handleDateChange('pickup', e.target.value)}
-                        min={new Date().toISOString().split('T')[0]}
+                        id="firstName"
+                        value={guestInfo.firstName}
+                        onChange={(e) => setGuestInfo(prev => ({ ...prev, firstName: e.target.value }))}
                         required
                       />
                     </div>
                     <div>
-                      <Label htmlFor="dropoffDate">{language === 'it' ? 'Data consegna' : 'Drop-off Date'} *</Label>
+                      <Label htmlFor="lastName">{t.lastName} *</Label>
                       <Input
-                        id="dropoffDate"
-                        type="date"
-                        value={dropoffDate}
-                        onChange={(e) => handleDateChange('dropoff', e.target.value)}
-                        min={pickupDate || new Date().toISOString().split('T')[0]}
+                        id="lastName"
+                        value={guestInfo.lastName}
+                        onChange={(e) => setGuestInfo(prev => ({ ...prev, lastName: e.target.value }))}
                         required
                       />
                     </div>
                   </div>
-                  
                   <div>
-                    <Label htmlFor="pickupLocation">{language === 'it' ? 'Luogo di ritiro' : 'Pickup Location'} *</Label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="pickupLocation"
-                        value={pickupLocation}
-                        onChange={(e) => setPickupLocation(e.target.value)}
-                        className="pl-10"
-                        placeholder={language === 'it' ? 'Inserisci indirizzo di ritiro' : 'Enter pickup address'}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="dropoffLocation">{language === 'it' ? 'Luogo di consegna' : 'Drop-off Location'}</Label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="dropoffLocation"
-                        value={dropoffLocation}
-                        onChange={(e) => setDropoffLocation(e.target.value)}
-                        className="pl-10"
-                        placeholder={language === 'it' ? 'Stesso del ritiro se vuoto' : 'Same as pickup if empty'}
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Driver License Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <CreditCard className="h-5 w-5" />
-                    {language === 'it' ? 'Patente di guida' : 'Driver License'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="licenseNumber">{language === 'it' ? 'Numero patente' : 'License Number'} *</Label>
-                      <Input
-                        id="licenseNumber"
-                        value={licenseNumber}
-                        onChange={(e) => setLicenseNumber(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="licenseCountry">{language === 'it' ? 'Paese di rilascio' : 'Country of Issue'} *</Label>
-                      <Select value={licenseCountry} onValueChange={setLicenseCountry} required>
-                        <SelectTrigger>
-                          <SelectValue placeholder={language === 'it' ? 'Seleziona paese' : 'Select country'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="IT">Italia</SelectItem>
-                          <SelectItem value="FR">France</SelectItem>
-                          <SelectItem value="DE">Deutschland</SelectItem>
-                          <SelectItem value="ES">España</SelectItem>
-                          <SelectItem value="UK">United Kingdom</SelectItem>
-                          <SelectItem value="US">United States</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="licenseIssueDate">{language === 'it' ? 'Data di rilascio' : 'Issue Date'} *</Label>
+                    <Label htmlFor="email">{t.email} *</Label>
                     <Input
-                      id="licenseIssueDate"
-                      type="date"
-                      value={licenseIssueDate}
-                      onChange={(e) => setLicenseIssueDate(e.target.value)}
-                      max={new Date().toISOString().split('T')[0]}
+                      id="email"
+                      type="email"
+                      value={guestInfo.email}
+                      onChange={(e) => setGuestInfo(prev => ({ ...prev, email: e.target.value }))}
                       required
                     />
                   </div>
-
                   <div>
-                    <Label htmlFor="licenseFile">{language === 'it' ? 'Carica patente (fronte/retro)' : 'Upload License (front/back)'}</Label>
+                    <Label htmlFor="phone">{t.phone} *</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={guestInfo.phone}
+                      onChange={(e) => setGuestInfo(prev => ({ ...prev, phone: e.target.value }))}
+                      required
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Booking Details Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  {t.bookingDetails}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="pickupDate">{t.pickupDate} *</Label>
+                    <Input
+                      id="pickupDate"
+                      type="date"
+                      value={pickupDate}
+                      onChange={(e) => setPickupDate(e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="dropoffDate">{t.dropoffDate} *</Label>
+                    <Input
+                      id="dropoffDate"
+                      type="date"
+                      value={dropoffDate}
+                      onChange={(e) => setDropoffDate(e.target.value)}
+                      min={pickupDate || new Date().toISOString().split('T')[0]}
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="pickupLocation">{t.pickupLocation} *</Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="pickupLocation"
+                      value={pickupLocation}
+                      onChange={(e) => setPickupLocation(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="dropoffLocation">{t.dropoffLocation}</Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="dropoffLocation"
+                      value={dropoffLocation}
+                      onChange={(e) => setDropoffLocation(e.target.value)}
+                      className="pl-10"
+                      placeholder="Same as pickup if empty"
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Insurance and Extras */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  {t.insurance}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  {[
+                    { id: 'kasko', name: 'Kasko - Basic protection', price: 15 },
+                    { id: 'kasko-black', name: 'Kasko Black - Advanced protection', price: 25 },
+                    { id: 'kasko-signature', name: 'Kasko Signature - Complete protection', price: 35 }
+                  ].map((option) => (
+                    <div key={option.id} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id={option.id}
+                        name="insurance"
+                        value={option.id}
+                        checked={insurance === option.id}
+                        onChange={(e) => setInsurance(e.target.value)}
+                        className="w-4 h-4"
+                      />
+                      <Label htmlFor={option.id} className="flex-1 cursor-pointer">
+                        <div className="flex justify-between">
+                          <span>{option.name}</span>
+                          <span className="font-semibold">€{option.price}/{t.day}</span>
+                        </div>
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Car className="h-5 w-5" />
+                  {t.additionalServices}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  {[
+                    { key: 'fullCleaning', label: t.fullCleaning, price: '€30' },
+                    { key: 'secondDriver', label: t.secondDriver, price: `€10/${t.day}` },
+                    { key: 'under25', label: t.under25Surcharge, price: `€10/${t.day}` },
+                    { key: 'licenseUnder3', label: t.licenseUnder3, price: `€20/${t.day}` },
+                    { key: 'outOfHours', label: t.outOfHours, price: '€50' }
+                  ].map((extra) => (
+                    <div key={extra.key} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id={extra.key}
+                          checked={extras[extra.key as keyof typeof extras]}
+                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, [extra.key]: !!checked }))}
+                        />
+                        <Label htmlFor={extra.key}>{extra.label}</Label>
+                      </div>
+                      <span className="font-semibold">{extra.price}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+
+      case 2:
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                {t.eligibilityCheck}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="dateOfBirth">{t.dateOfBirth} *</Label>
+                  <Input
+                    id="dateOfBirth"
+                    type="date"
+                    value={eligibility.dateOfBirth}
+                    onChange={(e) => setEligibility(prev => ({ ...prev, dateOfBirth: e.target.value }))}
+                    max={new Date().toISOString().split('T')[0]}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="licenseIssueDate">{t.licenseIssueDate} *</Label>
+                  <Input
+                    id="licenseIssueDate"
+                    type="date"
+                    value={eligibility.licenseIssueDate}
+                    onChange={(e) => setEligibility(prev => ({ ...prev, licenseIssueDate: e.target.value }))}
+                    max={new Date().toISOString().split('T')[0]}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="country">{t.country} *</Label>
+                <Select value={eligibility.countryIso2} onValueChange={(value) => setEligibility(prev => ({ ...prev, countryIso2: value }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="IT">Italia</SelectItem>
+                    <SelectItem value="FR">France</SelectItem>
+                    <SelectItem value="DE">Deutschland</SelectItem>
+                    <SelectItem value="ES">España</SelectItem>
+                    <SelectItem value="UK">United Kingdom</SelectItem>
+                    <SelectItem value="US">United States</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="licenseFile">{t.licensePhoto} *</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="mt-4">
                     <Input
                       id="licenseFile"
                       type="file"
                       accept="image/*,.pdf"
                       onChange={(e) => setLicenseFile(e.target.files?.[0] || null)}
-                      className="cursor-pointer"
+                      className="hidden"
                     />
-                    <p className="text-sm text-gray-500 mt-1">
-                      {language === 'it' 
-                        ? 'Formati supportati: JPG, PNG, PDF (max 5MB)'
-                        : 'Supported formats: JPG, PNG, PDF (max 5MB)'
-                      }
-                    </p>
+                    <Label htmlFor="licenseFile" className="cursor-pointer">
+                      <Button type="button" variant="outline" asChild>
+                        <span>Choose file</span>
+                      </Button>
+                    </Label>
+                    {licenseFile && (
+                      <p className="mt-2 text-sm text-green-600">
+                        <Check className="inline h-4 w-4 mr-1" />
+                        {licenseFile.name}
+                      </p>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
-              {/* Insurance Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Shield className="h-5 w-5" />
-                    {language === 'it' ? 'Assicurazione' : 'Insurance'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="kasko"
-                        name="insurance"
-                        value="kasko"
-                        checked={selectedInsurance === 'kasko'}
-                        onChange={(e) => setSelectedInsurance(e.target.value)}
-                        className="w-4 h-4"
-                      />
-                      <Label htmlFor="kasko" className="flex-1 cursor-pointer">
-                        <div className="flex justify-between">
-                          <span>Kasko - {language === 'it' ? 'Protezione base' : 'Basic protection'}</span>
-                          <span className="font-semibold">€15/{language === 'it' ? 'giorno' : 'day'}</span>
-                        </div>
-                        <p className="text-sm text-gray-500">
-                          {language === 'it' ? 'Copertura per danni e furto' : 'Coverage for damage and theft'}
-                        </p>
-                      </Label>
-                    </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="termsAccepted"
+                  checked={eligibility.termsAccepted}
+                  onCheckedChange={(checked) => setEligibility(prev => ({ ...prev, termsAccepted: !!checked }))}
+                />
+                <Label htmlFor="termsAccepted" className="text-sm">
+                  {t.termsAndConditions} *
+                </Label>
+              </div>
+            </CardContent>
+          </Card>
+        );
 
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="kasko-black"
-                        name="insurance"
-                        value="kasko-black"
-                        checked={selectedInsurance === 'kasko-black'}
-                        onChange={(e) => setSelectedInsurance(e.target.value)}
-                        className="w-4 h-4"
-                      />
-                      <Label htmlFor="kasko-black" className="flex-1 cursor-pointer">
-                        <div className="flex justify-between">
-                          <span>Kasko Black - {language === 'it' ? 'Protezione avanzata' : 'Advanced protection'}</span>
-                          <span className="font-semibold">€25/{language === 'it' ? 'giorno' : 'day'}</span>
-                        </div>
-                        <p className="text-sm text-gray-500">
-                          {language === 'it' ? 'Include danni agli pneumatici e cerchi' : 'Includes tire and rim damage'}
-                        </p>
-                      </Label>
-                    </div>
+      case 3:
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                {t.paymentProcessing}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <p className="text-lg mb-4">Ready to process payment</p>
+                <p className="text-gray-600 mb-6">
+                  Total amount: <strong>€{calculateTotal()}</strong>
+                </p>
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold"
+                >
+                  {isSubmitting ? t.processing : t.proceedToPayment}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        );
 
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="kasko-signature"
-                        name="insurance"
-                        value="kasko-signature"
-                        checked={selectedInsurance === 'kasko-signature'}
-                        onChange={(e) => setSelectedInsurance(e.target.value)}
-                        className="w-4 h-4"
-                      />
-                      <Label htmlFor="kasko-signature" className="flex-1 cursor-pointer">
-                        <div className="flex justify-between">
-                          <span>Kasko Signature - {language === 'it' ? 'Protezione completa' : 'Complete protection'}</span>
-                          <span className="font-semibold">€35/{language === 'it' ? 'giorno' : 'day'}</span>
-                        </div>
-                        <p className="text-sm text-gray-500">
-                          {language === 'it' ? 'Copertura totale senza franchigia' : 'Full coverage with no deductible'}
-                        </p>
-                      </Label>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+      default:
+        return null;
+    }
+  };
 
-              {/* Extras Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Car className="h-5 w-5" />
-                    {language === 'it' ? 'Servizi aggiuntivi' : 'Additional Services'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="fullCleaning"
-                          checked={extras.fullCleaning}
-                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, fullCleaning: !!checked }))}
-                        />
-                        <Label htmlFor="fullCleaning">
-                          {language === 'it' ? 'Pulizia completa' : 'Full cleaning'}
-                        </Label>
-                      </div>
-                      <span className="font-semibold">€30</span>
-                    </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            {t.completeReservation}
+          </h1>
+          <p className="text-gray-600">{t.enterDetails}</p>
+        </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="secondDriver"
-                          checked={extras.secondDriver}
-                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, secondDriver: !!checked }))}
-                        />
-                        <Label htmlFor="secondDriver">
-                          {language === 'it' ? 'Secondo guidatore' : 'Second driver'}
-                        </Label>
-                      </div>
-                      <span className="font-semibold">€10/{language === 'it' ? 'giorno' : 'day'}</span>
-                    </div>
+        {/* Progress Indicator */}
+        <div className="flex justify-center mb-8">
+          <div className="flex items-center space-x-4">
+            {[1, 2, 3].map((stepNumber) => (
+              <div key={stepNumber} className="flex items-center">
+                <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                  stepNumber <= step ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+                }`}>
+                  {stepNumber < step ? <Check className="w-4 h-4" /> : stepNumber}
+                </div>
+                {stepNumber < 3 && (
+                  <div className={`w-16 h-1 ${stepNumber < step ? 'bg-blue-600' : 'bg-gray-300'}`} />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="under25"
-                          checked={extras.under25}
-                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, under25: !!checked }))}
-                        />
-                        <Label htmlFor="under25">
-                          {language === 'it' ? 'Supplemento under 25' : 'Under 25 surcharge'}
-                        </Label>
-                      </div>
-                      <span className="font-semibold">€10/{language === 'it' ? 'giorno' : 'day'}</span>
-                    </div>
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Left Column - Forms */}
+          <div className="lg:col-span-2">
+            <form onSubmit={(e) => e.preventDefault()}>
+              {renderStepContent()}
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="licenseUnder3"
-                          checked={extras.licenseUnder3}
-                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, licenseUnder3: !!checked }))}
-                        />
-                        <Label htmlFor="licenseUnder3">
-                          {language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years'}
-                        </Label>
-                      </div>
-                      <span className="font-semibold">€20/{language === 'it' ? 'giorno' : 'day'}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="outOfHours"
-                          checked={extras.outOfHours}
-                          onCheckedChange={(checked) => setExtras(prev => ({ ...prev, outOfHours: !!checked }))}
-                        />
-                        <Label htmlFor="outOfHours">
-                          {language === 'it' ? 'Consegna fuori orario' : 'Out of hours delivery'}
-                        </Label>
-                      </div>
-                      <span className="font-semibold">€50</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Submit Button */}
-              <Button 
-                type="submit" 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold"
-                disabled={isSubmitting || !pickupDate || !dropoffDate || !pickupLocation || !licenseNumber || !licenseCountry || !licenseIssueDate || (!user && (!firstName || !lastName || !email || !phone))}
-              >
-                {isSubmitting 
-                  ? (language === 'it' ? 'Elaborazione...' : 'Processing...') 
-                  : (language === 'it' ? 'Procedi al pagamento' : 'Proceed to Payment')
-                }
-              </Button>
+              {/* Navigation Buttons */}
+              <div className="flex justify-between mt-6">
+                <Button
+                  type="button"
+                  onClick={handlePreviousStep}
+                  disabled={step === 1}
+                  variant="outline"
+                >
+                  {t.previousStep}
+                </Button>
+                
+                {step < 3 ? (
+                  <Button
+                    type="button"
+                    onClick={handleNextStep}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    {t.nextStep}
+                  </Button>
+                ) : null}
+              </div>
             </form>
           </div>
 
@@ -729,7 +949,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Car className="h-5 w-5" />
-                  {language === 'it' ? 'Riepilogo prenotazione' : 'Booking Summary'}
+                  {t.bookingSummary}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -749,54 +969,54 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                 {pickupDate && dropoffDate && (
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span>{language === 'it' ? 'Periodo:' : 'Period:'}</span>
+                      <span>{t.period}:</span>
                       <span className="font-medium">
-                        {Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))} {language === 'it' ? 'giorni' : 'days'}
+                        {Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))} {t.days}
                       </span>
                     </div>
                     
                     <div className="flex justify-between">
-                      <span>{language === 'it' ? 'Tariffa base:' : 'Base rate:'}</span>
-                      <span>€{basePrice}/{language === 'it' ? 'giorno' : 'day'}</span>
+                      <span>{t.baseRate}:</span>
+                      <span>€{basePrice}/{t.day}</span>
                     </div>
 
-                    {selectedInsurance && (
+                    {insurance && (
                       <div className="flex justify-between">
-                        <span>{language === 'it' ? 'Assicurazione:' : 'Insurance:'}</span>
-                        <span>€{getInsurancePrice(selectedInsurance)}/{language === 'it' ? 'giorno' : 'day'}</span>
+                        <span>Insurance:</span>
+                        <span>€{insurance === 'kasko' ? 15 : insurance === 'kasko-black' ? 25 : 35}/{t.day}</span>
                       </div>
                     )}
 
                     {Object.entries(extras).some(([key, value]) => value) && (
                       <div className="space-y-1">
-                        <p className="font-medium">{language === 'it' ? 'Servizi aggiuntivi:' : 'Extras:'}</p>
+                        <p className="font-medium">{t.extras}:</p>
                         {extras.fullCleaning && (
                           <div className="flex justify-between text-xs">
-                            <span>{language === 'it' ? 'Pulizia completa' : 'Full cleaning'}</span>
+                            <span>{t.fullCleaning}</span>
                             <span>€30</span>
                           </div>
                         )}
                         {extras.secondDriver && (
                           <div className="flex justify-between text-xs">
-                            <span>{language === 'it' ? 'Secondo guidatore' : 'Second driver'}</span>
+                            <span>{t.secondDriver}</span>
                             <span>€{10 * Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))}</span>
                           </div>
                         )}
                         {extras.under25 && (
                           <div className="flex justify-between text-xs">
-                            <span>{language === 'it' ? 'Under 25' : 'Under 25'}</span>
+                            <span>Under 25</span>
                             <span>€{10 * Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))}</span>
                           </div>
                         )}
                         {extras.licenseUnder3 && (
                           <div className="flex justify-between text-xs">
-                            <span>{language === 'it' ? 'Patente < 3 anni' : 'License < 3 years'}</span>
+                            <span>License &lt; 3 years</span>
                             <span>€{20 * Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))}</span>
                           </div>
                         )}
                         {extras.outOfHours && (
                           <div className="flex justify-between text-xs">
-                            <span>{language === 'it' ? 'Fuori orario' : 'Out of hours'}</span>
+                            <span>{t.outOfHours}</span>
                             <span>€50</span>
                           </div>
                         )}
@@ -806,16 +1026,16 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                     <hr className="my-2" />
                     
                     <div className="flex justify-between font-bold text-lg">
-                      <span>{language === 'it' ? 'Totale:' : 'Total:'}</span>
+                      <span>{t.total}:</span>
                       <span>€{calculateTotal()}</span>
                     </div>
                   </div>
                 )}
 
                 <div className="text-xs text-gray-500 space-y-1">
-                  <p>• {language === 'it' ? 'Tutti i prezzi includono IVA' : 'All prices include VAT'}</p>
-                  <p>• {language === 'it' ? 'Pagamento sicuro con Nexi' : 'Secure payment with Nexi'}</p>
-                  <p>• {language === 'it' ? 'Cancellazione gratuita fino a 24h prima' : 'Free cancellation up to 24h before'}</p>
+                  <p>• {t.allPricesIncludeVAT}</p>
+                  <p>• {t.securePayment}</p>
+                  <p>• {t.freeCancellation}</p>
                 </div>
               </CardContent>
             </Card>

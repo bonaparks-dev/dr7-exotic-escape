@@ -65,11 +65,11 @@ const handler = async (req: Request): Promise<Response> => {
       verified: macVerified 
     });
 
-    // Determine payment status
-    const isSuccess = esito === "OK" && codiceEsito === "0";
+    // Determine payment status based on Nexi response codes
+    const isSuccess = esito === "OK" && (codiceEsito === "0" || codiceEsito === "00");
     const paymentStatus = isSuccess ? "completed" : "failed";
     
-    // Update payment record
+    // Update payment record (make idempotent using upsert pattern)
     const { data: paymentData, error: paymentError } = await supabaseService
       .from("payments")
       .update({
@@ -77,8 +77,11 @@ const handler = async (req: Request): Promise<Response> => {
         nexi_response_code: codiceEsito,
         nexi_auth_code: codAut,
         mac_verification_status: macVerified ? "verified" : "failed",
-        completed_at: new Date().toISOString(),
-        error_message: isSuccess ? null : `Payment failed with code: ${codiceEsito}`
+        completed_at: isSuccess ? new Date().toISOString() : null,
+        captured_amount: isSuccess ? parseInt(importo || '0') : null,
+        gateway_transaction_time: new Date().toISOString(),
+        three_ds_status: isSuccess ? "authenticated" : "failed",
+        error_message: isSuccess ? null : `Payment failed: ${codiceEsito}`
       })
       .eq("nexi_transaction_id", codTrans)
       .select()
@@ -90,20 +93,46 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Update booking status
+    const bookingUpdateData: any = {
+      payment_status: paymentStatus,
+      payment_completed_at: isSuccess ? new Date().toISOString() : null,
+      payment_error_message: isSuccess ? null : `Payment failed: ${codiceEsito}`
+    };
+
+    if (isSuccess) {
+      bookingUpdateData.status = "confirmed";
+    }
+
     await supabaseService
       .from("bookings")
-      .update({
-        payment_status: paymentStatus,
-        payment_completed_at: isSuccess ? new Date().toISOString() : null,
-        payment_error_message: isSuccess ? null : `Payment failed with code: ${codiceEsito}`
-      })
+      .update(bookingUpdateData)
       .eq("nexi_transaction_id", codTrans);
+
+    // Log detailed audit trail
+    await supabaseService.from("payment_audit_logs").insert({
+      booking_id: paymentData?.booking_id,
+      payment_id: paymentData?.id,
+      action: "callback",
+      amount: parseInt(importo || '0'),
+      currency: divisa || 'EUR',
+      gateway_response: {
+        esito,
+        codiceEsito,
+        codAut,
+        data,
+        orario,
+        macVerified,
+        responseType: "callback"
+      },
+      ip_address: req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip")
+    });
 
     console.log("Payment processed:", {
       transactionId: codTrans,
       status: paymentStatus,
       macVerified,
-      amount: importo
+      amount: importo,
+      authCode: codAut
     });
 
     return new Response("OK", {

@@ -74,10 +74,28 @@ const handler = async (req: Request): Promise<Response> => {
       payerName 
     }: PaymentRequest = await req.json();
 
-    // Validate server-side total calculation
-    const serverCalculatedTotal = calculateServerTotal(bookingDetails, lineItems);
-    if (Math.abs(serverCalculatedTotal - totalAmount) > 1) { // Allow 1 cent difference for rounding
-      throw new Error(`Amount mismatch: client ${totalAmount}, server ${serverCalculatedTotal}`);
+    const supabaseService = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+
+    // Server-side total calculation using database function
+    const { data: calculatedTotal, error: calcError } = await supabaseService
+      .rpc('calculate_booking_total', {
+        base_price_cents: Math.round(parseFloat(bookingDetails.basePrice || '0') * 100),
+        days: Math.ceil((new Date(bookingDetails.dropoffDate).getTime() - new Date(bookingDetails.pickupDate).getTime()) / (1000 * 60 * 60 * 24)),
+        insurance_type: bookingDetails.insurance,
+        extras: bookingDetails.extras
+      });
+
+    if (calcError) {
+      console.error("Error calculating total:", calcError);
+      throw new Error("Failed to calculate booking total");
+    }
+
+    const serverCalculatedTotal = calculatedTotal / 100; // Convert back to euros
+    if (Math.abs(serverCalculatedTotal - totalAmount) > 1) { // Allow 1 euro difference for rounding
+      throw new Error(`Amount mismatch: client ${totalAmount}€, server ${serverCalculatedTotal}€`);
     }
 
     const codiceVendita = Deno.env.get("NEXI_CODICE_PUNTO_VENDITA")!;
@@ -113,10 +131,6 @@ const handler = async (req: Request): Promise<Response> => {
     };
 
     // Create payment record in database
-    const supabaseService = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-    );
 
     // Create payment record with detailed breakdown
     await supabaseService.from("payments").insert({
@@ -198,32 +212,5 @@ const handler = async (req: Request): Promise<Response> => {
   }
 };
 
-// Server-side total calculation function
-function calculateServerTotal(bookingDetails: any, lineItems: any[]): number {
-  const basePrice = parseFloat(bookingDetails.basePrice) || 0;
-  const days = Math.ceil((new Date(bookingDetails.dropoffDate).getTime() - new Date(bookingDetails.pickupDate).getTime()) / (1000 * 60 * 60 * 24));
-  
-  let total = basePrice * days;
-  
-  // Add insurance costs
-  const insurancePrices: { [key: string]: number } = {
-    'kasko': 15,
-    'kasko-black': 25,
-    'kasko-signature': 35
-  };
-  
-  if (insurancePrices[bookingDetails.insurance]) {
-    total += insurancePrices[bookingDetails.insurance] * days;
-  }
-  
-  // Add extras
-  if (bookingDetails.extras.fullCleaning) total += 30;
-  if (bookingDetails.extras.secondDriver) total += 10 * days;
-  if (bookingDetails.extras.under25) total += 10 * days;
-  if (bookingDetails.extras.licenseUnder3) total += 20 * days;
-  if (bookingDetails.extras.outOfHours) total += 50;
-  
-  return Math.round(total * 100) / 100; // Round to 2 decimal places
-}
 
 serve(handler);
