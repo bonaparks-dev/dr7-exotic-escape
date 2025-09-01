@@ -464,9 +464,20 @@ export const ReservationForm = ({ isOpen, onClose, carName, dailyPrice }: Reserv
     setIsSubmitting(true);
 
     try {
-      // Get current user or create a guest user ID (for non-authenticated users)
-      const userId = user?.id || `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
+      // Require login before booking and payment
+      if (!user) {
+        toast({
+          title: language === 'it' ? 'Accedi richiesto' : 'Login required',
+          description: language === 'it'
+            ? 'Per prenotare e pagare devi accedere o registrarti.'
+            : 'Please sign in or create an account to book and pay.',
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        navigate('/auth');
+        return;
+      }
+      const userId = user.id;
       
       let licenseFilePath = null;
       
