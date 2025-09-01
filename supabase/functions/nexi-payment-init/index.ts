@@ -69,6 +69,39 @@ async function handler(req: Request): Promise<Response> {
     const transactionId = `dr7-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const timestamp = Date.now().toString();
 
+    // Insert payment record using existing table structure
+    const { error: paymentError } = await supabaseAdmin
+      .from('payments')
+      .insert({
+        nexi_transaction_id: transactionId,
+        booking_id: paymentRequest.bookingId,
+        amount: paymentRequest.totalAmount * 100,
+        currency: paymentRequest.currency,
+        payment_status: 'pending',
+        payment_method: 'nexi',
+        payer_email: paymentRequest.payerEmail,
+        payer_name: paymentRequest.payerName
+      });
+
+    if (paymentError) {
+      console.error('Payment insert error:', paymentError);
+      throw new Error('Failed to create payment record');
+    }
+
+    // Update booking with payment info
+    const { error: bookingError } = await supabaseAdmin
+      .from('bookings')
+      .update({
+        payment_status: 'initializing',
+        nexi_transaction_id: transactionId
+      })
+      .eq('id', paymentRequest.bookingId);
+
+    if (bookingError) {
+      console.error('Booking update error:', bookingError);
+      throw new Error('Failed to update booking');
+    }
+
     // Generate MAC for XPayBuild
     const macParams = `${nexiAlias}${timestamp}${transactionId}${paymentRequest.totalAmount * 100}${paymentRequest.currency}`;
     const mac = await generateMAC(macParams, nexiMacKey);

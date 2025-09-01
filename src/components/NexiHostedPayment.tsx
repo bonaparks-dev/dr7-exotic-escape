@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { CreditCard, Shield, Lock, AlertCircle } from 'lucide-react';
+import { CreditCard, Shield, Lock } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -31,40 +29,20 @@ interface NexiHostedPaymentProps {
   onPaymentError: (error: string) => void;
 }
 
-// Declare Nexi global types
-declare global {
-  interface Window {
-    XPayBuild?: any;
-    XPay?: any;
-  }
-}
-
 export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
   bookingData,
   onPaymentSuccess,
   onPaymentError
 }) => {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const [isInitializing, setIsInitializing] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSession, setPaymentSession] = useState<any>(null);
-  const [cardValid, setCardValid] = useState(false);
-  const [billingName, setBillingName] = useState(bookingData.payerName);
-  const [billingEmail, setBillingEmail] = useState(bookingData.payerEmail);
-  
-  const hostedFieldsRef = useRef<any>(null);
-  const scriptLoadedRef = useRef(false);
-  const [hostedFailed, setHostedFailed] = useState(false);
 
   const translations = {
     en: {
       paymentDetails: 'Payment Details',
       securePayment: 'Secure Payment with Nexi',
-      cardNumber: 'Card Number',
-      expiryDate: 'Expiry Date',
-      cvv: 'CVV',
-      billingName: 'Cardholder Name',
-      billingEmail: 'Email Address',
       payNow: 'Pay Now',
       processing: 'Processing Payment...',
       orderSummary: 'Order Summary',
@@ -73,18 +51,12 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
       ssl: 'SSL Encryption',
       pci: 'PCI DSS Compliant',
       secure3d: '3D Secure Authentication',
-      cardRequired: 'Please enter valid card details',
       paymentFailed: 'Payment failed. Please try again.',
       initializingPayment: 'Initializing secure payment...'
     },
     it: {
       paymentDetails: 'Dettagli Pagamento',
       securePayment: 'Pagamento Sicuro con Nexi',
-      cardNumber: 'Numero Carta',
-      expiryDate: 'Scadenza',
-      cvv: 'CVV',
-      billingName: 'Nome Titolare',
-      billingEmail: 'Indirizzo Email',
       payNow: 'Paga Ora',
       processing: 'Elaborazione Pagamento...',
       orderSummary: 'Riepilogo Ordine',
@@ -93,7 +65,6 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
       ssl: 'Crittografia SSL',
       pci: 'Conforme PCI DSS',
       secure3d: 'Autenticazione 3D Secure',
-      cardRequired: 'Inserisci i dati della carta validi',
       paymentFailed: 'Pagamento fallito. Riprova.',
       initializingPayment: 'Inizializzazione pagamento sicuro...'
     }
@@ -101,48 +72,9 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
 
   const tr = translations[language as keyof typeof translations] || translations.en;
 
-  // Load Nexi scripts
+  // Initialize payment
   useEffect(() => {
-    if (scriptLoadedRef.current) return;
-
-    const loadNexiScript = () => {
-      return new Promise<void>((resolve, reject) => {
-        // Check if script is already loaded
-        if (window.XPayBuild) {
-          scriptLoadedRef.current = true;
-          resolve();
-          return;
-        }
-
-        const script = document.createElement('script');
-        script.src = 'https://ecommerce.nexi.it/ecomm/XPayBuild/XPayBuild.js';
-        script.async = true;
-        script.onload = () => {
-          scriptLoadedRef.current = true;
-          // Wait a bit for the script to initialize
-          setTimeout(() => {
-            if (window.XPayBuild) {
-              resolve();
-            } else {
-              reject(new Error('XPayBuild not available after script load'));
-            }
-          }, 100);
-        };
-        script.onerror = (error) => {
-          console.error('Script loading error:', error);
-          reject(new Error('Failed to load Nexi script'));
-        };
-        document.head.appendChild(script);
-      });
-    };
-
-    loadNexiScript()
-      .then(() => initializePayment())
-      .catch((error) => {
-        console.error('Failed to load Nexi script:', error);
-        setHostedFailed(true);
-        setIsInitializing(false);
-      });
+    initializePayment();
   }, []);
 
   const initializePayment = async () => {
@@ -158,70 +90,39 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
 
       console.log('Payment session initialized:', data);
       setPaymentSession(data);
-
-      // Initialize Nexi hosted fields
-      if (window.XPayBuild) {
-        console.log('Initializing XPayBuild with data:', data);
-        
-        try {
-          const xpayBuild = new window.XPayBuild();
-          
-          // Configure hosted fields
-          hostedFieldsRef.current = xpayBuild.create({
-            baseUrl: 'https://ecommerce.nexi.it',
-            alias: data.alias,
-            timestamp: data.timestamp,
-            mac: data.mac,
-            fields: {
-              number: {
-                selector: '#card-number',
-                placeholder: '1234 5678 9012 3456'
-              },
-              expiryDate: {
-                selector: '#expiry-date',
-                placeholder: 'MM/YY'
-              },
-              cvv: {
-                selector: '#cvv',
-                placeholder: '123'
-              }
-            },
-            style: {
-              'font-family': 'inherit',
-              'font-size': '14px',
-              'color': 'hsl(var(--foreground))',
-              'background-color': 'hsl(var(--background))',
-              'border': '1px solid hsl(var(--border))',
-              'border-radius': '6px',
-              'padding': '8px 12px'
-            },
-            onFieldEvent: (event: any) => {
-              console.log('Field event:', event);
-              if (event.type === 'validation') {
-                setCardValid(event.allFieldsValid);
-              }
-            }
-          });
-
-          console.log('Mounting hosted fields...');
-          await hostedFieldsRef.current.mount();
-          console.log('Hosted fields mounted successfully');
-          setIsInitializing(false);
-        } catch (error) {
-          console.error('Error creating hosted fields:', error);
-          setHostedFailed(true);
-          setIsInitializing(false);
-        }
-      } else {
-        console.error('XPayBuild not available');
-        setHostedFailed(true);
-        setIsInitializing(false);
-      }
+      setIsInitializing(false);
+      
     } catch (error: any) {
       console.error('Payment initialization error:', error);
-      setHostedFailed(true);
       onPaymentError(error.message || 'Failed to initialize payment');
       setIsInitializing(false);
+    }
+  };
+
+  const handleTestPayment = async () => {
+    setIsProcessing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('nexi-payment-process', {
+        body: {
+          bookingId: bookingData.bookingId,
+          totalAmount: bookingData.totalAmount,
+          currency: bookingData.currency
+        }
+      });
+
+      if (error) throw error;
+      if (!data.success) throw new Error(data.error || 'Payment failed');
+
+      console.log('Payment processed successfully:', data);
+      toast.success(language === 'it' ? 'Pagamento completato!' : 'Payment completed!');
+      onPaymentSuccess(data);
+
+    } catch (error: any) {
+      console.error('Test payment error:', error);
+      toast.error(error.message || tr.paymentFailed);
+      onPaymentError(error.message || 'Payment failed');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -242,6 +143,7 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
       });
       if (error) throw error;
       if (!data?.success) throw new Error(data?.error || 'Failed to start payment');
+      
       const form = document.createElement('form');
       form.method = 'POST';
       form.action = data.paymentUrl;
@@ -257,59 +159,6 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
     } catch (e: any) {
       console.error('Fallback HPP error:', e);
       onPaymentError(e.message || 'Payment initialization failed');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const handlePayment = async () => {
-    if (!cardValid || !hostedFieldsRef.current) {
-      toast.error(tr.cardRequired);
-      return;
-    }
-
-    setIsProcessing(true);
-
-    try {
-      // Create payment token with hosted fields
-      const tokenResult = await hostedFieldsRef.current.createToken({
-        billingName,
-        billingEmail
-      });
-
-      if (!tokenResult.success) {
-        throw new Error(tokenResult.error || 'Failed to create payment token');
-      }
-
-      console.log('Payment token created:', tokenResult.token);
-
-      // Process payment with token
-      const { data, error } = await supabase.functions.invoke('nexi-payment-process', {
-        body: {
-          ...bookingData,
-          paymentToken: tokenResult.token,
-          billingName,
-          billingEmail
-        }
-      });
-
-      if (error) throw error;
-      if (!data.success) throw new Error(data.error);
-
-      console.log('Payment processed:', data);
-
-      // Handle 3D Secure if required
-      if (data.requiresAuthentication) {
-        window.location.href = data.authenticationUrl;
-        return;
-      }
-
-      // Payment successful
-      onPaymentSuccess(data);
-
-    } catch (error: any) {
-      console.error('Payment processing error:', error);
-      onPaymentError(error.message || tr.paymentFailed);
     } finally {
       setIsProcessing(false);
     }
@@ -333,29 +182,6 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
     );
   }
 
-  if (hostedFailed) {
-    return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-amber-500" />
-            {language === 'it' ? 'Pagina di pagamento sicura' : 'Secure payment page'}
-          </CardTitle>
-          <CardDescription>
-            {language === 'it' ? 'I campi carta non sono disponibili. Procedi sulla pagina sicura di Nexi.' : 'Card fields are unavailable. Continue on Nexi’s secure payment page.'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button onClick={openSecurePage} disabled={isProcessing} className="w-full" size="lg">
-            {isProcessing ? tr.processing : (language === 'it' ? 'Apri pagina Nexi' : 'Open Nexi page')}
-          </Button>
-        </CardContent>
-      </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
       {/* Payment Form */}
@@ -369,53 +195,6 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
         </CardHeader>
         
         <CardContent className="space-y-6">
-          {/* Hosted Card Fields */}
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="card-number">{tr.cardNumber}</Label>
-              <div id="card-number" className="mt-1 min-h-[40px] border rounded-md"></div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="expiry-date">{tr.expiryDate}</Label>
-                <div id="expiry-date" className="mt-1 min-h-[40px] border rounded-md"></div>
-              </div>
-              <div>
-                <Label htmlFor="cvv">{tr.cvv}</Label>
-                <div id="cvv" className="mt-1 min-h-[40px] border rounded-md"></div>
-              </div>
-            </div>
-          </div>
-
-          <Separator />
-
-          {/* Billing Information */}
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="billing-name">{tr.billingName}</Label>
-              <Input
-                id="billing-name"
-                value={billingName}
-                onChange={(e) => setBillingName(e.target.value)}
-                required
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="billing-email">{tr.billingEmail}</Label>
-              <Input
-                id="billing-email"
-                type="email"
-                value={billingEmail}
-                onChange={(e) => setBillingEmail(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <Separator />
-
           {/* Security Features */}
           <div className="space-y-3">
             <h4 className="font-medium text-sm">{tr.securityFeatures}</h4>
@@ -435,11 +214,13 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
             </div>
           </div>
 
-          {/* Pay Button */}
+          <Separator />
+
+          {/* Pay Buttons */}
           <div className="space-y-3">
             <Button
-              onClick={handlePayment}
-              disabled={!cardValid || isProcessing || !billingName || !billingEmail}
+              onClick={handleTestPayment}
+              disabled={isProcessing}
               className="w-full"
               size="lg"
             >
@@ -461,10 +242,10 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
               disabled={isProcessing}
               className="w-full"
             >
-              {language === 'it' ? 'Oppure paga sulla pagina Nexi' : 'Or pay on Nexi secure page'}
+              {language === 'it' ? 'Apri pagina Nexi' : 'Open Nexi secure page'}
             </Button>
             <p className="text-xs text-muted-foreground text-center">
-              {language === 'it' ? 'Se i campi carta non sono interattivi, usa la pagina sicura di Nexi.' : 'If the card fields are not interactive, use the secure Nexi page.'}
+              {language === 'it' ? 'Usa il pulsante in alto per testare il pagamento o quello sotto per la pagina sicura Nexi.' : 'Use the button above to test payment or below for Nexi secure page.'}
             </p>
           </div>
         </CardContent>
