@@ -4,7 +4,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, CreditCard, Clock, Shield } from 'lucide-react';
@@ -15,7 +14,7 @@ interface OrderSummary {
   carName: string;
   pickupDate: string;
   dropoffDate: string;
-  totalAmount: number;
+  totalAmount: number; // in minor units (cents)
   currency: string;
   transactionId?: string;
   cardBrand?: string;
@@ -33,7 +32,6 @@ export default function PaymentVerification() {
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [retryCount, setRetryCount] = useState(0);
   const [orderSummary, setOrderSummary] = useState<OrderSummary | null>(null);
-  const [challengeUrl, setChallengeUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const maxRetries = 3;
@@ -61,7 +59,14 @@ export default function PaymentVerification() {
       failed: 'Payment verification failed',
       maxRetries: 'Maximum retry attempts reached',
       networkError: 'Network error. Please try again.',
-      cardInfo: 'Card ending in'
+      cardInfo: 'Card ending in',
+      successTitle: 'Success',
+      successDesc: 'Payment verified successfully',
+      pendingOrTimeout: 'Verification pending or timed out. Please check your bank app and try again.',
+      missingInfo: 'Missing payment information',
+      failedToLoad: 'Failed to load order details',
+      orderNotFound: 'Order not found',
+      goHome: 'Go Home',
     },
     it: {
       title: 'Verifica Pagamento Sicuro',
@@ -83,12 +88,104 @@ export default function PaymentVerification() {
       failed: 'Verifica pagamento fallita',
       maxRetries: 'Raggiunto numero massimo di tentativi',
       networkError: 'Errore di rete. Riprova.',
-      cardInfo: 'Carta che termina con'
+      cardInfo: 'Carta che termina con',
+      successTitle: 'Successo',
+      successDesc: 'Pagamento verificato correttamente',
+      pendingOrTimeout: 'Verifica in sospeso o scaduta. Controlla la tua app bancaria e riprova.',
+      missingInfo: 'Informazioni di pagamento mancanti',
+      failedToLoad: "Impossibile caricare i dettagli dell'ordine",
+      orderNotFound: 'Ordine non trovato',
+      goHome: 'Vai alla Home',
     }
+  } as const;
+
+  const t = translations[language as 'en' | 'it'];
+
+  // -------- Helpers --------
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const t = translations[language];
+  const formatCurrency = (amountMinorUnits: number, currency: string) => {
+    return new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
+      style: 'currency',
+      currency: currency,
+    }).format(amountMinorUnits / 100);
+  };
 
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString(
+      language === 'it' ? 'it-IT' : 'en-US',
+      {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }
+    );
+  };
+
+  // Poll payment status in DB (server is source of truth)
+  const pollPaymentUntilFinal = async ({
+    txId,
+    expectedTotalMinor,
+    timeoutMs = 90000, // 90s
+    intervalMs = 2000, // 2s
+  }: {
+    txId: string;
+    expectedTotalMinor: number;
+    timeoutMs?: number;
+    intervalMs?: number;
+  }) => {
+    const start = Date.now();
+
+    while (Date.now() - start < timeoutMs) {
+      const { data: payment, error } = await supabase
+        .from('payments')
+        .select('status,captured_amount,currency,result_code,result_message')
+        .eq('nexi_transaction_id', txId)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Polling error:', error);
+        await new Promise((r) => setTimeout(r, intervalMs));
+        continue;
+      }
+
+      const status = payment?.status?.toUpperCase();
+
+      if (status === 'PAID') {
+        // Extra safety: verify captured amount equals expected total
+        if (
+          typeof payment.captured_amount === 'number' &&
+          payment.captured_amount === expectedTotalMinor
+        ) {
+          return { ok: true, payment };
+        } else {
+          // Amount mismatch → treat as failure
+          return { ok: false, payment, reason: 'amount_mismatch' as const };
+        }
+      }
+
+      if (
+        status === 'PAYMENT_FAILED' ||
+        status === 'CANCELED' ||
+        status === 'DECLINED'
+      ) {
+        return { ok: false, payment };
+      }
+
+      // Still pending
+      await new Promise((r) => setTimeout(r, intervalMs));
+    }
+
+    return { ok: false, timeout: true as const };
+  };
+
+  // -------- Effects --------
   // Timer countdown
   useEffect(() => {
     const timer = setInterval(() => {
@@ -103,15 +200,16 @@ export default function PaymentVerification() {
     }, 1000);
 
     return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Load order summary
+  // Load order summary from DB
   useEffect(() => {
     const loadOrderSummary = async () => {
       if (!transactionId || !orderId) {
         toast({
           title: 'Error',
-          description: 'Missing payment information',
+          description: t.missingInfo,
           variant: 'destructive',
         });
         navigate('/');
@@ -119,10 +217,10 @@ export default function PaymentVerification() {
       }
 
       try {
-        // Fetch payment and booking details
         const { data: payment, error: paymentError } = await supabase
           .from('payments')
-          .select(`
+          .select(
+            `
             *,
             bookings (
               vehicle_name,
@@ -131,7 +229,8 @@ export default function PaymentVerification() {
               price_total,
               currency
             )
-          `)
+          `
+          )
           .eq('nexi_transaction_id', transactionId)
           .maybeSingle();
 
@@ -150,12 +249,19 @@ export default function PaymentVerification() {
             cardBrand: searchParams.get('cardBrand') || undefined,
             cardLast4: searchParams.get('cardLast4') || undefined,
           });
+        } else {
+          // No booking found for this tx
+          toast({
+            title: 'Error',
+            description: t.orderNotFound,
+            variant: 'destructive',
+          });
         }
       } catch (error) {
         console.error('Error loading order summary:', error);
         toast({
           title: 'Error',
-          description: 'Failed to load order details',
+          description: t.failedToLoad,
           variant: 'destructive',
         });
       } finally {
@@ -164,35 +270,19 @@ export default function PaymentVerification() {
     };
 
     loadOrderSummary();
-  }, [transactionId, orderId, navigate, toast, searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactionId, orderId]);
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
-  const formatCurrency = (amount: number, currency: string) => {
-    return new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
-      style: 'currency',
-      currency: currency,
-    }).format(amount / 100);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString(
-      language === 'it' ? 'it-IT' : 'en-US',
-      {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      }
-    );
-  };
-
+  // -------- Handlers --------
   const handleVerification = async () => {
+    if (!transactionId || !orderId) {
+      toast({
+        title: 'Error',
+        description: t.missingInfo,
+        variant: 'destructive',
+      });
+      return;
+    }
     if (!otpValue || otpValue.length < 6) {
       toast({
         title: 'Error',
@@ -205,6 +295,8 @@ export default function PaymentVerification() {
     setIsVerifying(true);
 
     try {
+      // 1) Relay the OTP to serverless function which talks to Nexi.
+      // Do NOT trust the function's success as final truth.
       const { data, error } = await supabase.functions.invoke('nexi-verify', {
         body: {
           transactionId,
@@ -216,33 +308,69 @@ export default function PaymentVerification() {
 
       if (error) throw error;
 
-      if (data.success) {
+      // 2) Poll DB until final status is written by Nexi callback (MAC-verified)
+      const expectedTotal =
+        orderSummary?.totalAmount ?? 0; // minor units (cents)
+
+      const result = await pollPaymentUntilFinal({
+        txId: transactionId,
+        expectedTotalMinor: expectedTotal,
+        timeoutMs: 90000,
+        intervalMs: 2000,
+      });
+
+      if (result.ok) {
         toast({
-          title: 'Success',
-          description: 'Payment verified successfully',
+          title: t.successTitle,
+          description: t.successDesc,
         });
         navigate('/payment-success', {
-          state: { transactionId, orderId }
+          state: { transactionId, orderId },
         });
       } else {
-        throw new Error(data.error || 'Verification failed');
+        if ((result as any).timeout) {
+          toast({
+            title: 'Error',
+            description: t.pendingOrTimeout,
+            variant: 'destructive',
+          });
+          navigate('/payment-failure', {
+            state: { reason: 'timeout_or_pending', transactionId, orderId },
+          });
+        } else if ((result as any).reason === 'amount_mismatch') {
+          toast({
+            title: 'Error',
+            description: t.failed,
+            variant: 'destructive',
+          });
+          navigate('/payment-failure', {
+            state: { reason: 'amount_mismatch', transactionId, orderId },
+          });
+        } else {
+          toast({
+            title: 'Error',
+            description: t.failed,
+            variant: 'destructive',
+          });
+          setRetryCount((prev) => prev + 1);
+        }
       }
     } catch (error: any) {
       console.error('Verification error:', error);
-      
-      if (error.message?.includes('expired')) {
+
+      if (error?.message?.toLowerCase().includes('expired')) {
         toast({
           title: 'Error',
           description: t.expired,
           variant: 'destructive',
         });
-      } else if (error.message?.includes('invalid')) {
+      } else if (error?.message?.toLowerCase().includes('invalid')) {
         toast({
           title: 'Error',
           description: t.invalid,
           variant: 'destructive',
         });
-        setRetryCount(prev => prev + 1);
+        setRetryCount((prev) => prev + 1);
       } else {
         toast({
           title: 'Error',
@@ -250,9 +378,8 @@ export default function PaymentVerification() {
           variant: 'destructive',
         });
       }
-      
-      setOtpValue('');
     } finally {
+      setOtpValue('');
       setIsVerifying(false);
     }
   };
@@ -264,13 +391,13 @@ export default function PaymentVerification() {
       variant: 'destructive',
     });
     navigate('/payment-failure', {
-      state: { reason: 'timeout', transactionId, orderId }
+      state: { reason: 'timeout', transactionId, orderId },
     });
   };
 
   const handleCancel = () => {
     navigate('/payment-failure', {
-      state: { reason: 'cancelled', transactionId, orderId }
+      state: { reason: 'cancelled', transactionId, orderId },
     });
   };
 
@@ -286,8 +413,8 @@ export default function PaymentVerification() {
       setTimeLeft(300); // Reset timer
       setRetryCount(0);
       toast({
-        title: 'Success',
-        description: 'Verification code resent',
+        title: t.successTitle,
+        description: language === 'it' ? 'Codice di verifica reinviato' : 'Verification code resent',
       });
     } catch (error) {
       toast({
@@ -300,6 +427,7 @@ export default function PaymentVerification() {
     }
   };
 
+  // -------- UI --------
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -317,9 +445,9 @@ export default function PaymentVerification() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="text-center p-8">
-            <p>Order not found</p>
+            <p>{t.orderNotFound}</p>
             <Button onClick={() => navigate('/')} className="mt-4">
-              Go Home
+              {t.goHome}
             </Button>
           </CardContent>
         </Card>
