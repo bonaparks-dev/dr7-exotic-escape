@@ -122,14 +122,19 @@ const handler = async (req: Request): Promise<Response> => {
     
     // Use validated total amount in cents
     const amountCents = Math.round(totalAmount * 100);
+
+    // Nexi requires a timestamp included in both params and MAC
+    const timeStamp = Date.now().toString();
     
     const origin = req.headers.get("origin") || "https://d9a6e588-965c-400c-b618-673fe52d03c9.sandbox.lovable.dev";
     const urlBack = `${origin}/verify-payment?transactionId=${transactionId}&orderId=${bookingId}`;
     const urlPost = `${origin}/api/payment-callback`;
 
     // Build parameters for MAC calculation (according to Nexi documentation)
-    const macParams = `codTrans=${transactionId}divisa=${currency}importo=${amountCents}`;
+    // Order matters: codTrans, divisa, importo, timeStamp
+    const macParams = `codTrans=${transactionId}divisa=${currency}importo=${amountCents}timeStamp=${timeStamp}`;
     const mac = await generateMAC(macParams, macKey);
+    console.log('Nexi macParams:', macParams);
 
     // Nexi payment form parameters
     const paymentParams = {
@@ -137,6 +142,7 @@ const handler = async (req: Request): Promise<Response> => {
       importo: amountCents.toString(),
       divisa: currency,
       codTrans: transactionId,
+      timeStamp,
       url: urlBack,
       url_back: urlBack,
       url_post: urlPost,
