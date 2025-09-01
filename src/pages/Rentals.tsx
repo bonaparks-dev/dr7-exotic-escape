@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ReservationForm } from "@/components/ReservationForm";
+import ReservationForm from "@/components/ReservationForm";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
@@ -381,10 +381,9 @@ const Rentals = () => {
 
       {selectedCar && (
         <ReservationForm
-          isOpen={isReservationFormOpen}
-          onClose={closeReservationForm}
-          carName={selectedCar}
-          dailyPrice={cars.find(car => car.name === selectedCar)?.dailyPrice || 0}
+          vehicleType="car"
+          vehicleName={selectedCar}
+          basePrice={cars.find(car => car.name === selectedCar)?.dailyPrice || 0}
         />
       )}
 
