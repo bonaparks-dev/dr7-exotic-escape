@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -379,13 +380,17 @@ const Rentals = () => {
         </div>
       </main>
 
-      {selectedCar && (
-        <ReservationForm
-          vehicleType="car"
-          vehicleName={selectedCar}
-          basePrice={cars.find(car => car.name === selectedCar)?.dailyPrice || 0}
-        />
-      )}
+      <Dialog open={isReservationFormOpen} onOpenChange={setIsReservationFormOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {selectedCar && (
+            <ReservationForm
+              vehicleType="car"
+              vehicleName={selectedCar}
+              basePrice={cars.find(car => car.name === selectedCar)?.dailyPrice || 0}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
