@@ -234,23 +234,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     return errors;
   };
 
-  const calculateAge = (birthDate: Date): number => {
-    const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      return age - 1;
-    }
-    
-    return age;
-  };
-
-  const calculateLicenseAge = (issueDate: Date): number => {
-    const today = new Date();
-    const diffTime = Math.abs(today.getTime() - issueDate.getTime());
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 365)); // Convert to years
-  };
 
   const calculateTotal = () => {
     if (!pickupDate || !dropoffDate) return 0;
@@ -297,6 +280,26 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       setEligibility(prev => ({ ...prev, licenseIssueDate: date.toISOString().split('T')[0] }));
       updateInsuranceSelection(dateOfBirth, date);
     }
+  };
+
+  // Helper functions for age calculations
+  const calculateAge = (birthDate: Date): number => {
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    return age;
+  };
+
+  const calculateLicenseAge = (licenseDate: Date): number => {
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - licenseDate.getTime());
+    const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25);
+    return diffYears;
   };
 
   // Automatic insurance selection based on age and license experience
