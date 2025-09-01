@@ -303,22 +303,34 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
   // Automatic insurance selection based on age and license experience
   const updateInsuranceSelection = (dob: Date | undefined, licenseDate: Date | undefined) => {
-    if (!dob || !licenseDate) return;
+    console.log('updateInsuranceSelection called', { dob, licenseDate });
+    if (!dob || !licenseDate) {
+      console.log('Missing dates, skipping insurance update');
+      return;
+    }
     
     const age = calculateAge(dob);
     const licenseAge = calculateLicenseAge(licenseDate);
+    console.log('Age calculations:', { age, licenseAge });
     
     // Insurance selection logic based on risk assessment
+    let selectedInsurance = 'kasko';
     if (age < 25 || licenseAge < 2) {
       // High risk: young driver or new license - require premium insurance
-      setInsurance('kasko-signature');
+      selectedInsurance = 'kasko-signature';
+      console.log('High risk detected, selecting kasko-signature');
     } else if (age < 30 || licenseAge < 5) {
       // Medium risk: moderate experience - advanced insurance
-      setInsurance('kasko-black');
+      selectedInsurance = 'kasko-black';
+      console.log('Medium risk detected, selecting kasko-black');
     } else {
       // Low risk: experienced driver - basic insurance allowed
-      setInsurance('kasko');
+      selectedInsurance = 'kasko';
+      console.log('Low risk detected, selecting basic kasko');
     }
+    
+    setInsurance(selectedInsurance);
+    console.log('Insurance set to:', selectedInsurance);
   };
 
   // Get available insurance options based on conditions
@@ -990,31 +1002,34 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  {getAvailableInsuranceOptions().map((option) => (
-                    <div key={option.id} className={`flex items-center space-x-2 ${option.disabled ? 'opacity-50' : ''}`}>
-                      <input
-                        type="radio"
-                        id={option.id}
-                        name="insurance"
-                        value={option.id}
-                        checked={insurance === option.id}
-                        onChange={(e) => setInsurance(e.target.value)}
-                        disabled={option.disabled}
-                        className="w-4 h-4"
-                      />
-                      <Label htmlFor={option.id} className={`flex-1 ${option.disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
-                        <div className="flex justify-between">
-                          <span>
-                            {option.name}
-                            {option.disabled && <span className="text-sm text-red-500 ml-2">(Non disponibile per la tua età/esperienza)</span>}
-                          </span>
-                          <span className="font-semibold">€{option.price}/{t.day}</span>
-                        </div>
-                      </Label>
-                    </div>
-                  ))}
-                </div>
+                 <div className="space-y-3">
+                   {getAvailableInsuranceOptions().map((option) => (
+                     <div key={option.id} className={`flex items-center space-x-2 p-3 rounded-lg border ${
+                       insurance === option.id ? 'border-primary bg-primary/5' : 'border-gray-200'
+                     } ${option.disabled ? 'opacity-50 bg-gray-50' : ''}`}>
+                       <input
+                         type="radio"
+                         id={option.id}
+                         name="insurance"
+                         value={option.id}
+                         checked={insurance === option.id}
+                         onChange={(e) => !option.disabled && setInsurance(e.target.value)}
+                         disabled={option.disabled}
+                         className="w-4 h-4"
+                       />
+                       <Label htmlFor={option.id} className={`flex-1 ${option.disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+                         <div className="flex justify-between">
+                           <span>
+                             {option.name}
+                             {insurance === option.id && <span className="text-sm text-green-600 ml-2 font-medium">(Selezionato automaticamente)</span>}
+                             {option.disabled && <span className="text-sm text-red-500 ml-2">(Non disponibile per la tua età/esperienza)</span>}
+                           </span>
+                           <span className="font-semibold">€{option.price}/{t.day}</span>
+                         </div>
+                       </Label>
+                     </div>
+                   ))}
+                 </div>
               </CardContent>
             </Card>
 
