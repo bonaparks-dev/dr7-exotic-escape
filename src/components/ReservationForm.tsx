@@ -337,32 +337,30 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   const getAvailableInsuranceOptions = () => {
     if (!dateOfBirth || !licenseIssueDate) {
       return [
-        { id: 'kasko', name: 'Kasko - Basic protection', price: 15, disabled: true },
-        { id: 'kasko-black', name: 'Kasko Black - Advanced protection', price: 25, disabled: true },
-        { id: 'kasko-signature', name: 'Kasko Signature - Complete protection', price: 35, disabled: true }
+        { id: 'kasko', name: 'Kasko - Basic protection', price: 15, disabled: true }
       ];
     }
 
     const age = calculateAge(dateOfBirth);
     const licenseAge = calculateLicenseAge(licenseIssueDate);
     
-    const options = [
-      { id: 'kasko', name: 'Kasko - Basic protection', price: 15, disabled: false },
-      { id: 'kasko-black', name: 'Kasko Black - Advanced protection', price: 25, disabled: false },
-      { id: 'kasko-signature', name: 'Kasko Signature - Complete protection', price: 35, disabled: false }
-    ];
-
-    // Disable options based on risk assessment
+    // Only show the appropriate insurance option based on risk assessment
     if (age < 25 || licenseAge < 2) {
-      // High risk: only signature allowed
-      options[0].disabled = true;
-      options[1].disabled = true;
+      // High risk: only show signature
+      return [
+        { id: 'kasko-signature', name: 'Kasko Signature - Complete protection', price: 35, disabled: false }
+      ];
     } else if (age < 30 || licenseAge < 5) {
-      // Medium risk: basic not allowed
-      options[0].disabled = true;
+      // Medium risk: only show black
+      return [
+        { id: 'kasko-black', name: 'Kasko Black - Advanced protection', price: 25, disabled: false }
+      ];
+    } else {
+      // Low risk: only show basic
+      return [
+        { id: 'kasko', name: 'Kasko - Basic protection', price: 15, disabled: false }
+      ];
     }
-
-    return options;
   };
 
   // Generate arrays for dropdowns
@@ -1004,8 +1002,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
               <CardContent className="space-y-4">
                  <div className="space-y-3">
                    {getAvailableInsuranceOptions().map((option) => (
-                     <div key={option.id} className={`flex items-center space-x-2 p-3 rounded-lg border ${
-                       insurance === option.id ? 'border-primary bg-primary/5' : 'border-gray-200'
+                     <div key={option.id} className={`flex items-center space-x-2 p-4 rounded-lg border-2 ${
+                       insurance === option.id ? 'border-green-500 bg-green-50' : 'border-gray-200'
                      } ${option.disabled ? 'opacity-50 bg-gray-50' : ''}`}>
                        <input
                          type="radio"
@@ -1015,16 +1013,19 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                          checked={insurance === option.id}
                          onChange={(e) => !option.disabled && setInsurance(e.target.value)}
                          disabled={option.disabled}
-                         className="w-4 h-4"
+                         className="w-4 h-4 text-green-600"
                        />
                        <Label htmlFor={option.id} className={`flex-1 ${option.disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
-                         <div className="flex justify-between">
-                           <span>
-                             {option.name}
-                             {insurance === option.id && <span className="text-sm text-green-600 ml-2 font-medium">(Selezionato automaticamente)</span>}
-                             {option.disabled && <span className="text-sm text-red-500 ml-2">(Non disponibile per la tua età/esperienza)</span>}
-                           </span>
-                           <span className="font-semibold">€{option.price}/{t.day}</span>
+                         <div className="flex justify-between items-center">
+                           <div>
+                             <span className="font-medium">{option.name}</span>
+                             {insurance === option.id && !option.disabled && (
+                               <div className="text-sm text-green-600 font-medium mt-1">
+                                 ✓ Selezionato automaticamente in base alla tua età ed esperienza
+                               </div>
+                             )}
+                           </div>
+                           <span className="font-bold text-lg">€{option.price}/{t.day}</span>
                          </div>
                        </Label>
                      </div>
