@@ -15,6 +15,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { NexiHostedPayment } from './NexiHostedPayment';
 
 interface ReservationFormProps {
   vehicleType: string;
@@ -81,7 +82,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   const [licenseFile, setLicenseFile] = useState<File | null>(null);
   const [pickupDateOpen, setPickupDateOpen] = useState(false);
   const [dropoffDateOpen, setDropoffDateOpen] = useState(false);
-  
+  const [bookingId, setBookingId] = useState<string | null>(null);
+
   const { toast } = useToast();
   const { language } = useLanguage();
   const { user } = useAuth();
@@ -370,7 +372,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   const dobYears = Array.from({ length: 80 }, (_, i) => (currentYear - 18 - i).toString()); // 18-98 years old
   const licenseYears = Array.from({ length: 50 }, (_, i) => (currentYear - i).toString()); // Current year to 50 years ago
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (step === 1) {
       // Validate step 1 fields
       if (!pickupDate || !dropoffDate || !pickupLocation) {
@@ -499,7 +501,19 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         description: t.eligibilityValidated,
       });
       
-      setStep(3);
+      try {
+        setIsSubmitting(true);
+        await createBookingForPayment();
+        setStep(3);
+      } catch (err: any) {
+        toast({
+          title: 'Error',
+          description: err.message || 'Failed to create booking',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -744,6 +758,68 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+  
+  const createBookingForPayment = async () => {
+    try {
+      let licenseFileUrl: string | null = null;
+      if (licenseFile) {
+        const fileExt = licenseFile.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('driver-licenses')
+          .upload(fileName, licenseFile);
+        if (uploadError) throw uploadError;
+        licenseFileUrl = uploadData?.path || null;
+      }
+
+      const bookingPayload: any = {
+        vehicle_type: vehicleType,
+        vehicle_name: vehicleName,
+        vehicle_image_url: vehicleImageUrl,
+        pickup_date: pickupDate?.toISOString(),
+        dropoff_date: dropoffDate?.toISOString(),
+        pickup_location: pickupLocation,
+        dropoff_location: null,
+        price_total: Math.round(calculateTotal() * 100),
+        currency: 'EUR',
+        status: 'pending',
+        payment_status: 'pending',
+        user_id: user?.id || null,
+        booking_details: {
+          vehicleName: vehicleName,
+          vehicleType: vehicleType,
+          vehicleImageUrl,
+          insurance,
+          extras,
+          basePrice,
+          firstName: user?.user_metadata?.first_name || guestInfo.firstName,
+          lastName: user?.user_metadata?.last_name || guestInfo.lastName,
+          email: user?.email || guestInfo.email,
+          phone: guestInfo.phone
+        },
+        date_of_birth: dateOfBirth,
+        license_issue_date: licenseIssueDate,
+        license_file_url: licenseFileUrl,
+        terms_accepted: eligibility.termsAccepted,
+        age_bucket: calculateAge(dateOfBirth!) < 25 ? 'under_25' : 'over_25',
+        country_iso2: eligibility.countryIso2 || 'IT'
+      };
+
+      const { data: booking, error: bookingError } = await supabase
+        .from('bookings')
+        .insert(bookingPayload)
+        .select()
+        .single();
+
+      if (bookingError) throw bookingError;
+
+      setBookingId(booking.id);
+      return booking.id as string;
+    } catch (err) {
+      console.error('createBookingForPayment error:', err);
+      throw err;
     }
   };
 
@@ -1162,29 +1238,66 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
       case 3:
         return (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-5 w-5" />
-                {t.paymentProcessing}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <p className="text-lg mb-4">Ready to process payment</p>
-                <p className="text-gray-600 mb-6">
-                  Total amount: <strong>€{calculateTotal()}</strong>
-                </p>
-                <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold"
-                >
-                  {isSubmitting ? t.processing : t.proceedToPayment}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          !bookingId ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CreditCard className="h-5 w-5" />
+                  {t.paymentProcessing}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8">
+                  <p className="mb-4">Preparing secure payment...</p>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <NexiHostedPayment
+              bookingData={{
+                bookingId: bookingId!,
+                bookingDetails: {
+                  vehicleName,
+                  vehicleType,
+                  vehicleImageUrl,
+                  pickupDate: pickupDate?.toISOString(),
+                  dropoffDate: dropoffDate?.toISOString(),
+                  pickupLocation,
+                  dropoffLocation: null,
+                  insurance,
+                  extras,
+                  basePrice
+                },
+                lineItems: (() => {
+                  const items: Array<{type:string;description:string;quantity:number;unitPrice:number;totalPrice:number;}> = [];
+                  const days = Math.ceil(((dropoffDate as Date).getTime() - (pickupDate as Date).getTime()) / (1000 * 60 * 60 * 24));
+                  items.push({ type: 'rental', description: `${vehicleName} - ${days} ${language === 'it' ? 'giorno' : 'day'}${days > 1 ? (language === 'it' ? 'i' : 's') : ''}`, quantity: 1, unitPrice: basePrice * days, totalPrice: basePrice * days });
+                  if (insurance !== 'none') {
+                    const insuranceCostPerDay = insurance === 'kasko' ? 15 : insurance === 'kasko-black' ? 25 : 35;
+                    items.push({ type: 'insurance', description: `${insurance} - ${days} ${language === 'it' ? 'giorno' : 'day'}${days > 1 ? (language === 'it' ? 'i' : 's') : ''}`, quantity: 1, unitPrice: insuranceCostPerDay, totalPrice: insuranceCostPerDay * days });
+                  }
+                  if (extras.fullCleaning) items.push({ type: 'extra', description: language === 'it' ? 'Pulizia completa' : 'Full cleaning', quantity: 1, unitPrice: 30, totalPrice: 30 });
+                  if (extras.secondDriver) { const cost = 10 * days; items.push({ type: 'extra', description: language === 'it' ? 'Secondo conducente' : 'Second driver', quantity: 1, unitPrice: 10, totalPrice: cost }); }
+                  if (extras.under25) { const cost = 10 * days; items.push({ type: 'extra', description: language === 'it' ? 'Conducente sotto 25 anni' : 'Under 25 driver', quantity: 1, unitPrice: 10, totalPrice: cost }); }
+                  if (extras.licenseUnder3) { const cost = 20 * days; items.push({ type: 'extra', description: language === 'it' ? 'Patente da meno di 3 anni' : 'License under 3 years', quantity: 1, unitPrice: 20, totalPrice: cost }); }
+                  if (extras.outOfHours) items.push({ type: 'extra', description: language === 'it' ? 'Consegna fuori orario' : 'Out of hours delivery', quantity: 1, unitPrice: 50, totalPrice: 50 });
+                  return items;
+                })(),
+                totalAmount: calculateTotal(),
+                currency: 'EUR',
+                payerEmail: user?.email || guestInfo.email,
+                payerName: `${user?.user_metadata?.first_name || guestInfo.firstName} ${user?.user_metadata?.last_name || guestInfo.lastName}`
+              }}
+              onPaymentSuccess={(res) => {
+                toast({ title: 'Success', description: 'Payment completed successfully' });
+                navigate('/payment-success');
+              }}
+              onPaymentError={(msg) => {
+                toast({ title: 'Payment error', description: msg, variant: 'destructive' });
+              }}
+            />
+          )
         );
 
       default:
