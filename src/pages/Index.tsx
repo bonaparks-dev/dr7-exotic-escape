@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { ServiceCategories } from "@/components/ServiceCategories";
-
+import GoogleReviewsCarousel from "@/components/GoogleReviewsCarousel";
 import { Footer } from "@/components/Footer";
 import CookieConsentModal from "@/components/CookieConsentModal";
 import AgeVerificationModal from "@/components/AgeVerificationModal";
@@ -62,6 +62,21 @@ const Index = () => {
         </section>
 
         <ServiceCategories />
+
+        {/* Google Reviews Section */}
+        <section className="py-16 px-4 sm:py-20 sm:px-6 md:px-12 bg-muted/10">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-foreground" style={{ fontFamily: 'The Seasons, serif' }}>
+                What Our Clients Say
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                Real reviews from our customers who experienced the luxury of DR7 Exotic Cars
+              </p>
+            </div>
+            <GoogleReviewsCarousel />
+          </div>
+        </section>
 
 
         {/* SECTION CONTACT – clean minimalist design */}

@@ -33,12 +33,12 @@ export const PaymentCallback = () => {
     while (Date.now() - start < timeoutMs) {
       const { data, error } = await supabase
         .from('payments')
-        .select('status,captured_amount,currency,result_code,result_message')
+        .select('payment_status,captured_amount,currency,nexi_response_code,error_message')
         .eq('nexi_transaction_id', txId)
         .maybeSingle();
 
       if (!error) {
-        const status = data?.status?.toUpperCase();
+        const status = data?.payment_status?.toUpperCase();
         if (status === 'PAID') return { ok: true, payment: data };
         if (status === 'PAYMENT_FAILED' || status === 'CANCELED' || status === 'DECLINED') {
           return { ok: false, payment: data };

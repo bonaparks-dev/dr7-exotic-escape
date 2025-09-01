@@ -145,7 +145,7 @@ export default function PaymentVerification() {
     while (Date.now() - start < timeoutMs) {
       const { data: payment, error } = await supabase
         .from('payments')
-        .select('status,captured_amount,currency,result_code,result_message')
+        .select('payment_status,captured_amount,currency,nexi_response_code,error_message')
         .eq('nexi_transaction_id', txId)
         .maybeSingle();
 
@@ -155,7 +155,7 @@ export default function PaymentVerification() {
         continue;
       }
 
-      const status = payment?.status?.toUpperCase();
+      const status = payment?.payment_status?.toUpperCase();
 
       if (status === 'PAID') {
         // Extra safety: verify captured amount equals expected total
