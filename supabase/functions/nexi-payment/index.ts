@@ -51,6 +51,8 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log('nexi-payment function started');
+    
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
@@ -61,13 +63,20 @@ const handler = async (req: Request): Promise<Response> => {
     const authHeader = req.headers.get("Authorization");
     
     if (authHeader) {
+      console.log('Authorization header found, attempting to get user');
       const token = authHeader.replace("Bearer ", "");
       const { data } = await supabaseClient.auth.getUser(token);
       user = data.user;
+      console.log('User authenticated:', user ? 'yes' : 'no');
+    } else {
+      console.log('No authorization header - treating as guest');
     }
     
     // Note: user can be null for guest bookings
 
+    const requestBody = await req.json();
+    console.log('Request body received:', JSON.stringify(requestBody, null, 2));
+    
     const { 
       bookingId, 
       bookingDetails, 
@@ -77,7 +86,7 @@ const handler = async (req: Request): Promise<Response> => {
       language,
       payerEmail,
       payerName 
-    }: PaymentRequest = await req.json();
+    }: PaymentRequest = requestBody;
 
     const supabaseService = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
