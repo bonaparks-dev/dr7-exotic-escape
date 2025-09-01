@@ -107,13 +107,31 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
 
     const loadNexiScript = () => {
       return new Promise<void>((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://ecommerce.nexi.it/ecomm/XPayBuild/XPayBuild.js';
-        script.onload = () => {
+        // Check if script is already loaded
+        if (window.XPayBuild) {
           scriptLoadedRef.current = true;
           resolve();
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://ecommerce.nexi.it/ecomm/XPayBuild/XPayBuild.js';
+        script.async = true;
+        script.onload = () => {
+          scriptLoadedRef.current = true;
+          // Wait a bit for the script to initialize
+          setTimeout(() => {
+            if (window.XPayBuild) {
+              resolve();
+            } else {
+              reject(new Error('XPayBuild not available after script load'));
+            }
+          }, 100);
         };
-        script.onerror = reject;
+        script.onerror = (error) => {
+          console.error('Script loading error:', error);
+          reject(new Error('Failed to load Nexi script'));
+        };
         document.head.appendChild(script);
       });
     };
@@ -122,7 +140,8 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
       .then(() => initializePayment())
       .catch((error) => {
         console.error('Failed to load Nexi script:', error);
-        onPaymentError('Failed to initialize payment system');
+        setHostedFailed(true);
+        setIsInitializing(false);
       });
   }, []);
 
@@ -142,50 +161,61 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
 
       // Initialize Nexi hosted fields
       if (window.XPayBuild) {
-        const xpayBuild = new window.XPayBuild();
+        console.log('Initializing XPayBuild with data:', data);
         
-        // Configure hosted fields
-        hostedFieldsRef.current = xpayBuild.create({
-          baseUrl: 'https://ecommerce.nexi.it',
-          alias: data.alias,
-          timestamp: data.timestamp,
-          mac: data.mac,
-          fields: {
-            number: {
-              selector: '#card-number',
-              placeholder: '1234 5678 9012 3456'
+        try {
+          const xpayBuild = new window.XPayBuild();
+          
+          // Configure hosted fields
+          hostedFieldsRef.current = xpayBuild.create({
+            baseUrl: 'https://ecommerce.nexi.it',
+            alias: data.alias,
+            timestamp: data.timestamp,
+            mac: data.mac,
+            fields: {
+              number: {
+                selector: '#card-number',
+                placeholder: '1234 5678 9012 3456'
+              },
+              expiryDate: {
+                selector: '#expiry-date',
+                placeholder: 'MM/YY'
+              },
+              cvv: {
+                selector: '#cvv',
+                placeholder: '123'
+              }
             },
-            expiryDate: {
-              selector: '#expiry-date',
-              placeholder: 'MM/YY'
+            style: {
+              'font-family': 'inherit',
+              'font-size': '14px',
+              'color': 'hsl(var(--foreground))',
+              'background-color': 'hsl(var(--background))',
+              'border': '1px solid hsl(var(--border))',
+              'border-radius': '6px',
+              'padding': '8px 12px'
             },
-            cvv: {
-              selector: '#cvv',
-              placeholder: '123'
+            onFieldEvent: (event: any) => {
+              console.log('Field event:', event);
+              if (event.type === 'validation') {
+                setCardValid(event.allFieldsValid);
+              }
             }
-          },
-          style: {
-            'font-family': 'inherit',
-            'font-size': '14px',
-            'color': 'hsl(var(--foreground))',
-            'background-color': 'hsl(var(--background))',
-            'border': '1px solid hsl(var(--border))',
-            'border-radius': '6px',
-            'padding': '8px 12px'
-          },
-          onFieldEvent: (event: any) => {
-            console.log('Field event:', event);
-            if (event.type === 'validation') {
-              setCardValid(event.allFieldsValid);
-            }
-          }
-        });
+          });
 
-        await hostedFieldsRef.current.mount();
-        setIsInitializing(false);
+          console.log('Mounting hosted fields...');
+          await hostedFieldsRef.current.mount();
+          console.log('Hosted fields mounted successfully');
+          setIsInitializing(false);
+        } catch (error) {
+          console.error('Error creating hosted fields:', error);
+          setHostedFailed(true);
+          setIsInitializing(false);
+        }
       } else {
+        console.error('XPayBuild not available');
         setHostedFailed(true);
-        throw new Error('Nexi XPayBuild not available');
+        setIsInitializing(false);
       }
     } catch (error: any) {
       console.error('Payment initialization error:', error);
@@ -305,7 +335,8 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
 
   if (hostedFailed) {
     return (
-      <Card className="max-w-2xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <AlertCircle className="h-5 w-5 text-amber-500" />
@@ -321,6 +352,7 @@ export const NexiHostedPayment: React.FC<NexiHostedPaymentProps> = ({
           </Button>
         </CardContent>
       </Card>
+      </div>
     );
   }
 
