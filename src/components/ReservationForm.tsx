@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, User, Phone, Mail, CreditCard, Shield, Car, Clock, Upload, FileText, AlertCircle, Check } from 'lucide-react';
+import { Calendar as CalendarIcon, MapPin, User, Phone, Mail, CreditCard, Shield, Car, Clock, Upload, FileText, AlertCircle, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface ReservationFormProps {
   vehicleType: string;
@@ -35,8 +39,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   basePrice
 }) => {
   // Form states
-  const [pickupDate, setPickupDate] = useState('');
-  const [dropoffDate, setDropoffDate] = useState('');
+  const [pickupDate, setPickupDate] = useState<Date>();
+  const [dropoffDate, setDropoffDate] = useState<Date>();
   const [pickupLocation, setPickupLocation] = useState('Piazza del Colosseo, 1, Roma');
   const [dropoffLocation, setDropoffLocation] = useState('');
   const [insurance, setInsurance] = useState('kasko');
@@ -49,6 +53,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   });
 
   // Eligibility states
+  const [dateOfBirth, setDateOfBirth] = useState<Date>();
+  const [licenseIssueDate, setLicenseIssueDate] = useState<Date>();
   const [eligibility, setEligibility] = useState<EligibilityData>({
     dateOfBirth: '',
     licenseIssueDate: '',
@@ -187,10 +193,10 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   const validateEligibility = (): string[] => {
     const errors: string[] = [];
     
-    if (!eligibility.dateOfBirth) {
+    if (!dateOfBirth) {
       errors.push(t.dateOfBirthRequired);
     } else {
-      const age = calculateAge(new Date(eligibility.dateOfBirth));
+      const age = calculateAge(dateOfBirth);
       if (age < 21) {
         errors.push(t.minimumAgeError);
       } else if (age > 75) {
@@ -198,10 +204,10 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       }
     }
     
-    if (!eligibility.licenseIssueDate) {
+    if (!licenseIssueDate) {
       errors.push(t.licenseIssueDateRequired);
     } else {
-      const licenseAge = calculateLicenseAge(new Date(eligibility.licenseIssueDate));
+      const licenseAge = calculateLicenseAge(licenseIssueDate);
       if (licenseAge < 1) {
         errors.push(t.minimumLicenseAgeError);
       }
@@ -242,7 +248,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
   const calculateTotal = () => {
     if (!pickupDate || !dropoffDate) return 0;
-    const days = Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24));
+    const days = Math.ceil((dropoffDate.getTime() - pickupDate.getTime()) / (1000 * 60 * 60 * 24));
     if (days <= 0) return 0;
 
     let total = basePrice * days;
@@ -303,7 +309,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       }
 
       // Set age bucket based on calculated age
-      const age = calculateAge(new Date(eligibility.dateOfBirth));
+      const age = calculateAge(dateOfBirth!);
       let ageBucket = '';
       if (age >= 21 && age <= 24) ageBucket = '21-24';
       else if (age >= 25 && age <= 30) ageBucket = '25-30';
@@ -364,17 +370,17 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         vehicle_type: vehicleType,
         vehicle_name: vehicleName,
         vehicle_image_url: vehicleImageUrl,
-        pickup_date: pickupDate,
-        dropoff_date: dropoffDate,
+        pickup_date: pickupDate?.toISOString().split('T')[0],
+        dropoff_date: dropoffDate?.toISOString().split('T')[0],
         pickup_location: pickupLocation,
         dropoff_location: dropoffLocation || pickupLocation,
         price_total: Math.round(calculateTotal() * 100), // Store in cents
         currency: 'EUR',
         status: 'pending',
         payment_status: 'pending',
-        license_issue_date: eligibility.licenseIssueDate,
+        license_issue_date: licenseIssueDate?.toISOString().split('T')[0],
         license_file_url: licenseFilePath,
-        date_of_birth: eligibility.dateOfBirth,
+        date_of_birth: dateOfBirth?.toISOString().split('T')[0],
         age_bucket: eligibility.ageBucket,
         country_iso2: eligibility.countryIso2,
         terms_accepted: eligibility.termsAccepted,
@@ -383,16 +389,16 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           insurance: insurance,
           extras: extras,
           guestInfo: !userId ? guestInfo : null,
-          pickupDate: pickupDate,
-          dropoffDate: dropoffDate,
+          pickupDate: pickupDate?.toISOString().split('T')[0],
+          dropoffDate: dropoffDate?.toISOString().split('T')[0],
           pickupLocation: pickupLocation,
           dropoffLocation: dropoffLocation || pickupLocation,
           vehicleName: vehicleName,
           vehicleType: vehicleType,
           vehicleImageUrl: vehicleImageUrl,
-          eligibility: {
-            dateOfBirth: eligibility.dateOfBirth,
-            licenseIssueDate: eligibility.licenseIssueDate,
+            eligibility: {
+              dateOfBirth: dateOfBirth?.toISOString().split('T')[0],
+              licenseIssueDate: licenseIssueDate?.toISOString().split('T')[0],
             ageBucket: eligibility.ageBucket,
             countryIso2: eligibility.countryIso2,
             termsAccepted: eligibility.termsAccepted
@@ -418,7 +424,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       }
 
       // Calculate line items for payment
-      const days = Math.ceil((new Date(dropoffDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24));
+      const days = Math.ceil((dropoffDate!.getTime() - pickupDate!.getTime()) / (1000 * 60 * 60 * 24));
       const lineItems = [];
 
       // Base rental cost
@@ -627,37 +633,69 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
             {/* Booking Details Card */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
-                  {t.bookingDetails}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="pickupDate">{t.pickupDate} *</Label>
-                    <Input
-                      id="pickupDate"
-                      type="date"
-                      value={pickupDate}
-                      onChange={(e) => setPickupDate(e.target.value)}
-                      min={new Date().toISOString().split('T')[0]}
-                      required
-                    />
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CalendarIcon className="h-5 w-5" />
+                    {t.bookingDetails}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label>{t.pickupDate} *</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !pickupDate && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {pickupDate ? format(pickupDate, "PPP") : <span>Pick a date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={pickupDate}
+                            onSelect={setPickupDate}
+                            disabled={(date) => date < new Date()}
+                            initialFocus
+                            className="pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <div>
+                      <Label>{t.dropoffDate} *</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !dropoffDate && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {dropoffDate ? format(dropoffDate, "PPP") : <span>Pick a date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={dropoffDate}
+                            onSelect={setDropoffDate}
+                            disabled={(date) => date < (pickupDate || new Date())}
+                            initialFocus
+                            className="pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="dropoffDate">{t.dropoffDate} *</Label>
-                    <Input
-                      id="dropoffDate"
-                      type="date"
-                      value={dropoffDate}
-                      onChange={(e) => setDropoffDate(e.target.value)}
-                      min={pickupDate || new Date().toISOString().split('T')[0]}
-                      required
-                    />
-                  </div>
-                </div>
                 
                 <div>
                   <Label htmlFor="pickupLocation">{t.pickupLocation} *</Label>
@@ -772,26 +810,64 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="dateOfBirth">{t.dateOfBirth} *</Label>
-                  <Input
-                    id="dateOfBirth"
-                    type="date"
-                    value={eligibility.dateOfBirth}
-                    onChange={(e) => setEligibility(prev => ({ ...prev, dateOfBirth: e.target.value }))}
-                    max={new Date().toISOString().split('T')[0]}
-                    required
-                  />
+                  <Label>{t.dateOfBirth} *</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !dateOfBirth && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {dateOfBirth ? format(dateOfBirth, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={dateOfBirth}
+                        onSelect={(date) => {
+                          setDateOfBirth(date);
+                          setEligibility(prev => ({ ...prev, dateOfBirth: date?.toISOString().split('T')[0] || '' }));
+                        }}
+                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div>
-                  <Label htmlFor="licenseIssueDate">{t.licenseIssueDate} *</Label>
-                  <Input
-                    id="licenseIssueDate"
-                    type="date"
-                    value={eligibility.licenseIssueDate}
-                    onChange={(e) => setEligibility(prev => ({ ...prev, licenseIssueDate: e.target.value }))}
-                    max={new Date().toISOString().split('T')[0]}
-                    required
-                  />
+                  <Label>{t.licenseIssueDate} *</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !licenseIssueDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {licenseIssueDate ? format(licenseIssueDate, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={licenseIssueDate}
+                        onSelect={(date) => {
+                          setLicenseIssueDate(date);
+                          setEligibility(prev => ({ ...prev, licenseIssueDate: date?.toISOString().split('T')[0] || '' }));
+                        }}
+                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
 
