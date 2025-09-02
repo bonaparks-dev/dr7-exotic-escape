@@ -77,7 +77,7 @@ const GoogleReviewsCarousel: React.FC = () => {
 
   // Initial load and periodic refresh
   useEffect(() => {
-    fetchReviews();
+    fetchReviews(true);
 
     // Set up periodic refresh every 30 minutes
     const refreshInterval = setInterval(() => {
@@ -99,7 +99,7 @@ const GoogleReviewsCarousel: React.FC = () => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+        className={`w-4 h-4 ${i < rating ? 'text-primary fill-primary' : 'text-muted-foreground/30'}`}
       />
     ));
   };

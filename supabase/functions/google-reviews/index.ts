@@ -68,13 +68,22 @@ serve(async (req) => {
 
     let shouldFetch = timeDiff > thirtyMinutes;
 
-    // Always allow manual refresh via force parameter
-    const url = new URL(req.url);
-    const force = url.searchParams.get('force') === 'true';
-    
-    if (force) {
-      shouldFetch = true;
-    }
+// Allow manual refresh via query parameter or JSON body
+const url = new URL(req.url);
+let force = url.searchParams.get('force') === 'true';
+
+if (!force && req.method !== 'OPTIONS') {
+  try {
+    const body = await req.json();
+    if (body?.force === true) force = true;
+  } catch {
+    // ignore JSON parse errors
+  }
+}
+
+if (force) {
+  shouldFetch = true;
+}
 
     if (shouldFetch) {
       console.log('Fetching fresh reviews from Google Places API...');
