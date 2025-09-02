@@ -32,7 +32,7 @@ interface EligibilityData {
 }
 
 // ⚠️ Set your WhatsApp number in international format (no +, no spaces)
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '393457905202'; // e.g. 39349XXXXXXX
+const WHATSAPP_NUMBER = '393457905205'; // Fixed WhatsApp number
 
 const ReservationForm: React.FC<ReservationFormProps> = ({
   vehicleType,
