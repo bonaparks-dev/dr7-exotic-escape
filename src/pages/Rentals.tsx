@@ -293,7 +293,7 @@ const Rentals = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cars.map((car) => (
-              <Card key={car.id} className={`bg-white/5 border-white/20 hover:bg-white/10 transition-all duration-300 group ${car.available === false ? 'opacity-60' : ''}`}>
+              <Card key={car.id} className={`bg-white/5 border-white/20 hover:bg-white/10 transition-all duration-300 group ${car.available === false ? 'opacity-10' : ''}`}>
                 <div className="aspect-video overflow-hidden rounded-t-lg relative">
                   <img
                     src={car.image}
@@ -347,7 +347,7 @@ const Rentals = () => {
                     className="w-full"
                     disabled={car.available === false}
                   >
-                    {car.available === false ? t('rentals.notavailable') : t('rentals.booknow')}
+                    {car.available === false ? t('rentals.comingbacksoon') : t('rentals.booknow')}
                   </Button>
                 </CardContent>
               </Card>
