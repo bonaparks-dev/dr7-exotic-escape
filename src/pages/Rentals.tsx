@@ -102,7 +102,7 @@ const cars: Car[] = [
   {
     id: 6,
     name: "BMW M2",
-    dailyPrice: 60,
+    dailyPrice: 80,
     specs: {
       acceleration: "0–100 in 4.1s",
       power: "460Cv",  
@@ -144,7 +144,7 @@ const cars: Car[] = [
   {
     id: 9,
     name: "BMW M4 Competition",
-    dailyPrice: 90,
+    dailyPrice: 100,
     specs: {
       acceleration: "0–100 in 3.8s",
       power: "510Cv",
@@ -157,7 +157,7 @@ const cars: Car[] = [
   {
     id: 10,
     name: "Porsche 992 Carrera 4S",
-    dailyPrice: 90,
+    dailyPrice: 120,
     specs: {
       acceleration: "0–100 in 3.6s",
       maxSpeed: "Max speed: 306km/h",
@@ -171,7 +171,7 @@ const cars: Car[] = [
   {
     id: 11,
     name: "Mercedes C63 S AMG",
-    dailyPrice: 90,
+    dailyPrice: 120,
     specs: {
       acceleration: "0–100 in 3.9s",
       power: "510Cv",
@@ -184,7 +184,7 @@ const cars: Car[] = [
   {
     id: 12,
     name: "Porsche Macan GTS",
-    dailyPrice: 90,
+    dailyPrice: 120,
     specs: {
       acceleration: "0–100 in 4.5s",
       power: "440Cv",
@@ -197,7 +197,7 @@ const cars: Car[] = [
   {
     id: 13,
     name: "Mercedes GLE 63 AMG",
-    dailyPrice: 90,
+    dailyPrice: 120,
     specs: {
       acceleration: "0–100 in 3.8s",
       power: "612Cv",
