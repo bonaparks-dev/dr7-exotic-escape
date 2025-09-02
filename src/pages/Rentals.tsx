@@ -347,7 +347,7 @@ const Rentals = () => {
                     className="w-full"
                     disabled={car.available === false}
                   >
-                    {car.available === false ? t('rentals.comingbacksoon') : t('rentals.booknow')}
+                    {car.available === false ? t('rentals.notavailable') : t('rentals.booknow')}
                   </Button>
                 </CardContent>
               </Card>
