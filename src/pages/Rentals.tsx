@@ -300,11 +300,6 @@ const Rentals = () => {
                     alt={car.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  {car.available === false && (
-                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                      <span className="text-white font-bold text-lg">{t('rentals.notavailable')}</span>
-                    </div>
-                  )}
                 </div>
                 <CardContent className="p-6">
                   <div className="mb-4">
