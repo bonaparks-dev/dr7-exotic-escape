@@ -320,7 +320,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           terms_accepted: eligibility.termsAccepted,
           country_iso2: eligibility.countryIso2,
           currency: 'eur',
-          status: 'pending_whatsapp',
+          status: 'pending',
           payment_status: 'not_required'
         };
         const { data, error } = await supabase.from('bookings').insert([bookingData]).select().single();
