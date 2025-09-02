@@ -448,9 +448,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   // Location options
   const locationOptions = [
     { value: 'cagliari-airport', label: 'Cagliari Airport' },
-    { value: 'cagliari-center', label: 'Cagliari Center' },
-    { value: 'olbia-airport', label: 'Olbia Airport' },
-    { value: 'alghero-airport', label: 'Alghero Airport' },
+    { value: 'cagliari-center', label: 'DR7 Office' },
   ];
 
   // Countries list
