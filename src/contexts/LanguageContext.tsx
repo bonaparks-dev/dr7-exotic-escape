@@ -347,6 +347,19 @@ const translations = {
     'validation.ageInconsistent.title': 'Età non corrispondente',
     'validation.ageInconsistent.message': 'L\'età selezionata non coincide con la data di nascita.',
     'validation.ageInconsistent.short': 'Età non corrispondente alla data di nascita.',
+
+    // Reviews
+    'reviews.title': 'Recensioni dei Clienti',
+    'reviews.subtitle': 'Cosa dicono i nostri clienti della loro esperienza',
+    'reviews.error': 'Errore nel caricamento delle recensioni',
+    'reviews.retry': 'Riprova',
+    'reviews.noReviews': 'Nessuna recensione disponibile',
+    'reviews.topRated': 'Migliori Recensioni (4+ ⭐)',
+    'reviews.allReviews': 'Tutte le Recensioni',
+    'reviews.seeAllOnGoogle': 'Vedi tutte su Google',
+    'reviews.previous': 'Precedente',
+    'reviews.next': 'Successiva',
+    'reviews.goToReview': 'Vai alla recensione',
   },
   en: {
     // Navigation
@@ -494,14 +507,14 @@ const translations = {
     'notfound.returnhome': 'Return to Home',
     'contact.cta': 'Let us curate your next unforgettable journey.',
     
-    // Reviews section
-    'reviews.title': 'What Our Clients Say',
-    'reviews.subtitle': 'Authentic experiences of luxury and quality',
-    'reviews.topRated': 'Top Rated',
+    // Reviews section  
+    'reviews.title': 'Customer Reviews',
+    'reviews.subtitle': 'What our clients say about their experience',
+    'reviews.topRated': 'Top Rated (4+ ⭐)',
     'reviews.allReviews': 'All Reviews',
-    'reviews.seeAllOnGoogle': 'See all reviews on Google',
-    'reviews.previous': 'Previous review',
-    'reviews.next': 'Next review',
+    'reviews.seeAllOnGoogle': 'See all on Google',
+    'reviews.previous': 'Previous',
+    'reviews.next': 'Next',
     'reviews.goToReview': 'Go to review',
     'reviews.error': 'Error loading reviews',
     'reviews.noReviews': 'No reviews available',
