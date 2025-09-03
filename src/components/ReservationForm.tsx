@@ -244,7 +244,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       `Email: ${user?.email || guestInfo.email}`,
       `Phone: ${guestInfo.phone || '-'}`,
       `Country: ${eligibility.countryIso2 || '-'}`,
-      licenseFileUrl ? `License file: ${licenseFileUrl}` : null,
       bookingIdParam ? `Booking ID: ${bookingIdParam}` : null,
     ].filter(Boolean) as string[];
 
