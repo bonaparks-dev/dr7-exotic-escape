@@ -72,7 +72,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [step, setStep] = useState(1); // 1: Details, 2: Eligibility, 3: WhatsApp
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [step, setStep] = useState(1); // 1: Details, 2: Eligibility, 3: Payment
   const [licenseFile, setLicenseFile] = useState<File | null>(null);
   const [pickupDateOpen, setPickupDateOpen] = useState(false);
   const [dropoffDateOpen, setDropoffDateOpen] = useState(false);
@@ -91,7 +92,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       personalInfo: 'Personal Information',
       bookingDetails: 'Booking Details',
       eligibilityCheck: 'Eligibility Check',
-      whatsappStep: 'Contact via WhatsApp',
+      paymentStep: 'Secure Payment',
       firstName: 'First Name',
       lastName: 'Last Name',
       email: 'Email',
@@ -110,7 +111,11 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       insurance: 'Insurance',
       additionalServices: 'Additional Services',
       bookingSummary: 'Booking Summary',
-      proceedToWhatsapp: 'Send via WhatsApp',
+      proceedToPayment: 'Pay Securely with Stripe',
+      paymentDescription: 'Complete your booking with our secure payment system. You will be redirected to Stripe for a safe and secure checkout.',
+      paymentSecure: 'Your payment is secured by Stripe with 256-bit SSL encryption',
+      whatsappOption: 'Or contact us via WhatsApp',
+      whatsappHint: 'Tap to open WhatsApp with all booking details pre-filled.',
       processing: 'Processing...',
       nextStep: 'Next Step',
       previousStep: 'Previous Step',
@@ -130,7 +135,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       extras: 'Extras',
       total: 'Total',
       allPricesIncludeVAT: 'All prices include VAT',
-      whatsappHint: 'Tap to open WhatsApp with all booking details pre-filled.',
     },
     it: {
       completeReservation: 'Completa la tua prenotazione',
@@ -138,7 +142,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       personalInfo: 'Informazioni personali',
       bookingDetails: 'Dettagli prenotazione',
       eligibilityCheck: 'Verifica idoneità',
-      whatsappStep: 'Contatto via WhatsApp',
+      paymentStep: 'Pagamento Sicuro',
       firstName: 'Nome',
       lastName: 'Cognome',
       email: 'Email',
@@ -157,7 +161,11 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       insurance: 'Assicurazione',
       additionalServices: 'Servizi aggiuntivi',
       bookingSummary: 'Riepilogo prenotazione',
-      proceedToWhatsapp: 'Invia su WhatsApp',
+      proceedToPayment: 'Paga in Sicurezza con Stripe',
+      paymentDescription: 'Completa la tua prenotazione con il nostro sistema di pagamento sicuro. Sarai reindirizzato a Stripe per un checkout sicuro e protetto.',
+      paymentSecure: 'Il tuo pagamento è protetto da Stripe con crittografia SSL a 256 bit',
+      whatsappOption: 'Oppure contattaci via WhatsApp',
+      whatsappHint: 'Tocca per aprire WhatsApp con i dettagli precompilati.',
       processing: 'Elaborazione...',
       nextStep: 'Prossimo step',
       previousStep: 'Step precedente',
@@ -177,7 +185,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       extras: 'Servizi aggiuntivi',
       total: 'Totale',
       allPricesIncludeVAT: 'Tutti i prezzi includono IVA',
-      whatsappHint: 'Tocca per aprire WhatsApp con i dettagli precompilati.',
     }
   };
 
@@ -302,7 +309,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           setLicenseFileUrl(publicUrl);
         }
 
-        // Create booking (status: pending_whatsapp)
+        // Create booking (status: pending)
         const bookingData = {
           user_id: user?.id || null,
           vehicle_type: vehicleType,
@@ -320,12 +327,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           country_iso2: eligibility.countryIso2,
           currency: 'eur',
           status: 'pending',
-          payment_status: 'not_required'
+          payment_status: 'pending'
         };
         const { data, error } = await supabase.from('bookings').insert([bookingData]).select().single();
         if (error) throw error;
         setBookingId(data.id);
-        toast({ title: t.eligibilityValidated, description: t.whatsappHint });
+        toast({ title: t.eligibilityValidated, description: 'Ready for payment' });
         setStep(3);
       } catch (e: any) {
         console.error(e);
@@ -333,6 +340,49 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       } finally {
         setIsSubmitting(false);
       }
+    }
+  };
+
+  // Handle Stripe Payment
+  const handleStripePayment = async () => {
+    if (!bookingId) {
+      toast({ title: 'Error', description: 'No booking found', variant: 'destructive' });
+      return;
+    }
+
+    setIsProcessingPayment(true);
+    try {
+      const bookingData = {
+        bookingId,
+        vehicleName,
+        pickupDate,
+        dropoffDate,
+        pickupLocation,
+        priceTotal: Math.round(calculateTotal() * 100), // Convert to cents
+        guestInfo: user ? null : guestInfo,
+      };
+
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: { bookingData }
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        // Open Stripe checkout in a new tab
+        window.open(data.url, '_blank');
+      } else {
+        throw new Error('No payment URL received');
+      }
+    } catch (error: any) {
+      console.error('Payment error:', error);
+      toast({ 
+        title: 'Payment Error', 
+        description: error.message || 'Failed to create payment session',
+        variant: 'destructive' 
+      });
+    } finally {
+      setIsProcessingPayment(false);
     }
   };
 
@@ -623,20 +673,77 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         );
 
       case 3:
-        // WhatsApp CTA step (no payment)
+        // Payment step
         const waText = buildWhatsAppText(bookingId || undefined);
         const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`;
+        
         return (
-          <div className="text-center space-y-4 py-8">
-            <MessageCircle className="w-12 h-12 mx-auto text-primary" />
-            <h3 className="text-2xl font-semibold">{t.whatsappStep}</h3>
-            <p className="text-muted-foreground">{t.whatsappHint}</p>
-            <Button asChild size="lg" className="gap-2">
-              <a href={waHref} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="w-5 h-5" />
-                {t.proceedToWhatsapp}
-              </a>
-            </Button>
+          <div className="space-y-6 py-8">
+            {/* Stripe Payment Option */}
+            <Card className="border-primary/20">
+              <CardContent className="p-6">
+                <div className="text-center space-y-4">
+                  <div className="flex justify-center">
+                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                      <Shield className="w-6 h-6 text-primary" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-semibold">{t.paymentStep}</h3>
+                  <p className="text-muted-foreground max-w-md mx-auto">
+                    {t.paymentDescription}
+                  </p>
+                  
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                      <Shield className="w-4 h-4" />
+                      {t.paymentSecure}
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    onClick={handleStripePayment} 
+                    disabled={isProcessingPayment}
+                    size="lg" 
+                    className="w-full max-w-sm gap-2"
+                  >
+                    {isProcessingPayment ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        {t.processing}
+                      </>
+                    ) : (
+                      <>
+                        <Shield className="w-5 h-5" />
+                        {t.proceedToPayment}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* WhatsApp Alternative */}
+            <div className="text-center">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-muted" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="bg-background px-2 text-muted-foreground">or</span>
+                </div>
+              </div>
+              
+              <div className="mt-6 space-y-3">
+                <h4 className="font-medium">{t.whatsappOption}</h4>
+                <p className="text-sm text-muted-foreground">{t.whatsappHint}</p>
+                <Button asChild variant="outline" size="sm" className="gap-2">
+                  <a href={waHref} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp
+                  </a>
+                </Button>
+              </div>
+            </div>
           </div>
         );
 
@@ -662,7 +769,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             {t.eligibilityCheck}
           </span>
           <span className={cn("text-sm", step >= 3 ? "text-primary font-medium" : "text-muted-foreground")}>
-            {t.whatsappStep}
+            {t.paymentStep}
           </span>
         </div>
         <div className="h-2 bg-muted rounded-full">
