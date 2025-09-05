@@ -102,10 +102,11 @@ const OneClickGateModal = () => {
         {/* Header */}
         <div className="p-8 pb-6 text-center border-b border-primary/10">
           <div className="flex items-center justify-center mb-4">
-            <Crown className="h-8 w-8 text-primary mr-2" />
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              DR7 EXOTIC
-            </h1>
+            <img 
+              src="/newlogo.png" 
+              alt="DR7 Exotic Logo" 
+              className="h-16 w-auto object-contain"
+            />
           </div>
           <h2 className="text-xl font-semibold text-foreground mb-2">
             {language === 'it' ? 'Benvenuto' : 'Welcome'}
