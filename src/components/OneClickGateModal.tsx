@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Crown } from "lucide-react";
+import { Crown, Mail } from "lucide-react";
 
 declare global {
   interface Window {
@@ -13,6 +14,7 @@ declare global {
 const OneClickGateModal = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showCookieSettings, setShowCookieSettings] = useState(false);
+  const [email, setEmail] = useState('');
   const [cookiePreferences, setCookiePreferences] = useState({
     analytics: true,
     marketing: true,
@@ -51,7 +53,7 @@ const OneClickGateModal = () => {
     }
   };
 
-  const handleEnter = () => {
+  const handleEnter = async () => {
     // Store age confirmation
     localStorage.setItem('dr7_age_confirmed_v1', 'true');
     
@@ -61,6 +63,22 @@ const OneClickGateModal = () => {
       marketing: cookiePreferences.marketing,
       timestamp: new Date().toISOString()
     }));
+
+    // Store email for lottery news if provided
+    if (email.trim()) {
+      try {
+        const response = await fetch('/api/lottery-newsletter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email.trim() })
+        });
+        if (!response.ok) {
+          console.error('Failed to save email for lottery newsletter');
+        }
+      } catch (error) {
+        console.error('Error saving email:', error);
+      }
+    }
 
     // Initialize tracking
     initializeTracking();
@@ -169,7 +187,7 @@ const OneClickGateModal = () => {
               {language === 'it' ? 'Promozione Esclusiva' : 'Exclusive Promotion'}
             </h3>
             <div className="ml-9 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-lg p-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-3">
                 <div>
                   <h4 className="font-medium text-sm text-foreground">DR7 MILLION LOTTERY</h4>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -180,6 +198,17 @@ const OneClickGateModal = () => {
                   </p>
                 </div>
                 <Crown className="h-6 w-6 text-primary/60" />
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <Mail className="h-4 w-4 text-primary/60" />
+                <Input
+                  type="email"
+                  placeholder={language === 'it' ? 'Email per aggiornamenti' : 'Email for updates'}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 h-8 text-xs bg-background/50 border-primary/20 focus:border-primary/40"
+                />
               </div>
             </div>
           </div>
