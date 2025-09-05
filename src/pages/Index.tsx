@@ -3,9 +3,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { ServiceCategories } from "@/components/ServiceCategories";
 import GoogleReviewsCarousel from "@/components/GoogleReviewsCarousel";
 import { Footer } from "@/components/Footer";
-import CookieConsentModal from "@/components/CookieConsentModal";
-import AgeVerificationModal from "@/components/AgeVerificationModal";
-import LotteryModal from "@/components/LotteryModal";
+import OneClickGateModal from "@/components/OneClickGateModal";
 import { Instagram, Crown, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -135,9 +133,7 @@ const Index = () => {
       </main>
 
       <Footer />
-      <CookieConsentModal />
-      <AgeVerificationModal />
-      <LotteryModal />
+      <OneClickGateModal />
     </div>
   );
 };
