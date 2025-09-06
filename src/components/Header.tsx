@@ -97,7 +97,7 @@ export function Header() {
           {/* Logo centré */}
           <a href="/" className="z-10 pt-2">
             <img
-              src="/newlogo.png"
+              src="/lovable-uploads/bda33e8e-6cf9-4057-816e-d3c2a51425db.png"
               alt="DR7 Exotic Cars & Luxury"
               className="h-16 w-auto"
             />

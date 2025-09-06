@@ -103,7 +103,7 @@ const OneClickGateModal = () => {
         <div className="p-8 pb-6 text-center border-b border-primary/10">
           <div className="flex items-center justify-center mb-4">
             <img 
-              src="/newlogo.png" 
+              src="/lovable-uploads/bda33e8e-6cf9-4057-816e-d3c2a51425db.png" 
               alt="DR7 Exotic Logo" 
               className="h-16 w-auto object-contain"
             />
