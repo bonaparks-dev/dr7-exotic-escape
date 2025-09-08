@@ -55,7 +55,7 @@ export default function Intro() {
       />
       
       {/* Black overlay for contrast */}
-      <div className="absolute inset-0 bg-black/70" />
+      <div className="absolute inset-0 bg-black/30" />
       
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between p-6 md:p-8">
@@ -65,9 +65,6 @@ export default function Intro() {
             alt="DR7 Exotic Logo" 
             className="h-12 w-auto object-contain"
           />
-          <span className="text-xl font-bold text-white font-['Space_Grotesk']">
-            Luxury Empire
-          </span>
         </div>
       </header>
       
@@ -76,12 +73,12 @@ export default function Intro() {
         <div className="max-w-2xl mx-auto space-y-8">
           {/* Hero Title */}
           <h1 className="text-4xl md:text-6xl font-bold text-white font-['Space_Grotesk'] leading-tight">
-            Welcome to Luxury Empire
+            Welcome to DR7 Luxury Empire
           </h1>
           
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-white/80 font-['Noto_Sans'] max-w-lg mx-auto leading-relaxed">
-            Experience the pinnacle of luxury with our exclusive collection of supercars, yachts, and premium services.
+            Experience the pinnacle of luxury with our exclusive collection of exotic cars, villas, yachts, and premium services.
           </p>
           
           {/* Action Buttons */}
@@ -121,7 +118,7 @@ export default function Intro() {
             <Button
               onClick={() => handleButtonClick('continue')}
               data-action="continue"
-              className="px-12 py-4 bg-white text-black font-bold text-lg font-['Space_Grotesk'] hover:bg-white/90 transition-all duration-200 border-2 border-white focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
+              className="px-10 py-4 bg-white text-black font-bold text-lg font-['Space_Grotesk'] hover:bg-white/90 transition-all duration-200 border-2 border-white focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
               aria-label="Continue to main website"
             >
               Continue
