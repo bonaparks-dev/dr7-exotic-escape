@@ -79,12 +79,12 @@ export default function Intro() {
       <main className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-120px)] px-6 text-center">
         <div className="max-w-2xl mx-auto space-y-8">
           {/* Hero Title */}
-          <h1 className="text-4xl md:text-6xl font-bold text-white font-sans leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-white font-['Space_Grotesk'] leading-tight">
             Welcome to DR7 Luxury Empire
           </h1>
           
           {/* Subtitle */}
-          <p className="text-lg md:text-xl text-white/80 font-sans max-w-lg mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-white/80 font-['Noto_Sans'] max-w-lg mx-auto leading-relaxed">
             Experience the pinnacle of luxury with our exclusive collection of exotic cars, villas, yachts, and premium services.
           </p>
           
@@ -93,7 +93,7 @@ export default function Intro() {
             <Button
               onClick={() => handleButtonClick('signup')}
               data-action="signup"
-              className="w-full md:w-auto px-8 py-3 bg-white text-black font-semibold font-sans hover:bg-white/90 transition-all duration-200 border-2 border-white focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
+              className="w-full md:w-auto px-8 py-3 bg-white text-black font-semibold font-['Space_Grotesk'] hover:bg-white/90 transition-all duration-200 border-2 border-white focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
               aria-label="Sign up for DR7 Exotic account"
             >
               Sign Up
@@ -103,7 +103,7 @@ export default function Intro() {
               onClick={() => handleButtonClick('login')}
               data-action="login"
               variant="outline"
-              className="w-full md:w-auto px-8 py-3 bg-transparent text-white font-semibold font-sans border-2 border-white hover:bg-white/10 transition-all duration-200 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
+              className="w-full md:w-auto px-8 py-3 bg-transparent text-white font-semibold font-['Space_Grotesk'] border-2 border-white hover:bg-white/10 transition-all duration-200 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
               aria-label="Log in to your DR7 Exotic account"
             >
               Log In
@@ -113,7 +113,7 @@ export default function Intro() {
               onClick={() => handleButtonClick('connect-wallet')}
               data-action="connect-wallet"
               variant="outline"
-              className="w-full md:w-auto px-8 py-3 bg-transparent text-white font-semibold font-sans border-2 border-white hover:bg-white/10 transition-all duration-200 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
+              className="w-full md:w-auto px-8 py-3 bg-transparent text-white font-semibold font-['Space_Grotesk'] border-2 border-white hover:bg-white/10 transition-all duration-200 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
               aria-label="Connect your crypto wallet"
             >
               Connect Wallet
@@ -125,7 +125,7 @@ export default function Intro() {
             <Button
               onClick={() => handleButtonClick('continue')}
               data-action="continue"
-              className="px-10 py-4 bg-white text-black font-bold text-lg font-sans hover:bg-white/90 transition-all duration-200 border-2 border-white focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
+              className="px-10 py-4 bg-white text-black font-bold text-lg font-['Space_Grotesk'] hover:bg-white/90 transition-all duration-200 border-2 border-white focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
               aria-label="Continue to main website"
             >
               Continue

@@ -20,8 +20,6 @@ export default {
 		extend: {
 			fontFamily: {
 				seasons: ['"The Seasons"', 'serif'],
-				sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
-				body: ['"Noto Sans"', 'system-ui', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

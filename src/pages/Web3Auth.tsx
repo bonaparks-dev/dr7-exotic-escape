@@ -80,7 +80,7 @@ export default function Web3Auth() {
         <Button
           onClick={handleBack}
           variant="ghost"
-          className="text-white hover:bg-white/10 font-sans"
+          className="text-white hover:bg-white/10 font-['Space_Grotesk']"
           aria-label="Go back"
         >
           ← Back
@@ -99,12 +99,12 @@ export default function Web3Auth() {
       <main className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-120px)] px-6 text-center">
         <div className="max-w-2xl mx-auto space-y-8">
           {/* Hero Title */}
-          <h1 className="text-4xl md:text-6xl font-bold text-white font-sans leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-white font-['Space_Grotesk'] leading-tight">
             Connect Your Digital Identity
           </h1>
           
           {/* Subtitle */}
-          <p className="text-lg md:text-xl text-white/80 font-sans max-w-lg mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-white/80 font-['Noto_Sans'] max-w-lg mx-auto leading-relaxed">
             Secure access to DR7 Luxury Empire through decentralized authentication. Your gateway to exclusive luxury experiences.
           </p>
           
@@ -112,7 +112,7 @@ export default function Web3Auth() {
           {isConnecting && (
             <div className="flex items-center justify-center space-x-3">
               <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-white font-sans">Connecting...</span>
+              <span className="text-white font-['Space_Grotesk']">Connecting...</span>
             </div>
           )}
           
@@ -121,7 +121,7 @@ export default function Web3Auth() {
             <Button
               onClick={handleConnectWallet}
               disabled={isConnecting}
-              className="px-12 py-4 bg-white text-black font-bold text-lg font-sans hover:bg-white/90 transition-all duration-200 border-2 border-white focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-12 py-4 bg-white text-black font-bold text-lg font-['Space_Grotesk'] hover:bg-white/90 transition-all duration-200 border-2 border-white focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Connect your digital wallet"
             >
               {isConnecting ? 'Connecting...' : 'Connect Wallet'}
@@ -130,13 +130,13 @@ export default function Web3Auth() {
           
           {/* Alternative Authentication */}
           <div className="pt-8 border-t border-white/20">
-            <p className="text-sm text-white/60 font-sans mb-4">
+            <p className="text-sm text-white/60 font-['Noto_Sans'] mb-4">
               Or use traditional authentication
             </p>
             <Button
               onClick={() => navigate('/auth')}
               variant="outline"
-              className="px-8 py-3 bg-transparent text-white font-semibold font-sans border-2 border-white hover:bg-white/10 transition-all duration-200 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
+              className="px-8 py-3 bg-transparent text-white font-semibold font-['Space_Grotesk'] border-2 border-white hover:bg-white/10 transition-all duration-200 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
               aria-label="Use email and password"
             >
               Email & Password
