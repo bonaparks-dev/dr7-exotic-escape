@@ -12,7 +12,7 @@ export function ServiceCategories() {
       id: 'Exotic Cars',
       title: t('services.supercars'),
       icon: Car,
-      video: '/rental.mp4',
+      video: '/rental1.mp4',
       buttonLabel: t('btn.learnmore'),
       link: '/rentals'
     },
