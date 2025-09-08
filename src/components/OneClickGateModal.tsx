@@ -83,8 +83,12 @@ const OneClickGateModal = () => {
     // Initialize tracking
     initializeTracking();
     
-    // Close modal
+    // Set flag for intro page
+    sessionStorage.setItem('cameFromPopup', '1');
+    
+    // Close modal and navigate to intro
     setIsVisible(false);
+    window.location.href = '/intro';
   };
 
   const handleDenyAge = () => {
