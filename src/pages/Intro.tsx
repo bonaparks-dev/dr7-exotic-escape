@@ -17,10 +17,19 @@ export default function Intro() {
   const handleButtonClick = (action: string) => {
     console.log(`Button clicked: ${action}`);
     
-    if (action === 'continue') {
-      // Clear the popup flag and navigate to home
-      sessionStorage.removeItem('cameFromPopup');
-      navigate('/', { replace: true });
+    switch (action) {
+      case 'signup':
+      case 'login':
+        navigate('/auth');
+        break;
+      case 'connect-wallet':
+        navigate('/web3-auth');
+        break;
+      case 'continue':
+        // Clear the popup flag and navigate to home
+        sessionStorage.removeItem('cameFromPopup');
+        navigate('/', { replace: true });
+        break;
     }
   };
 
@@ -58,14 +67,12 @@ export default function Intro() {
       <div className="absolute inset-0 bg-black/30" />
       
       {/* Header */}
-      <header className="relative z-10 flex items-center justify-between p-6 md:p-8">
-        <div className="flex items-center space-x-4">
-          <img 
-            src="/lovable-uploads/bda33e8e-6cf9-4057-816e-d3c2a51425db.png" 
-            alt="DR7 Exotic Logo" 
-            className="h-12 w-auto object-contain"
-          />
-        </div>
+      <header className="relative z-10 flex items-center justify-center p-6 md:p-8">
+        <img 
+          src="/lovable-uploads/bda33e8e-6cf9-4057-816e-d3c2a51425db.png" 
+          alt="DR7 Exotic Logo" 
+          className="h-12 w-auto object-contain"
+        />
       </header>
       
       {/* Main Content */}
