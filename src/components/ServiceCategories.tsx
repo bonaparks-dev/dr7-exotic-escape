@@ -76,6 +76,8 @@ export function ServiceCategories() {
                   muted
                   loop
                   playsInline
+                  onError={(e) => console.error(`Video error for ${category.id}:`, e)}
+                  onLoadedData={() => console.log(`Video loaded for ${category.id}`)}
                 />
               </div>
 
