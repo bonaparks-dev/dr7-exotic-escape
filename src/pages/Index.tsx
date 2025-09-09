@@ -23,7 +23,7 @@ const Index = () => {
         <section className="bg-black text-white py-16 px-4 sm:py-20 sm:px-6 md:px-12 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black opacity-90"></div>
           <div className="relative max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent" style={{ fontFamily: 'The Seasons, serif' }}>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-seasons mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               DR7 Concierge AI
             </h2>
 
@@ -64,7 +64,7 @@ const Index = () => {
         <section className="py-16 px-4 sm:py-20 sm:px-6 md:px-12 bg-muted/10">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-foreground" style={{ fontFamily: 'The Seasons, serif' }}>
+              <h2 className="text-3xl sm:text-4xl font-bold font-seasons mb-4 text-foreground">
                 What Our Clients Say
               </h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -85,7 +85,7 @@ const Index = () => {
             {/* Infos à gauche */}
             <div className="md:w-1/2 text-left">
               <h2
-                className="text-3xl sm:text-4xl font-bold uppercase mb-6 text-foreground"
+                className="text-3xl sm:text-4xl font-bold font-seasons uppercase mb-6 text-foreground"
                 style={{ fontFamily: 'The Seasons, serif' }}
               >
                 {t('contact.title')}

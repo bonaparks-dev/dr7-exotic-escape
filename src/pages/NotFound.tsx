@@ -18,7 +18,7 @@ const NotFound = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 text-luxury-gold">{t('notfound.title')}</h1>
+        <h1 className="text-4xl font-bold font-seasons mb-4 text-luxury-gold">{t('notfound.title')}</h1>
         <p className="text-xl text-muted-foreground mb-4">{t('notfound.subtitle')}</p>
         <Button 
           onClick={() => navigate("/")} 

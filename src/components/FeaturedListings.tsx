@@ -104,7 +104,7 @@ export function FeaturedListings() {
                   </Badge>
                 </div>
                 
-                <h3 className="text-xl font-bold mb-2">{listing.title}</h3>
+                <h3 className="text-xl font-bold font-seasons mb-2">{listing.title}</h3>
                 
                 <div className="flex items-center justify-between mb-4">
                   <div>

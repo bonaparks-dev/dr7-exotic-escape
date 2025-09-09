@@ -82,7 +82,7 @@ export function ServiceCategories() {
               </div>
 
                <CardContent className="p-6">
-                <h3 className="text-2xl font-bold mb-6 text-white">{category.title}</h3>
+                <h3 className="text-2xl font-bold font-seasons mb-6 text-white">{category.title}</h3>
                 {category.link ? (
                   <a href={category.link}>
                     <Button variant="luxury" className="w-full">

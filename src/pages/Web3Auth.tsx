@@ -138,7 +138,7 @@ export default function Web3Auth() {
       <main className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-120px)] px-6 text-center">
         <div className="max-w-2xl mx-auto space-y-8">
           {/* Title */}
-          <h1 className="text-4xl md:text-6xl font-bold text-white font-['Space_Grotesk'] leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold font-seasons text-white leading-tight">
             Connect Your Web3 Wallet
           </h1>
 

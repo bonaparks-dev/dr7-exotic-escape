@@ -57,7 +57,7 @@ export function StelvioShowcase() {
 
               {/* Content Section */}
               <CardContent className="p-8 flex flex-col justify-center">
-                <h3 className="text-2xl md:text-3xl font-bold mb-4">{stelvio.name}</h3>
+                <h3 className="text-2xl md:text-3xl font-bold font-seasons mb-4">{stelvio.name}</h3>
                 <p className="text-muted-foreground mb-6">{stelvio.description}</p>
 
                 {/* Specs Grid */}

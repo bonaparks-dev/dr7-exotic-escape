@@ -266,7 +266,7 @@ export default function GoogleReviewsCarousel() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-4xl font-bold font-seasons text-foreground mb-4">
             {t('reviews.title')}
           </h2>
           <p className="text-xl text-muted-foreground mb-8">

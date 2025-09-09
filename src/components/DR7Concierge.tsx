@@ -120,7 +120,7 @@ const DR7Concierge = () => {
               <Crown className="w-7 h-7 text-black" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">DR7 Concierge AI</h1>
+              <h1 className="text-3xl font-bold font-seasons text-white">DR7 Concierge AI</h1>
               <p className="text-white/70 text-sm">{language === 'it' ? 'Assistente Luxury Elite' : 'Elite Luxury Assistant'}</p>
             </div>
           </div>

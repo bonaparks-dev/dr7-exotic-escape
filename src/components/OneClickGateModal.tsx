@@ -119,7 +119,7 @@ const OneClickGateModal = () => {
               className="h-16 w-auto object-contain"
             />
           </div>
-          <h2 className="text-xl font-semibold text-foreground mb-2">
+          <h2 className="text-xl font-semibold font-seasons text-foreground mb-2">
             {language === 'it' ? 'Benvenuto' : 'Welcome'}
           </h2>
           <p className="text-sm text-muted-foreground">
