@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Crown, Mail } from "lucide-react";
+import { Crown, Mail, Phone, X } from "lucide-react";
 
 declare global {
   interface Window {
@@ -15,6 +15,7 @@ const OneClickGateModal = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showCookieSettings, setShowCookieSettings] = useState(false);
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [cookiePreferences, setCookiePreferences] = useState({
     analytics: true,
     marketing: true,
@@ -98,7 +99,16 @@ const OneClickGateModal = () => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-background rounded-2xl shadow-2xl max-w-lg w-full animate-in fade-in-0 zoom-in-95 duration-300 border border-primary/20">
+      <div className="bg-background rounded-2xl shadow-2xl max-w-lg w-full animate-in fade-in-0 zoom-in-95 duration-300 border border-primary/20 relative">
+        
+        {/* Close Button */}
+        <button
+          onClick={() => setIsVisible(false)}
+          className="absolute top-4 right-4 p-2 rounded-full hover:bg-muted/20 transition-colors duration-200 z-10"
+          aria-label="Close"
+        >
+          <X className="h-5 w-5 text-muted-foreground hover:text-foreground" />
+        </button>
         
         {/* Header */}
         <div className="p-8 pb-6 text-center border-b border-primary/10">
@@ -202,15 +212,27 @@ const OneClickGateModal = () => {
                 <Crown className="h-6 w-6 text-primary/60" />
               </div>
               
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-primary/60" />
-                <Input
-                  type="email"
-                  placeholder={language === 'it' ? 'Email per aggiornamenti' : 'Email for updates'}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 h-8 text-xs bg-background/50 border-primary/20 focus:border-primary/40"
-                />
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Mail className="h-4 w-4 text-primary/60" />
+                  <Input
+                    type="email"
+                    placeholder={language === 'it' ? 'Email per aggiornamenti' : 'Email for updates'}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="flex-1 h-8 text-xs bg-background/50 border-primary/20 focus:border-primary/40"
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Phone className="h-4 w-4 text-primary/60" />
+                  <Input
+                    type="tel"
+                    placeholder={language === 'it' ? 'Numero di telefono (opzionale)' : 'Phone number (optional)'}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="flex-1 h-8 text-xs bg-background/50 border-primary/20 focus:border-primary/40"
+                  />
+                </div>
               </div>
             </div>
           </div>
