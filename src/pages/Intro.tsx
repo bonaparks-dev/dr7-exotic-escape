@@ -73,7 +73,7 @@ export default function Intro() {
         <div className="max-w-2xl mx-auto space-y-8">
           {/* Hero Title */}
           <h1 className="text-4xl md:text-6xl font-bold text-white font-['Space_Grotesk'] leading-tight">
-            Welcome to DR7 Luxury Empire
+            Welcome to DR7 Empire
           </h1>
           
           {/* Subtitle */}
