@@ -56,8 +56,8 @@ export default function Intro() {
         }}
       />
       
-      {/* Black overlay for contrast */}
-      <div className="absolute inset-0 bg-black/30" />
+      {/* Light black overlay */}
+      <div className="absolute inset-0 bg-black/20" />
       
       {/* Header */}
       <header className="relative z-10 flex items-center justify-center p-6 md:p-8">
