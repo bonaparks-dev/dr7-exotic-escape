@@ -59,7 +59,6 @@ const Index = () => {
           </div>
         </section>
 
-        <ServiceCategories />
 
         {/* Google Reviews Section */}
         <section className="py-16 px-4 sm:py-20 sm:px-6 md:px-12 bg-muted/10">
