@@ -871,6 +871,10 @@ export type Database = {
         }
         Returns: number
       }
+      create_public_booking: {
+        Args: { b: Json }
+        Returns: string
+      }
       generate_referral_code: {
         Args: Record<PropertyKey, never>
         Returns: string

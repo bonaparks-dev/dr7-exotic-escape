@@ -32,14 +32,12 @@ export const PaymentSuccess = () => {
       if (!transactionId) return;
 
       try {
-        const { data, error } = await supabase
-          .from('bookings')
-          .select('*')
-          .eq('nexi_transaction_id', transactionId)
-          .single();
+        const { data, error } = await supabase.functions.invoke('get-booking-by-transaction', {
+          body: { transactionId }
+        });
 
         if (error) throw error;
-        setBooking(data);
+        setBooking(data.booking);
       } catch (error) {
         console.error('Error fetching booking:', error);
       } finally {

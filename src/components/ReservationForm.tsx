@@ -309,7 +309,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           setLicenseFileUrl(publicUrl);
         }
 
-        // Create booking (status: pending)
+        // Create booking using secure function
         const bookingData = {
           user_id: user?.id || null,
           vehicle_type: vehicleType,
@@ -329,9 +329,21 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           status: 'pending',
           payment_status: 'pending'
         };
-        const { data, error } = await supabase.from('bookings').insert([bookingData]).select().single();
-        if (error) throw error;
-        setBookingId(data.id);
+
+        let bookingResult;
+        if (user) {
+          // Authenticated user - use direct insert
+          const { data, error } = await supabase.from('bookings').insert([bookingData]).select().single();
+          if (error) throw error;
+          bookingResult = data;
+        } else {
+          // Anonymous user - use secure function
+          const { data: bookingId, error } = await supabase.rpc('create_public_booking', { b: bookingData });
+          if (error) throw error;
+          bookingResult = { id: bookingId };
+        }
+        
+        setBookingId(bookingResult.id);
         toast({ title: t.eligibilityValidated, description: 'Ready for payment' });
         setStep(3);
       } catch (e: any) {
