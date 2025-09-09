@@ -19,7 +19,7 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				seasons: ['"Playfair Display"', 'serif'],
+				seasons: ['"The Seasons"', 'serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
