@@ -32,13 +32,13 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border" role="navigation">
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border transition-all duration-300" role="navigation">
       {/* Desktop & Mobile: Main top bar */}
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo on left */}
-        <Link to="/" className="flex items-center" aria-label="DR7 Exotic Cars Home">
+        <Link to="/" className="flex items-center transition-transform duration-200 hover:scale-105" aria-label="DR7 Exotic Cars Home">
           <img
-            src="/DR7logo.png"
+            src="/lovable-uploads/bda33e8e-6cf9-4057-816e-d3c2a51425db.png"
             alt="DR7 Exotic Cars & Luxury"
             className="h-10 w-auto"
           />
@@ -53,7 +53,7 @@ export function Header() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                  className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded px-2 py-1"
                   aria-label={`${link.label} (opens in new window)`}
                 >
                   {link.label}
@@ -61,7 +61,7 @@ export function Header() {
               ) : (
                 <Link
                   to={link.href}
-                  className="text-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                  className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded px-2 py-1"
                 >
                   {link.label}
                 </Link>

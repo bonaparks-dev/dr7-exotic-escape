@@ -83,10 +83,7 @@ const OneClickGateModal = () => {
     // Initialize tracking
     initializeTracking();
     
-    // Set flag for intro page
-    sessionStorage.setItem('cameFromPopup', '1');
-    
-    // Close modal and navigate to intro
+    // Always navigate to intro page
     setIsVisible(false);
     window.location.href = '/intro';
   };

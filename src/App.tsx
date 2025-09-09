@@ -47,8 +47,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/intro" element={<Intro />} />
+            <Route path="/" element={<Intro />} />
+            <Route path="/home" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/web3-auth" element={<Web3Auth />} />
             <Route path="/services" element={<Services />} />

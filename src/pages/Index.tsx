@@ -17,7 +17,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <HeroSection />
+        <ServiceCategories />
 
         {/* DR7 Concierge AI Feature */}
         <section className="bg-black text-white py-16 px-4 sm:py-20 sm:px-6 md:px-12 relative overflow-hidden">

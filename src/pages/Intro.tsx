@@ -5,14 +5,7 @@ import { Button } from '@/components/ui/button';
 export default function Intro() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if user came from popup
-    const cameFromPopup = sessionStorage.getItem('cameFromPopup');
-    if (!cameFromPopup) {
-      // Redirect to home if direct access
-      navigate('/', { replace: true });
-    }
-  }, [navigate]);
+  // Remove the redirect logic - always show intro page
 
   const handleButtonClick = (action: string) => {
     console.log(`Button clicked: ${action}`);
@@ -123,7 +116,7 @@ export default function Intro() {
           {/* Continue CTA */}
           <div className="pt-12">
             <Button
-              onClick={() => handleButtonClick('continue')}
+              onClick={() => navigate('/home')}
               data-action="continue"
               className="px-10 py-4 bg-white text-black font-bold text-lg font-['Space_Grotesk'] hover:bg-white/90 transition-all duration-200 border-2 border-white focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
               aria-label="Continue to main website"
