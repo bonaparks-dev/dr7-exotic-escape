@@ -35,7 +35,7 @@ export default function Intro() {
       {/* Background Video */}
       <video
         className="absolute inset-0 w-full h-full object-cover"
-        src="/main.MP4"
+        src="/0909(1).mp4"
         autoPlay
         muted
         loop
