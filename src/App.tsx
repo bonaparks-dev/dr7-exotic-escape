@@ -36,6 +36,7 @@ import PaymentVerification from "./pages/PaymentVerification";
 import NotFound from "./pages/NotFound";
 import DR7Concierge from "./components/DR7Concierge";
 import ChiSiamo from "./pages/ChiSiamo";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ const App = () => (
             <Route path="/payment-failure" element={<PaymentFailure />} />
             <Route path="/payment-canceled" element={<PaymentCanceled />} />
             <Route path="/chi-siamo" element={<ChiSiamo />} />
+            <Route path="/profile" element={<Profile />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
