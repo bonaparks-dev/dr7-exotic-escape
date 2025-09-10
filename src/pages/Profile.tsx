@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, User, Mail, Phone, MapPin, Camera, Save } from 'lucide-react';
+import { ArrowLeft, Bell, Star, Trophy, Award, Crown, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Profile {
   id: string;
@@ -24,18 +20,9 @@ interface Profile {
 
 const Profile = () => {
   const { user, loading } = useAuth();
-  const { language } = useLanguage();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setSaving] = useState(false);
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    phone: '',
-    preferred_language: 'it'
-  });
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -63,12 +50,6 @@ const Profile = () => {
 
         if (data) {
           setProfile(data);
-          setFormData({
-            first_name: data.first_name || '',
-            last_name: data.last_name || '',
-            phone: data.phone || '',
-            preferred_language: data.preferred_language || 'it'
-          });
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -78,227 +59,206 @@ const Profile = () => {
     fetchProfile();
   }, [user]);
 
-  const handleSave = async () => {
-    if (!user) return;
-
-    setSaving(true);
-    try {
-      const profileData = {
-        user_id: user.id,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        phone: formData.phone,
-        preferred_language: formData.preferred_language,
-        updated_at: new Date().toISOString()
-      };
-
-      const { data, error } = await supabase
-        .from('profiles')
-        .upsert(profileData, { onConflict: 'user_id' })
-        .select()
-        .single();
-
-      if (error) {
-        toast({
-          title: "Errore",
-          description: "Impossibile salvare il profilo. Riprova più tardi.",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      setProfile(data);
-      setIsEditing(false);
-      toast({
-        title: "Profilo aggiornato",
-        description: "Le modifiche sono state salvate con successo."
-      });
-    } catch (error) {
-      console.error('Error saving profile:', error);
-      toast({
-        title: "Errore",
-        description: "Impossibile salvare il profilo. Riprova più tardi.",
-        variant: "destructive"
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
-
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-[#181611] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Caricamento...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white mx-auto"></div>
+          <p className="mt-4 text-[#b9b09d]">Caricamento...</p>
         </div>
       </div>
     );
   }
 
-  const userInitials = `${formData.first_name?.[0] || ''}${formData.last_name?.[0] || ''}`.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U';
+  const userInitials = `${profile?.first_name?.[0] || ''}${profile?.last_name?.[0] || ''}`.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U';
+  const displayName = profile?.first_name && profile?.last_name 
+    ? `${profile.first_name} ${profile.last_name}` 
+    : user.email?.split('@')[0] || 'Utente DR7';
+
+  // Mock data for demo
+  const currentLevel = 3;
+  const currentPoints = 600;
+  const nextLevelPoints = 1000;
+  const progressPercent = (currentPoints / nextLevelPoints) * 100;
+
+  const badges = [
+    { name: 'Explorer', icon: Star, unlocked: true },
+    { name: 'Connoisseur', icon: Trophy, unlocked: true },
+    { name: 'Elite', icon: Crown, unlocked: true },
+    { name: 'Pioneer', icon: Award, unlocked: false },
+    { name: 'Navigator', icon: Target, unlocked: false },
+    { name: 'Adventurer', icon: Star, unlocked: false },
+  ];
+
+  const rewards = [
+    { name: 'Accesso Eventi Esclusivi', image: '/luxury-event.jpg' },
+    { name: 'Upgrade Auto di Lusso', image: '/luxury-car.jpg' },
+    { name: 'Esperienza Yacht Privato', image: '/yacht.jpg' },
+    { name: 'VIP Nightlife Pass', image: '/vip-night.jpg' },
+  ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Back Button */}
-      <div className="pt-6 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <Button
-            variant="ghost"
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Indietro
-          </Button>
-        </div>
-      </div>
+    <div className="relative flex size-full min-h-screen flex-col bg-[#181611]" style={{ fontFamily: '"Space Grotesk", "Noto Sans", sans-serif' }}>
+      <div className="layout-container flex h-full grow flex-col">
+        {/* Header */}
+        <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#393328] px-10 py-3">
+          <div className="flex items-center gap-4 text-white">
+            <Button
+              variant="ghost"
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-2 text-white hover:text-white/80 p-0"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <div className="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+            <h2 className="text-white text-lg font-bold leading-tight tracking-[-0.015em]">DR7 Luxury Empire</h2>
+          </div>
+          <div className="flex flex-1 justify-end gap-8">
+            <div className="flex items-center gap-9">
+              <button
+                onClick={() => navigate('/home')}
+                className="text-white text-sm font-medium leading-normal hover:text-white/80"
+              >
+                Home
+              </button>
+              <button
+                onClick={() => navigate('/rentals')}
+                className="text-white text-sm font-medium leading-normal hover:text-white/80"
+              >
+                Rent
+              </button>
+              <button
+                onClick={() => navigate('/services')}
+                className="text-white text-sm font-medium leading-normal hover:text-white/80"
+              >
+                Lifestyle
+              </button>
+              <button className="text-white text-sm font-medium leading-normal hover:text-white/80">
+                Membership
+              </button>
+            </div>
+            <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-[#393328] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+              <Bell className="w-5 h-5" />
+            </button>
+            <Avatar className="w-10 h-10">
+              <AvatarImage src={profile?.profile_picture_url || ''} />
+              <AvatarFallback className="bg-[#393328] text-white">
+                {userInitials}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+        </header>
 
-      {/* Profile Content */}
-      <div className="py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid gap-6">
-            {/* Profile Header */}
-            <Card>
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <Avatar className="w-20 h-20">
-                      <AvatarImage src={profile?.profile_picture_url || ''} />
-                      <AvatarFallback className="text-xl font-semibold bg-primary/10 text-primary">
-                        {userInitials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <CardTitle className="text-2xl">
-                        {formData.first_name || formData.last_name
-                          ? `${formData.first_name} ${formData.last_name}`.trim()
-                          : 'Il tuo profilo'}
-                      </CardTitle>
-                      <CardDescription className="flex items-center gap-2 mt-1">
-                        <Mail className="w-4 h-4" />
-                        {user.email}
-                      </CardDescription>
-                    </div>
+        {/* Main Content */}
+        <div className="px-40 flex flex-1 justify-center py-5">
+          <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+            {/* Profile Section */}
+            <div className="flex p-4">
+              <div className="flex w-full flex-col gap-4 items-center">
+                <div className="flex gap-4 flex-col items-center">
+                  <Avatar className="min-h-32 w-32">
+                    <AvatarImage src={profile?.profile_picture_url || ''} />
+                    <AvatarFallback className="bg-[#393328] text-white text-2xl">
+                      {userInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col items-center justify-center">
+                    <p className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] text-center">
+                      {displayName}
+                    </p>
+                    <p className="text-[#b9b09d] text-base font-normal leading-normal text-center">
+                      Membro dal 2024
+                    </p>
+                    <p className="text-[#b9b09d] text-base font-normal leading-normal text-center">
+                      Livello {currentLevel}
+                    </p>
                   </div>
-                  <Button
-                    onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-                    disabled={isSaving}
-                    className="min-w-[120px]"
-                  >
-                    {isSaving ? (
-                      <div className="flex items-center gap-2">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        Salvataggio...
+                </div>
+              </div>
+            </div>
+
+            {/* Progress Section */}
+            <div className="flex flex-col gap-3 p-4">
+              <div className="flex gap-6 justify-between">
+                <p className="text-white text-base font-medium leading-normal">
+                  Prossimo Livello: Livello {currentLevel + 1}
+                </p>
+              </div>
+              <div className="rounded bg-[#544b3b]">
+                <div className="h-2 rounded bg-white" style={{ width: `${progressPercent}%` }}></div>
+              </div>
+              <p className="text-[#b9b09d] text-sm font-normal leading-normal">
+                {currentPoints} / {nextLevelPoints} punti
+              </p>
+            </div>
+
+            {/* Badges Section */}
+            <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+              Badge
+            </h2>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+              {badges.map((badge, index) => {
+                const IconComponent = badge.icon;
+                return (
+                  <div key={badge.name} className="flex flex-col gap-3 text-center pb-3">
+                    <div className="px-4">
+                      <div className={`w-full aspect-square rounded-full flex items-center justify-center ${
+                        badge.unlocked ? 'bg-gradient-to-br from-yellow-400 to-yellow-600' : 'bg-[#393328]'
+                      }`}>
+                        <IconComponent 
+                          className={`w-12 h-12 ${badge.unlocked ? 'text-white' : 'text-[#b9b09d]'}`} 
+                        />
                       </div>
-                    ) : isEditing ? (
-                      <>
-                        <Save className="w-4 h-4 mr-2" />
-                        Salva
-                      </>
-                    ) : (
-                      'Modifica profilo'
-                    )}
-                  </Button>
-                </div>
-              </CardHeader>
-            </Card>
+                    </div>
+                    <p className={`text-base font-medium leading-normal ${
+                      badge.unlocked ? 'text-white' : 'text-[#b9b09d]'
+                    }`}>
+                      {badge.name}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
 
-            {/* Profile Details */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  Informazioni personali
-                </CardTitle>
-                <CardDescription>
-                  Gestisci le tue informazioni personali e preferenze
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="first_name">Nome</Label>
-                    <Input
-                      id="first_name"
-                      value={formData.first_name}
-                      onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
-                      disabled={!isEditing}
-                      placeholder="Inserisci il tuo nome"
-                    />
+            {/* Rewards Section */}
+            <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+              Ricompense
+            </h2>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+              {rewards.map((reward, index) => (
+                <div key={reward.name} className="flex flex-col gap-3 pb-3">
+                  <div className="w-full aspect-square bg-gradient-to-br from-[#393328] to-[#544b3b] rounded-lg flex items-center justify-center">
+                    <Star className="w-12 h-12 text-yellow-400" />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="last_name">Cognome</Label>
-                    <Input
-                      id="last_name"
-                      value={formData.last_name}
-                      onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
-                      disabled={!isEditing}
-                      placeholder="Inserisci il tuo cognome"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Telefono</Label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      id="phone"
-                      value={formData.phone}
-                      onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                      disabled={!isEditing}
-                      placeholder="+39 123 456 7890"
-                      className="pl-10"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      id="email"
-                      value={user.email || ''}
-                      disabled
-                      className="pl-10 bg-muted/50"
-                    />
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    L'email non può essere modificata. Contatta il supporto per cambiarla.
+                  <p className="text-white text-base font-medium leading-normal">
+                    {reward.name}
                   </p>
                 </div>
-              </CardContent>
-            </Card>
+              ))}
+            </div>
 
-            {/* Account Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Azioni account</CardTitle>
-                <CardDescription>
-                  Gestisci le impostazioni del tuo account
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => navigate('/bookings')}
-                    className="w-full justify-start"
-                  >
-                    Le mie prenotazioni
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    onClick={() => navigate('/auth')}
-                    className="w-full justify-start"
-                  >
-                    Cambia password
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Action Buttons */}
+            <div className="flex gap-4 p-4 pt-8">
+              <Button
+                onClick={() => navigate('/home')}
+                className="flex-1 bg-[#393328] hover:bg-[#544b3b] text-white"
+              >
+                Torna alla Home
+              </Button>
+              <Button
+                onClick={() => navigate('/rentals')}
+                className="flex-1 bg-white hover:bg-gray-100 text-black"
+              >
+                Esplora Servizi
+              </Button>
+            </div>
           </div>
         </div>
       </div>
