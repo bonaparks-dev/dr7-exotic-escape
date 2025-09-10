@@ -20,7 +20,7 @@ export function ServiceCategories() {
       id: 'yachts',
       title: t('services.yachts'),
       icon: Ship,
-      video: '/yacht.MP4',
+      video: '/yacht.mp4',
       buttonLabel: t('btn.learnmore'),
       link: '/yacht-listings'
     },
@@ -36,7 +36,7 @@ export function ServiceCategories() {
       id: 'villas',
       title: t('services.villas'),
       icon: Home,
-      video: '/villa.MP4',
+      video: '/villa1.mp4',
       buttonLabel: t('btn.learnmore'),
       link: '/villa-listings'
     },
@@ -44,7 +44,7 @@ export function ServiceCategories() {
       id: 'helicopters',
       title: t('services.helicopters'),
       icon: RotateCcw,
-      video: '/helicopter.MP4',
+      video: '/helicopter1.mp4',
       buttonLabel: t('btn.learnmore'),
       link: '/helicopter-listings'
     },
@@ -52,7 +52,7 @@ export function ServiceCategories() {
       id: 'membership',
       title: t('services.membership'),
       icon: Crown,
-      video: '/main.MP4',
+      video: '/membership.mp4',
       buttonLabel: t('btn.learnmore'),
       link: '/membership'
     }
