@@ -19,13 +19,13 @@ const ChiSiamo = () => {
           </div>
 
           {/* Founders Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
-            <div className="space-y-8">
-              <div className="relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-20">
+            <div className="flex flex-col items-center">
+              <div className="relative w-64 h-80 mx-auto">
                 <img
                   src="/Valerio.jpeg"
                   alt="Valerio - Co-fondatore DR7 Empire"
-                  className="w-full h-96 object-cover rounded-lg shadow-elegant"
+                  className="w-full h-full object-cover rounded-lg shadow-elegant"
                 />
                 <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm px-4 py-2 rounded">
                   <p className="text-white font-semibold">Valerio</p>
@@ -34,12 +34,12 @@ const ChiSiamo = () => {
               </div>
             </div>
             
-            <div className="space-y-8">
-              <div className="relative">
+            <div className="flex flex-col items-center">
+              <div className="relative w-64 h-80 mx-auto">
                 <img
                   src="/Ilenia.jpeg"
                   alt="Ilenia - Co-fondatrice DR7 Empire"
-                  className="w-full h-96 object-cover rounded-lg shadow-elegant"
+                  className="w-full h-full object-cover rounded-lg shadow-elegant"
                 />
                 <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm px-4 py-2 rounded">
                   <p className="text-white font-semibold">Ilenia</p>
