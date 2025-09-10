@@ -22,7 +22,7 @@ export function Footer() {
                 variant="ghost" 
                 size="sm" 
                 className="text-luxury-white hover:text-luxury-black"
-                onClick={() => window.open('https://www.instagram.com/dr7_exotic_cars', '_blank')}
+                onClick={() => window.open('https://www.instagram.com/dubai_rent_7.0_luxury_empire', '_blank')}
               >
                 <Instagram className="w-5 h-5" />
               </Button>
