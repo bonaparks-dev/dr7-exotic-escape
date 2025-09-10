@@ -105,7 +105,7 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "DR7 Luxury Empire <onboarding@resend.dev>",
+      from: "DR7 Luxury Empire <noreply@resend.dev>",
       to: [email],
       subject: subject,
       html: emailContent,

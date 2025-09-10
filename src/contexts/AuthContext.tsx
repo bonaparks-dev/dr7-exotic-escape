@@ -63,9 +63,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             email,
             firstName,
             lastName,
-            language: 'en' // You can get this from language context if needed
+            language: 'it' // Default to Italian for DR7 Empire
           }
         });
+        console.log('Welcome email sent successfully');
       } catch (emailError) {
         console.error('Failed to send welcome email:', emailError);
         // Don't fail the signup if email fails
